@@ -1,12 +1,11 @@
--- klakz Hub - Key Sistemli
+-- klakz Hub - Tam ve Güncel Script Arşivi
 
--- Kendi belirleyeceğin şifreyi buraya yaz:
-local DOGRU_KEY = "klakz123" 
+local DOGRU_KEY = "klakz123" -- Buradan şifreni değiştirebilirsin
 
 -- Ana Ekran (GUI)
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = game.CoreGui
-ScreenGui.Name = "klakz_Hub_KeySystem"
+ScreenGui.Name = "klakz_Hub_Main"
 
 -- ==================== KEY PENCERESİ ====================
 local KeyFrame = Instance.new("Frame")
@@ -48,57 +47,84 @@ LoginBtn.Text = "Giriş Yap"
 LoginBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginBtn.TextSize = 16
 
--- ==================== ANA MENÜ (Gizli Başlar) ====================
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -175)
-MainFrame.Size = UDim2.new(0, 300, 0, 350)
-MainFrame.Visible = false -- Key girilene kadar görünmez
-MainFrame.Active = true
-MainFrame.Draggable = true
+-- ==================== ANA MENÜ YÜKLEYİCİSİ ====================
+local function ArayuzuBaslat()
+    local DiscordLib = loadstring(game:HttpGet("https://gitlab.com/HileciBabaYT/hbest/-/raw/main/hbscripthubui"))()
 
-local Title = Instance.new("TextLabel")
-Title.Parent = MainFrame
-Title.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Title.Size = UDim2.new(0, 300, 0, 40)
-Title.Font = Enum.Font.SourceSansBold
-Title.Text = "klakz Hub"
-Title.TextColor3 = Color3.fromRGB(0, 255, 128)
-Title.TextSize = 22
+    local win = DiscordLib:Window("klakz Hub - Oyun Kontrollü")
+    DiscordLib:Notification("Bildirim", "Oyun algılandı, sadece bu oyuna ait menüler yüklendi!", "Tamam")
 
-local ScrollingFrame = Instance.new("ScrollingFrame")
-ScrollingFrame.Parent = MainFrame
-ScrollingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-ScrollingFrame.Position = UDim2.new(0, 0, 0, 45)
-ScrollingFrame.Size = UDim2.new(0, 300, 0, 300)
-ScrollingFrame.CanvasSize = UDim2.new(0, 0, 2, 0)
+    local serv = win:Server("Aktif Oyun Menüsü", "")
 
-local UIListLayout = Instance.new("UIListLayout")
-UIListLayout.Parent = ScrollingFrame
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 5)
+    -- ==================== OYUN KONTROL MERKEZİ ====================
+    -- Sürekli her yerde çalışan genel araçlar (Fly, Admin vb.)
+    local globalChannel = serv:Channel("Genel Araçlar")
+    globalChannel:Button("Güvenli Fly (Uçma)", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+    end)
+    globalChannel:Button("Infinite Yield (Admin Komutları)", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end)
 
--- Buton Ekleme Fonksiyonu
-local function AddButton(name, callback)
-    local Button = Instance.new("TextButton")
-    Button.Parent = ScrollingFrame
-    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    Button.Size = UDim2.new(0, 280, 0, 35)
-    Button.Font = Enum.Font.SourceSansBold
-    Button.Text = name
-    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Button.TextSize = 16
-    
-    Button.MouseButton1Click:Connect(callback)
+    -- SADECE BULUNDUĞUN OYUNA AİT SCRIPT KODLARI ÇALIŞIR
+    if game.PlaceId == 12177325772 then
+        -- Super League Soccer
+        local btns = serv:Channel("Super League Soccer")
+        btns:Button("Super League Soccer Scripti", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/1f0yt/community/main/SuperLeagueSoccer"))()
+        end)
+
+    elseif game.PlaceId == 13772394625 then
+        -- Blade Ball
+        local btns = serv:Channel("Blade Ball Özel")
+        btns:Button("Auto Parry (Blade Ball)", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))()
+        end)
+        btns:Button("Reaper Hub (Blade Ball)", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua"))()
+        end)
+
+    elseif game.PlaceId == 10449761463 then
+        -- The Strongest Battlegrounds
+        local btns = serv:Channel("Strongest Battlegrounds")
+        btns:Button("BadWare Hub", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))()
+        end)
+
+    elseif game.PlaceId == 16732694052 then
+        -- Fisch
+        local btns = serv:Channel("Fisch Özel")
+        btns:Button("Speed Hub X (Fisch)", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+        end)
+
+    elseif game.PlaceId == 13651239634 then
+        -- Blocks n' Props
+        local btns = serv:Channel("Blocks n' Props Özel")
+        btns:Button("Exordum (Blocks n' Props)", function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Booger-Aids-V2/Exordum/refs/heads/main/Blocks%20n'%20Props"))()
+        end)
+
+    elseif game.PlaceId == 112731528776884 or game.PlaceId == 120700541929930 then
+        -- Knife Duels (Alternatif PlaceId'ler dahil)
+        local btns = serv:Channel("Knife Duels Özel")
+        btns:Button("Knife Duels Script 1", function()
+            loadstring(game:HttpGet("https://pastefy.app/iizD2kA3/raw"))()
+        end)
+
+    else
+        -- Hangi oyun olduğu listede yoksa sadece uyarı kanalı gösterir
+        local uyari = serv:Channel("Durum")
+        uyari:Label("Bu oyun için özel hile yok.")
+        uyari:Label("Sadece 'Genel Araçlar' kullanılabilir.")
+    end
 end
 
 -- ==================== KEY KONTROLÜ ====================
 LoginBtn.MouseButton1Click:Connect(function()
     if TextBox.Text == DOGRU_KEY then
-        KeyFrame:Destroy() -- Key penceresini kapat
-        MainFrame.Visible = true -- Ana menüyü aç
+        KeyFrame:Destroy()
+        ArayuzuBaslat()
     else
         LoginBtn.Text = "Yanlış Key!"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(170, 0, 0)
@@ -106,9 +132,4 @@ LoginBtn.MouseButton1Click:Connect(function()
         LoginBtn.Text = "Giriş Yap"
         LoginBtn.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
     end
-end)
-
--- ==================== SCRIPT LİSTESİ ====================
-AddButton("Örnek Oyun / Özellik 1", function()
-    print("klakz Hub çalıştı!")
 end)
