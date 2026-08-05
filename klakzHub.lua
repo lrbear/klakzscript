@@ -1,4 +1,4 @@
--- klakz Hub - Speed Hub Tarzı & Zengin Universal Sürüm
+-- klakz Hub - Hata Korumalı & Stabil Sürüm
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -9,7 +9,7 @@ ScreenGui.Name = "klakzHub_MainUI"
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
--- Ana Panel (Doğrudan Açılır, Key/Login Yok)
+-- Ana Panel
 local Dashboard = Instance.new("Frame")
 Dashboard.Parent = ScreenGui
 Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
@@ -25,9 +25,9 @@ Dashboard.Parent = Dashboard
 local DashStroke = Instance.new("UIStroke")
 DashStroke.Color = Color3.fromRGB(99, 102, 241)
 DashStroke.Thickness = 2
-DashStroke.Parent = Dashboard
+Dashboard.Parent = Dashboard
 
--- Üst Bilgi Barı (Speed Hub Tarzı)
+-- Üst Bilgi Barı
 local TopBar = Instance.new("Frame")
 TopBar.Parent = Dashboard
 TopBar.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
@@ -88,7 +88,8 @@ TabsContainer.Parent = Dashboard
 TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
 TabsContainer.Position = UDim2.new(0, 12, 0, 58)
 TabsContainer.Size = UDim2.new(0, 150, 0, 330)
-TabsContainer.CanvasSize = UDim2.new(0, 0, 2.5, 0)
+TabsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+TabsContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
 TabsContainer.ScrollBarThickness = 3
 
 local TabsLayout = Instance.new("UIListLayout")
@@ -97,15 +98,16 @@ TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TabsLayout.Padding = UDim.new(0, 5)
 
 -- Sağ Sayfalar (Script Butonları) Alanı
-local PagesContainer = Instance.new("ScrollingFrame")
+local PagesContainer = Instance.new("Frame")
 PagesContainer.Parent = Dashboard
 PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
 PagesContainer.Position = UDim2.new(0, 174, 0, 58)
 PagesContainer.Size = UDim2.new(0, 364, 0, 330)
-PagesContainer.CanvasSize = UDim2.new(0, 0, 4.0, 0)
-PagesContainer.ScrollBarThickness = 3
+PagesContainer.BackgroundTransparency = 1
 
 local firstTab = true
+local activePage = nil
+
 local function CreateCategory(name)
     local TabBtn = Instance.new("TextButton")
     TabBtn.Parent = TabsContainer
@@ -120,10 +122,13 @@ local function CreateCategory(name)
     BtnCorner.CornerRadius = UDim.new(0, 6)
     BtnCorner.Parent = TabBtn
 
-    local Page = Instance.new("Frame")
+    local Page = Instance.new("ScrollingFrame")
     Page.Parent = PagesContainer
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
+    Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Page.ScrollBarThickness = 3
     Page.Visible = false
 
     local PageLayout = Instance.new("UIListLayout")
@@ -132,14 +137,16 @@ local function CreateCategory(name)
     PageLayout.Padding = UDim.new(0, 6)
 
     TabBtn.MouseButton1Click:Connect(function()
-        for _, v in pairs(PagesContainer:GetChildren()) do
-            if v:IsA("Frame") then v.Visible = false end
+        if activePage then
+            activePage.Visible = false
         end
         Page.Visible = true
+        activePage = Page
     end)
 
     if firstTab then
         Page.Visible = true
+        activePage = Page
         firstTab = false
     end
 
@@ -166,9 +173,8 @@ local function AddScriptButton(parent, label, callback)
     end)
 end
 
--- ==================== KATEGORİLER VE GENİŞLETİLMİŞ UNIVERSAL SCRIPTLER ====================
+-- ==================== KATEGORİLER VE SCRIPTLER ====================
 
--- 1. Universal Hareket & Fizik
 local TabMove = CreateCategory("🏃 Hareket / Fizik")
 AddScriptButton(TabMove, "Güvenli Fly (Uçma V3)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
 AddScriptButton(TabMove, "Speed Hack (50 Hız)", function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.WalkSpeed = 50 end end)
@@ -176,27 +182,23 @@ AddScriptButton(TabMove, "Super Jump (Zıplama Gücü)", function() local p = ga
 AddScriptButton(TabMove, "Noclip (Duvarlardan Geçme)", function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Noclip-12345"))() end)
 AddScriptButton(TabMove, "Infinite Jump (Sınırsız Zıplama)", function() game:GetService("UserInputService").JumpRequest:Connect(function() game:GetService("Players").LocalPlayer.Character.Humanoid:ChangeState("Jumping") end) end)
 
--- 2. Universal Görsel & ESP
 local TabVisual = CreateCategory("👁️ Görsel & ESP")
 AddScriptButton(TabVisual, "Universal ESP (Oyuncuları Gör)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/PrivateUser202/ESP/main/UniversalESP.lua"))() end)
 AddScriptButton(TabVisual, "Fullbright (Gece Görüşü / Işık)", function() local l = game:GetService("Lighting") l.Ambient = Color3.new(1,1,1) l.Brightness = 2 l.ClockTime = 14 end)
 AddScriptButton(TabVisual, "FOV Changer (Görüş Açısı)", function() workspace.CurrentCamera.FieldOfView = 120 end)
 AddScriptButton(TabVisual, "X-Ray (Duvar Şeffaflığı)", function() for _,v in pairs(workspace:GetDescendants()) do if v:IsA("BasePart") and v.Transparency < 0.5 then v.Transparency = 0.5 end end end)
 
--- 3. Universal Admin & Araçlar
 local TabAdmin = CreateCategory("🛠️ Admin Komutları")
 AddScriptButton(TabAdmin, "Infinite Yield (En İyi Admin)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
 AddScriptButton(TabAdmin, "Nameless Admin", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/FilteringEnabled/NamelessAdmin/main/Source"))() end)
 AddScriptButton(TabAdmin, "Dex Explorer (Oyun Kodları)", function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dark-Dex-V3-15638"))() end)
 AddScriptButton(TabAdmin, "Remote Spy (Event Yakalayıcı)", function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Remote-Spy-Hub-6102"))() end)
 
--- 4. Popüler Oyunlar (Hublar)
 local TabHubs = CreateCategory("⚡ Büyük Hublar")
 AddScriptButton(TabHubs, "Speed Hub X (Genel Destekli)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
 AddScriptButton(TabHubs, "Vape V4 (PvP / Combat)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
 AddScriptButton(TabHubs, "Owl Hub (Aimbot & ESP)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
 
--- 5. Özel Oyun Sekmeleri
 local TabTSB = CreateCategory("⚔️ Strongest Battle.")
 AddScriptButton(TabTSB, "BadWare Hub", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))() end)
 
