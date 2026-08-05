@@ -1,4 +1,4 @@
--- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm
+-- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Güncellenmiş ESP ve Noclip)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -448,18 +448,73 @@ local function LoadDashboard(isVIP)
         local tNames = texts[currentLang].tabs
         local sNames = texts[currentLang].scripts
 
-        -- 1. Genel Araçlar (Standart ve VIP Ortak - Sadece Temel Araçlar)
+        -- 1. Genel Araçlar (Düzeltilmiş Güncel Noclip Kodu Dahil)
         local TabGenel = CreateCategory(tNames[1])
         AddScriptButton(TabGenel, sNames.fly, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
         AddScriptButton(TabGenel, sNames.inf, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
         AddScriptButton(TabGenel, sNames.speed, function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.WalkSpeed = 50 end end)
         AddScriptButton(TabGenel, sNames.god, function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.MaxHealth = math.huge p.Character.Humanoid.Health = math.huge end end)
-        AddScriptButton(TabGenel, sNames.noclip, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Noclip-12345"))() end)
+        
+        -- Düzeltilmiş Kararlı Noclip
+        AddScriptButton(TabGenel, sNames.noclip, function()
+            local p = game.Players.LocalPlayer
+            local RunService = game:GetService("RunService")
+            if getgenv().NoclipConnection then
+                getgenv().NoclipConnection:Disconnect()
+            end
+            getgenv().NoclipConnection = RunService.Stepped:Connect(function()
+                local char = p.Character
+                if char then
+                    for _, child in pairs(char:GetDescendants()) do
+                        if child:IsA("BasePart") and child.CanCollide then
+                            child.CanCollide = false
+                        end
+                    end
+                end
+            end)
+        end)
 
-        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL)
+        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL - Düzeltilmiş Güncel ESP Dahil)
         local TabUniversal = CreateCategory(tNames[2])
         if isVIP then
-            AddScriptButton(TabUniversal, sNames.esp, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/PrivateUser202/ESP/main/UniversalESP.lua"))() end)
+            -- Düzeltilmiş Çalışan ESP
+            AddScriptButton(TabUniversal, sNames.esp, function()
+                local Players = game:GetService("Players")
+                local LocalPlayer = Players.LocalPlayer
+
+                for _, player in pairs(Players:GetPlayers()) do
+                    if player ~= LocalPlayer then
+                        local function createESP(char)
+                            if not char:FindFirstChild("Head") then return end
+                            if char:FindFirstChild("KlakzESP") then return end
+
+                            local Billboard = Instance.new("BillboardGui")
+                            Billboard.Name = "KlakzESP"
+                            Billboard.Adornee = char.Head
+                            Billboard.Size = UDim2.new(0, 100, 0, 40)
+                            Billboard.StudsOffset = Vector3.new(0, 2.5, 0)
+                            Billboard.AlwaysOnTop = true
+                            Billboard.Parent = char
+
+                            local TextLabel = Instance.new("TextLabel")
+                            TextLabel.Parent = Billboard
+                            TextLabel.BackgroundTransparency = 1
+                            TextLabel.Size = UDim2.new(1, 0, 1, 0)
+                            TextLabel.Font = Enum.Font.GothamBold
+                            TextLabel.Text = player.Name
+                            TextLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+                            TextLabel.TextSize = 13
+                            TextLabel.TextStrokeTransparency = 0.5
+                        end
+
+                        if player.Character then
+                            createESP(player.Character)
+                        end
+                        player.CharacterAdded:Connect(createESP)
+                    end
+                end
+            end)
+
             AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
             AddScriptButton(TabUniversal, sNames.vape, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
             AddScriptButton(TabUniversal, sNames.owl, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
