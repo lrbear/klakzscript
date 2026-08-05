@@ -1,4 +1,4 @@
--- klakz Hub - 200+ Gerçek Oyun Scripti (Ultimate Mega Sürüm)
+-- klakz Hub - 200+ Gerçek Oyun Scripti (Arama Özellikli Ultimate Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -23,6 +23,7 @@ local texts = {
         errVipKey = "❌ Geçersiz Premium Anahtar!",
         headerStd = "klakz Hub [Standart Sürüm]",
         headerVip = "klakz Hub [👑 200+ ULTIMATE MEGA SÜRÜM]",
+        searchPlaceholder = "🔍 Script Ara (örn: Blox Fruits, Fisch...)",
         tabs = {
             "Genel Araçlar", 
             "Popüler Oyunlar", 
@@ -41,6 +42,7 @@ local texts = {
         errVipKey = "❌ Invalid Premium Key!",
         headerStd = "klakz Hub [Standard Edition]",
         headerVip = "klakz Hub [👑 200+ ULTIMATE MEGA EDITION]",
+        searchPlaceholder = "🔍 Search Script (e.g., Blox Fruits, Fisch...)",
         tabs = {
             "General Tools", 
             "Popular Games", 
@@ -153,8 +155,8 @@ local function LoadDashboard(isVIP)
     local Dashboard = Instance.new("Frame")
     Dashboard.Parent = ScreenGui
     Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-    Dashboard.Position = UDim2.new(0.5, -240, 0.5, -190)
-    Dashboard.Size = UDim2.new(0, 480, 0, 380)
+    Dashboard.Position = UDim2.new(0.5, -240, 0.5, -200)
+    Dashboard.Size = UDim2.new(0, 480, 0, 400)
     Dashboard.Active = true
     Dashboard.Draggable = true
     Instance.new("UICorner", Dashboard).CornerRadius = UDim.new(0, 10)
@@ -167,7 +169,7 @@ local function LoadDashboard(isVIP)
     local TopBar = Instance.new("Frame")
     TopBar.Parent = Dashboard
     TopBar.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
-    TopBar.Size = UDim2.new(1, 0, 0, 45)
+    TopBar.Size = UDim2.new(1, 0, 0, 40)
     Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 10)
 
     local TitleText = Instance.new("TextLabel")
@@ -178,26 +180,40 @@ local function LoadDashboard(isVIP)
     TitleText.Font = Enum.Font.GothamBold
     TitleText.Text = isVIP and texts[currentLang].headerVip or texts[currentLang].headerStd
     TitleText.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(255, 255, 255)
-    TitleText.TextSize = 12
+    TitleText.TextSize = 11
     TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
     local CloseButton = Instance.new("TextButton")
     CloseButton.Parent = TopBar
     CloseButton.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-    CloseButton.Position = UDim2.new(1, -38, 0, 10)
-    CloseButton.Size = UDim2.new(0, 26, 0, 25)
+    CloseButton.Position = UDim2.new(1, -35, 0, 7)
+    CloseButton.Size = UDim2.new(0, 25, 0, 25)
     CloseButton.Font = Enum.Font.GothamBold
     CloseButton.Text = "✕"
     CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseButton.TextSize = 12
+    CloseButton.TextSize = 11
     Instance.new("UICorner", CloseButton).CornerRadius = UDim.new(0, 6)
     CloseButton.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+
+    -- Arama Çubuğu (Search Bar)
+    local SearchBar = Instance.new("TextBox")
+    SearchBar.Parent = Dashboard
+    SearchBar.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    SearchBar.Position = UDim2.new(0, 12, 0, 48)
+    SearchBar.Size = UDim2.new(0, 456, 0, 30)
+    SearchBar.Font = Enum.Font.Gotham
+    SearchBar.PlaceholderText = texts[currentLang].searchPlaceholder
+    SearchBar.Text = ""
+    SearchBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SearchBar.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
+    SearchBar.TextSize = 10
+    Instance.new("UICorner", SearchBar).CornerRadius = UDim.new(0, 6)
 
     local TabsContainer = Instance.new("ScrollingFrame")
     TabsContainer.Parent = Dashboard
     TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-    TabsContainer.Position = UDim2.new(0, 12, 0, 58)
-    TabsContainer.Size = UDim2.new(0, 140, 0, 310)
+    TabsContainer.Position = UDim2.new(0, 12, 0, 84)
+    TabsContainer.Size = UDim2.new(0, 130, 0, 304)
     TabsContainer.CanvasSize = UDim2.new(0, 0, 3.0, 0)
     TabsContainer.ScrollBarThickness = 3
     
@@ -209,10 +225,12 @@ local function LoadDashboard(isVIP)
     local PagesContainer = Instance.new("ScrollingFrame")
     PagesContainer.Parent = Dashboard
     PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-    PagesContainer.Position = UDim2.new(0, 162, 0, 58)
-    PagesContainer.Size = UDim2.new(0, 306, 0, 310)
+    PagesContainer.Position = UDim2.new(0, 152, 0, 84)
+    PagesContainer.Size = UDim2.new(0, 316, 0, 304)
     PagesContainer.CanvasSize = UDim2.new(0, 0, 22.0, 0)
     PagesContainer.ScrollBarThickness = 3
+
+    local allScriptButtons = {}
 
     local firstTab = true
     local function CreateCategory(name, isVipTab)
@@ -221,7 +239,7 @@ local function LoadDashboard(isVIP)
         local TabBtn = Instance.new("TextButton")
         TabBtn.Parent = TabsContainer
         TabBtn.BackgroundColor3 = isVipTab and Color3.fromRGB(50, 40, 20) or Color3.fromRGB(30, 30, 40)
-        TabBtn.Size = UDim2.new(1, -6, 0, 34)
+        TabBtn.Size = UDim2.new(1, -6, 0, 32)
         TabBtn.Font = Enum.Font.GothamMedium
         TabBtn.Text = name
         TabBtn.TextColor3 = isVipTab and Color3.fromRGB(250, 204, 21) or Color3.fromRGB(210, 210, 220)
@@ -259,7 +277,7 @@ local function LoadDashboard(isVIP)
         local ScriptBtn = Instance.new("TextButton")
         ScriptBtn.Parent = parent
         ScriptBtn.BackgroundColor3 = isVipScript and Color3.fromRGB(50, 40, 20) or Color3.fromRGB(38, 38, 50)
-        ScriptBtn.Size = UDim2.new(1, -10, 0, 32)
+        ScriptBtn.Size = UDim2.new(1, -10, 0, 30)
         ScriptBtn.Font = Enum.Font.Gotham
         ScriptBtn.Text = label
         ScriptBtn.TextColor3 = isVipScript and Color3.fromRGB(250, 204, 21) or Color3.fromRGB(255, 255, 255)
@@ -275,7 +293,27 @@ local function LoadDashboard(isVIP)
                 end
             end)
         end)
+
+        table.insert(allScriptButtons, ScriptBtn)
     end
+
+    -- Arama Fonksiyonu
+    SearchBar:GetPropertyChangedSignal("Text"):Connect(function()
+        local query = string.lower(SearchBar.Text)
+        if query == "" then
+            for _, btn in ipairs(allScriptButtons) do
+                btn.Visible = true
+            end
+        else
+            for _, btn in ipairs(allScriptButtons) do
+                if string.find(string.lower(btn.Text), query) then
+                    btn.Visible = true
+                else
+                    btn.Visible = false
+                end
+            end
+        end
+    end)
 
     local tNames = texts[currentLang].tabs
 
@@ -291,9 +329,9 @@ local function LoadDashboard(isVIP)
     AddScriptButton(TabPopular, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
     AddScriptButton(TabPopular, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
 
-    -- ==================== 3. MEGA ARŞİV KISMI (Gumanba Entegrasyonlu 200+ Script) ====================
+    -- ==================== 3. MEGA ARŞİV KISMI (200+ Script) ====================
     
-    -- Bölüm 1 (1 - 50) - gumanba/Scripts Entegrasyonu Başlangıcı
+    -- Bölüm 1 (1 - 50)
     local TabMega1 = CreateCategory(tNames[3], true)
     if TabMega1 then
         local list1 = {
