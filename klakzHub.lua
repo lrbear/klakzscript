@@ -1,4 +1,4 @@
--- klakz Hub - Place ID Otomatik Algılamalı Akıllı Sistem
+-- klakz Hub - Place ID Otomatik Algılama ve Admin Şifreli Giriş Sistemi
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -10,30 +10,24 @@ ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
 local NORMAL_KEY = "klakz123"
-local PREMIUM_KEY = "klakz_vip_2026"
+local ADMIN_PASSWORD = "admin_klakz_99" -- Admin şifresi
 local currentLang = "TR"
 local currentPlaceId = game.PlaceId
+local loginMode = "KEY" -- "KEY" veya "ADMIN"
 
 -- Oyun Veritabanı (Place ID Eşleşmeleri ve Scriptleri)
 local gameDatabase = {
-    -- Popüler Dövüş / Anime
     [2753915549] = {name = "Blox Fruits", url = "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
     [10449761463] = {name = "The Strongest Battlegrounds", url = "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
     [1537690962] = {name = "Type Soul", url = "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua"},
     [16732694052] = {name = "Anime Vanguards", url = "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards"},
-    
-    -- Simulator & Pet
     [8737899170] = {name = "Pet Simulator 99!", url = "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
     [17260714902] = {name = "Fisch", url = "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
     [10078438206] = {name = "Gym League", url = "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
     [16478940842] = {name = "Arm Wrestle Simulator", url = "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"},
-
-    -- FPS & Yetenek
     [11520107397] = {name = "Blade Ball", url = "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"},
     [142823291] = {name = "Murder Mystery 2", url = "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2"},
     [8554990801] = {name = "BedWars", url = "https://raw.githubusercontent.com/VapeVoidware/vapevoidware/main/loader.lua"},
-
-    -- Korku & Hayatta Kalma
     [6516141723] = {name = "Doors", url = "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
     [9872472334] = {name = "Evade", url = "https://raw.githubusercontent.com/RobloxScripts/Evade/main/Source.lua"},
     [286090429] = {name = "Arsenal", url = "https://raw.githubusercontent.com/fevse/Arsenal/main/Loader"}
@@ -42,25 +36,31 @@ local gameDatabase = {
 local texts = {
     TR = {
         loginTitle = "KLAKZ HUB GİRİŞ",
-        placeholder = "Anahtarınızı (Key) girin...",
-        stdBtn = "Standart Giriş Yap",
-        vipBtn = "👑 VIP / Premium Giriş",
+        adminTitle = "KLAKZ ADMIN GİRİŞİ",
+        placeholderKey = "Anahtarınızı (Key) girin...",
+        placeholderAdmin = "Admin şifresini girin...",
+        loginBtn = "Giriş Yap",
+        adminTabBtn = "🔐 Admin Girişi",
+        keyTabBtn = "🔑 Key ile Giriş",
         errKey = "❌ Geçersiz Anahtar!",
-        errVipKey = "❌ Geçersiz VIP Anahtar!",
-        alertText = "✅ Key Onaylandı! Sistem Yükleniyor...",
+        errAdmin = "❌ Hatalı Admin Şifresi!",
         stdHeader = "klakz Hub [Otomatik Algılama]",
+        adminHeader = "klakz Hub [👑 ADMIN PANELİ]",
         activeGame = "Algılanan Oyun ID: ",
         unknownGame = "⚠️ Bu oyun veritabanında yok (Genel Araçlar Aktif)"
     },
     EN = {
         loginTitle = "KLAKZ HUB LOGIN",
-        placeholder = "Enter your key...",
-        stdBtn = "Standard Login",
-        vipBtn = "👑 VIP / Premium Login",
+        adminTitle = "KLAKZ ADMIN LOGIN",
+        placeholderKey = "Enter your key...",
+        placeholderAdmin = "Enter admin password...",
+        loginBtn = "Login",
+        adminTabBtn = "🔐 Admin Login",
+        keyTabBtn = "🔑 Key Login",
         errKey = "❌ Invalid Key!",
-        errVipKey = "❌ Invalid VIP Key!",
-        alertText = "✅ Key Verified! Loading System...",
+        errAdmin = "❌ Incorrect Admin Password!",
         stdHeader = "klakz Hub [Auto Detect]",
+        adminHeader = "klakz Hub [👑 ADMIN PANEL]",
         activeGame = "Detected Game ID: ",
         unknownGame = "⚠️ Game not in database (General Tools Active)"
     }
@@ -81,6 +81,7 @@ CardStroke.Color = Color3.fromRGB(99, 102, 241)
 CardStroke.Thickness = 2
 CardStroke.Parent = LoginCard
 
+-- Dil Seçenekleri (TR / EN)
 local LangTR = Instance.new("TextButton")
 LangTR.Parent = LoginCard
 LangTR.BackgroundColor3 = currentLang == "TR" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
@@ -125,43 +126,44 @@ LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginTitle.TextSize = 13
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-local KeyInput = Instance.new("TextBox")
-KeyInput.Parent = LoginCard
-KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-KeyInput.Position = UDim2.new(0, 25, 0, 70)
-KeyInput.Size = UDim2.new(0, 290, 0, 42)
-KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = texts[currentLang].placeholder
-KeyInput.Text = ""
-KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyInput.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
-KeyInput.TextSize = 13
-Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
+local InputField = Instance.new("TextBox")
+InputField.Parent = LoginCard
+InputField.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+InputField.Position = UDim2.new(0, 25, 0, 75)
+InputField.Size = UDim2.new(0, 290, 0, 42)
+InputField.Font = Enum.Font.Gotham
+InputField.PlaceholderText = texts[currentLang].placeholderKey
+InputField.Text = ""
+InputField.TextColor3 = Color3.fromRGB(255, 255, 255)
+InputField.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
+InputField.TextSize = 13
+Instance.new("UICorner", InputField).CornerRadius = UDim.new(0, 8)
 
-local BtnStandard = Instance.new("TextButton")
-BtnStandard.Parent = LoginCard
-BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
-BtnStandard.Position = UDim2.new(0, 25, 0, 130)
-BtnStandard.Size = UDim2.new(0, 290, 0, 42)
-BtnStandard.Font = Enum.Font.GothamBold
-BtnStandard.Text = texts[currentLang].stdBtn
-BtnStandard.TextColor3 = Color3.fromRGB(255, 255, 255)
-BtnStandard.TextSize = 13
-Instance.new("UICorner", BtnStandard).CornerRadius = UDim.new(0, 8)
+local BtnLogin = Instance.new("TextButton")
+BtnLogin.Parent = LoginCard
+BtnLogin.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+BtnLogin.Position = UDim2.new(0, 25, 0, 135)
+BtnLogin.Size = UDim2.new(0, 290, 0, 42)
+BtnLogin.Font = Enum.Font.GothamBold
+BtnLogin.Text = texts[currentLang].loginBtn
+BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
+BtnLogin.TextSize = 13
+Instance.new("UICorner", BtnLogin).CornerRadius = UDim.new(0, 8)
 
-local BtnVIP = Instance.new("TextButton")
-BtnVIP.Parent = LoginCard
-BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
-BtnVIP.Position = UDim2.new(0, 25, 0, 185)
-BtnVIP.Size = UDim2.new(0, 290, 0, 42)
-BtnVIP.Font = Enum.Font.GothamBold
-BtnVIP.Text = texts[currentLang].vipBtn
-BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
-BtnVIP.TextSize = 13
-Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
+-- Mod Değiştirme Butonu (Key <-> Admin)
+local BtnToggleMode = Instance.new("TextButton")
+BtnToggleMode.Parent = LoginCard
+BtnToggleMode.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+BtnToggleMode.Position = UDim2.new(0, 25, 0, 190)
+BtnToggleMode.Size = UDim2.new(0, 290, 0, 38)
+BtnToggleMode.Font = Enum.Font.GothamBold
+BtnToggleMode.Text = texts[currentLang].adminTabBtn
+BtnToggleMode.TextColor3 = Color3.fromRGB(234, 179, 8)
+BtnToggleMode.TextSize = 12
+Instance.new("UICorner", BtnToggleMode).CornerRadius = UDim.new(0, 8)
 
 -- ==================== 2. ANA KONTROL PANELİ ====================
-local function LoadDashboard(isVIP)
+local function LoadDashboard(isAdmin)
     LoginCard:Destroy()
 
     local Dashboard = Instance.new("Frame")
@@ -174,7 +176,7 @@ local function LoadDashboard(isVIP)
     Instance.new("UICorner", Dashboard).CornerRadius = UDim.new(0, 10)
 
     local DashStroke = Instance.new("UIStroke")
-    DashStroke.Color = Color3.fromRGB(99, 102, 241)
+    DashStroke.Color = isAdmin and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(99, 102, 241)
     DashStroke.Thickness = 2
     DashStroke.Parent = Dashboard
 
@@ -190,8 +192,8 @@ local function LoadDashboard(isVIP)
     TitleText.Position = UDim2.new(0, 15, 0, 0)
     TitleText.Size = UDim2.new(0, 300, 1, 0)
     TitleText.Font = Enum.Font.GothamBold
-    TitleText.Text = texts[currentLang].stdHeader
-    TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleText.Text = isAdmin and texts[currentLang].adminHeader or texts[currentLang].stdHeader
+    TitleText.TextColor3 = isAdmin and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(255, 255, 255)
     TitleText.TextSize = 12
     TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -207,7 +209,6 @@ local function LoadDashboard(isVIP)
     Instance.new("UICorner", CloseButton).CornerRadius = UDim.new(0, 6)
     CloseButton.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
-    -- Bilgi Ekranı (Place ID Göstergesi)
     local InfoLabel = Instance.new("TextLabel")
     InfoLabel.Parent = Dashboard
     InfoLabel.BackgroundTransparency = 1
@@ -219,7 +220,6 @@ local function LoadDashboard(isVIP)
     InfoLabel.TextSize = 12
     InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- İçerik Alanı (ScrollingFrame)
     local Container = Instance.new("ScrollingFrame")
     Container.Parent = Dashboard
     Container.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
@@ -249,7 +249,13 @@ local function LoadDashboard(isVIP)
         end)
     end
 
-    -- Her Oyunda Çalışan Genel Araçlar
+    -- Admin isen ekstra özellikler gösterilebilir
+    if isAdmin then
+        AddButton("👑 [ADMIN] Tüm Oyun Scriptlerine Tam Erişim", function()
+            print("Admin ayrıcalığı aktif!")
+        end)
+    end
+
     AddButton("🚀 Güvenli Fly (Uçma V3)", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
     end)
@@ -260,7 +266,6 @@ local function LoadDashboard(isVIP)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua"))()
     end)
 
-    -- Place ID Eşleşmesine Göre Oyuna Özel Scripti Getir
     local detectedGame = gameDatabase[currentPlaceId]
     if detectedGame then
         AddButton("⭐ [" .. detectedGame.name .. "] Özel Scriptini Çalıştır", function()
@@ -278,46 +283,75 @@ local function LoadDashboard(isVIP)
     end
 end
 
+-- Dil Değiştirme Fonksiyonları
+local function UpdateTexts()
+    if loginMode == "KEY" then
+        LoginTitle.Text = texts[currentLang].loginTitle
+        InputField.PlaceholderText = texts[currentLang].placeholderKey
+        BtnLogin.Text = texts[currentLang].loginBtn
+        BtnToggleMode.Text = texts[currentLang].adminTabBtn
+    else
+        LoginTitle.Text = texts[currentLang].adminTitle
+        InputField.PlaceholderText = texts[currentLang].placeholderAdmin
+        BtnLogin.Text = texts[currentLang].loginBtn
+        BtnToggleMode.Text = texts[currentLang].keyTabBtn
+    end
+end
+
 LangTR.MouseButton1Click:Connect(function()
     currentLang = "TR"
     LangTR.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
     LangEN.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    LoginTitle.Text = texts.TR.loginTitle
-    KeyInput.PlaceholderText = texts.TR.placeholder
-    BtnStandard.Text = texts.TR.stdBtn
-    BtnVIP.Text = texts.TR.vipBtn
+    UpdateTexts()
 end)
 
 LangEN.MouseButton1Click:Connect(function()
     currentLang = "EN"
     LangEN.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
     LangTR.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
-    LoginTitle.Text = texts.EN.loginTitle
-    KeyInput.PlaceholderText = texts.EN.placeholder
-    BtnStandard.Text = texts.EN.stdBtn
-    BtnVIP.Text = texts.EN.vipBtn
+    UpdateTexts()
 end)
 
-BtnStandard.MouseButton1Click:Connect(function()
-    if KeyInput.Text == NORMAL_KEY then
-        LoadDashboard(false)
+-- Modlar Arası Geçiş (Key <-> Admin Şifre)
+BtnToggleMode.MouseButton1Click:Connect(function()
+    if loginMode == "KEY" then
+        loginMode = "ADMIN"
+        CardStroke.Color = Color3.fromRGB(234, 179, 8)
+        BtnLogin.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
+        BtnLogin.TextColor3 = Color3.fromRGB(20, 20, 25)
+        BtnToggleMode.TextColor3 = Color3.fromRGB(99, 102, 241)
     else
-        BtnStandard.Text = texts[currentLang].errKey
-        BtnStandard.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-        task.wait(1.5)
-        BtnStandard.Text = texts[currentLang].stdBtn
-        BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+        loginMode = "KEY"
+        CardStroke.Color = Color3.fromRGB(99, 102, 241)
+        BtnLogin.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+        BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
+        BtnToggleMode.TextColor3 = Color3.fromRGB(234, 179, 8)
     end
+    InputField.Text = ""
+    UpdateTexts()
 end)
 
-BtnVIP.MouseButton1Click:Connect(function()
-    if KeyInput.Text == PREMIUM_KEY then
-        LoadDashboard(true)
+-- Giriş Yap Butonu
+BtnLogin.MouseButton1Click:Connect(function()
+    if loginMode == "KEY" then
+        if InputField.Text == NORMAL_KEY then
+            LoadDashboard(false)
+        else
+            BtnLogin.Text = texts[currentLang].errKey
+            BtnLogin.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+            task.wait(1.5)
+            UpdateTexts()
+            BtnLogin.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+        end
     else
-        BtnVIP.Text = texts[currentLang].errVipKey
-        BtnVIP.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-        task.wait(1.5)
-        BtnVIP.Text = texts[currentLang].vipBtn
-        BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
+        if InputField.Text == ADMIN_PASSWORD then
+            LoadDashboard(true)
+        else
+            BtnLogin.Text = texts[currentLang].errAdmin
+            BtnLogin.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+            task.wait(1.5)
+            UpdateTexts()
+            BtnLogin.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
+        end
     end
 end)
