@@ -1,4 +1,4 @@
--- klakz Hub - Hata Korumalı & Stabil Sürüm
+-- klakz Hub - Siyah Ekran / Çökme Düzeltilmiş Kararlı Sürüm
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -25,7 +25,7 @@ Dashboard.Parent = Dashboard
 local DashStroke = Instance.new("UIStroke")
 DashStroke.Color = Color3.fromRGB(99, 102, 241)
 DashStroke.Thickness = 2
-Dashboard.Parent = Dashboard
+DashStroke.Parent = Dashboard
 
 -- Üst Bilgi Barı
 local TopBar = Instance.new("Frame")
@@ -97,7 +97,7 @@ TabsLayout.Parent = TabsContainer
 TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TabsLayout.Padding = UDim.new(0, 5)
 
--- Sağ Sayfalar (Script Butonları) Alanı
+-- Sağ Sayfalar Taşıyıcısı (Hatasız Çerçeve)
 local PagesContainer = Instance.new("Frame")
 PagesContainer.Parent = Dashboard
 PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
