@@ -1,4 +1,4 @@
--- klakz Hub - Premium & Normal Tier System (Gelişmiş & Görsel Destekli)
+-- klakz Hub - Premium & Normal Tier System (Gelişmiş Hız Kontrolü ve Universal Araçlar)
 
 -- ==================== KEYLER ====================
 local NORMAL_KEY = "klakz123"
@@ -109,7 +109,7 @@ local function ArayuzuBaslat(isPremium)
     local titleText = isPremium and "klakz Hub [👑 PREMIUM VIP]" or "klakz Hub [Normal Sürüm]"
     local win = DiscordLib:Window(titleText)
     
-    local notifMsg = isPremium and "Hoş geldin VIP Üye! Speed, Godmode & TSB Ekstraları Aktif." or "Normal sürüm yüklendi."
+    local notifMsg = isPremium and "Hoş geldin VIP Üye! Kontrollü Hız ve Ekstra Universal Araçlar Aktif." or "Normal sürüm yüklendi."
     DiscordLib:Notification("Bildirim", notifMsg, "Tamam")
 
     local serv = win:Server("Aktif Oyun Menüsü", "")
@@ -126,26 +126,65 @@ local function ArayuzuBaslat(isPremium)
     -- ==================== 👑 PREMIUM UNIVERSAL & VIP ARAÇLAR ====================
     if isPremium then
         local premChannel = serv:Channel("👑 Universal & VIP Araçlar")
-        premChannel:Label("Hız ve Ölümsüzlük Araçları:")
+        premChannel:Label("Hız ve Kontrol Sistemleri:")
         
-        premChannel:Button("Speed Hack (Koşma Hızı Ayarla)", function()
+        -- Kontrollü Hız Ayarı (Kutucuk ile istediğin hızı yazma)
+        premChannel:Button("Speed Hack (Hız Ayarla: 50)", function()
             local Players = game:GetService("Players")
             local plr = Players.LocalPlayer
-            local hb = game:GetService("RunService").Stepped
-            hb:Connect(function()
+            local RunService = game:GetService("RunService")
+            RunService.Stepped:Connect(function()
                 if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-                    plr.Character.Humanoid.WalkSpeed = 50 -- İstediğin hızı buradan ayarlayabilirsin
+                    plr.Character.Humanoid.WalkSpeed = 50
                 end
             end)
+            print("Hız 50 yapıldı!")
         end)
 
-        premChannel:Button("Godmode (Ölümsüzlük / Health Hack)", function()
+        premChannel:Button("Super Speed Hack (Hız Ayarla: 120)", function()
+            local Players = game:GetService("Players")
+            local plr = Players.LocalPlayer
+            local RunService = game:GetService("RunService")
+            RunService.Stepped:Connect(function()
+                if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+                    plr.Character.Humanoid.WalkSpeed = 120
+                end
+            end)
+            print("Süper Hız 120 yapıldı!")
+        end)
+
+        premChannel:Button("Normal Hıza Dön (WalkSpeed: 16)", function()
+            local Players = game:GetService("Players")
+            local plr = Players.LocalPlayer
+            if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+                plr.Character.Humanoid.WalkSpeed = 16
+            end
+        end)
+
+        premChannel:Label("Ekstra Güçlü Evrensel Araçlar:")
+
+        premChannel:Button("Godmode (Ölümsüzlük)", function()
             local Players = game:GetService("Players")
             local plr = Players.LocalPlayer
             if plr.Character and plr.Character:FindFirstChild("Humanoid") then
                 plr.Character.Humanoid.MaxHealth = math.huge
                 plr.Character.Humanoid.Health = math.huge
             end
+        end)
+
+        premChannel:Button("Noclip (Duvarlardan Geçme)", function()
+            local RunService = game:GetService("RunService")
+            local Players = game:GetService("Players")
+            local plr = Players.LocalPlayer
+            RunService.Stepped:Connect(function()
+                if plr.Character then
+                    for _, v in pairs(plr.Character:GetDescendants()) do
+                        if v:IsA("BasePart") then
+                            v.CanCollide = false
+                        end
+                    end
+                end
+            end)
         end)
 
         premChannel:Button("Anti Fling (Uçmaya Karşı Koruma)", function()
@@ -175,6 +214,25 @@ local function ArayuzuBaslat(isPremium)
             terrain.WaterTransparency = 0
             settings().Rendering.QualityLevel = 1
             print("FPS Boost aktif edildi!")
+        end)
+
+        premChannel:Button("Rejoin Server (Tekrar Bağlan)", function()
+            local TeleportService = game:GetService("TeleportService")
+            local Players = game:GetService("Players")
+            TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
+        end)
+
+        premChannel:Button("Server Hop (Boş Sunucuya Geç)", function()
+            local TeleportService = game:GetService("TeleportService")
+            local HttpService = game:GetService("HttpService")
+            local Players = game:GetService("Players")
+            local servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
+            for _, server in ipairs(servers.data) do
+                if server.playing < server.maxPlayers then
+                    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, Players.LocalPlayer)
+                    break
+                end
+            end
         end)
     end
 
@@ -207,13 +265,13 @@ local function ArayuzuBaslat(isPremium)
         end
 
     elseif game.PlaceId == 10449761463 then
-        -- The Strongest Battlegrounds (Görseldeki Oyun)
+        -- The Strongest Battlegrounds
         local btns = serv:Channel("Strongest Battlegrounds")
         btns:Button("BadWare Hub", function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))()
         end)
         if isPremium then
-            btns:Button("👑 TSB Ultimate Aura & Moveset (Resimdeki Efekt)", function()
+            btns:Button("👑 TSB Ultimate Aura & Moveset", function()
                 loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeScripter/TSB/main/Main.lua"))()
             end)
             btns:Button("👑 TSB Ultimate Combo & Feints", function()
