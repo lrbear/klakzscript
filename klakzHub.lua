@@ -1,4 +1,4 @@
--- klakz Hub - TR/EN Dil Desteği & Login Sonrası Bildirimli Sürüm
+-- klakz Hub - Temiz Logo, Bildirim ve Sabit Login Sürümü
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -13,47 +13,12 @@ ScreenGui.ResetOnSpawn = false
 local NORMAL_KEY = "klakz123"
 local PREMIUM_KEY = "klakz_vip_2026"
 
--- Aktif Dil Değişkeni ("TR" veya "EN")
-local currentLang = "TR"
-
--- Metin Sözlüğü
-local texts = {
-    TR = {
-        loginTitle = "⚡ KLAKZ HUB | GİRİŞ",
-        placeholder = "Anahtarınızı (Key) girin...",
-        stdBtn = "Standart Giriş Yap",
-        vipBtn = "👑 VIP / Premium Giriş",
-        stdTitle = "⚡ klakz Hub [Standart Sürüm]",
-        vipTitle = "👑 klakz Hub [VIP Sürüm]",
-        notifTitle = "Sistem Bilgilendirmesi",
-        notifDesc = "klakz Hub başarıyla yüklendi! Key onaylandı.",
-        notifBtn = "Tamam",
-        tabs = {"Genel Araçlar", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
-        errKey = "❌ Geçersiz Anahtar!",
-        errVipKey = "❌ Geçersiz VIP Anahtar!"
-    },
-    EN = {
-        loginTitle = "⚡ KLAKZ HUB | LOGIN",
-        placeholder = "Enter your key...",
-        stdBtn = "Standard Login",
-        vipBtn = "👑 VIP / Premium Login",
-        stdTitle = "⚡ klakz Hub [Standard Version]",
-        vipTitle = "👑 klakz Hub [VIP Version]",
-        notifTitle = "System Notification",
-        notifDesc = "klakz Hub successfully loaded! Key verified.",
-        notifBtn = "OK",
-        tabs = {"General Tools", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
-        errKey = "❌ Invalid Key!",
-        errVipKey = "❌ Invalid VIP Key!"
-    }
-}
-
--- ==================== 1. LOGIN EKRANI ====================
+-- ==================== 1. MODERN LOGIN EKRANI (LOGOLU) ====================
 local LoginCard = Instance.new("Frame")
 LoginCard.Parent = ScreenGui
 LoginCard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-LoginCard.Position = UDim2.new(0.5, -170, 0.5, -120)
-LoginCard.Size = UDim2.new(0, 340, 0, 240)
+LoginCard.Position = UDim2.new(0.5, -170, 0.5, -135)
+LoginCard.Size = UDim2.new(0, 340, 0, 270)
 LoginCard.Active = true
 LoginCard.Draggable = true
 
@@ -66,23 +31,40 @@ CardStroke.Color = Color3.fromRGB(99, 102, 241)
 CardStroke.Thickness = 2
 CardStroke.Parent = LoginCard
 
+-- Logo / İkon Alanı
+local LoginLogo = Instance.new("TextLabel")
+LoginLogo.Parent = LoginCard
+LoginLogo.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+LoginLogo.Position = UDim2.new(0.5, -22, 0, 15)
+LoginLogo.Size = UDim2.new(0, 44, 0, 44)
+LoginLogo.Font = Enum.Font.GothamBold
+LoginLogo.Text = "⚡"
+LoginLogo.TextColor3 = Color3.fromRGB(255, 255, 255)
+LoginLogo.TextSize = 20
+
+local LogoCorner = Instance.new("UICorner")
+LogoCorner.CornerRadius = UDim.new(0, 10)
+LogoCorner.Parent = LoginLogo
+
+-- Login Başlık
 local LoginTitle = Instance.new("TextLabel")
 LoginTitle.Parent = LoginCard
 LoginTitle.BackgroundTransparency = 1
-LoginTitle.Position = UDim2.new(0, 0, 0, 15)
-LoginTitle.Size = UDim2.new(1, 0, 0, 30)
+LoginTitle.Position = UDim2.new(0, 0, 0, 65)
+LoginTitle.Size = UDim2.new(1, 0, 0, 25)
 LoginTitle.Font = Enum.Font.GothamBold
-LoginTitle.Text = texts.TR.loginTitle
+LoginTitle.Text = "KLAKZ HUB GİRİŞ"
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-LoginTitle.TextSize = 16
+LoginTitle.TextSize = 15
 
+-- Key Kutusu
 local KeyInput = Instance.new("TextBox")
 KeyInput.Parent = LoginCard
 KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-KeyInput.Position = UDim2.new(0, 25, 0, 65)
+KeyInput.Position = UDim2.new(0, 25, 0, 100)
 KeyInput.Size = UDim2.new(0, 290, 0, 42)
 KeyInput.Font = Enum.Font.Gotham
-KeyInput.PlaceholderText = texts.TR.placeholder
+KeyInput.PlaceholderText = "Anahtarınızı (Key) girin..."
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
@@ -92,13 +74,14 @@ local InputCorner = Instance.new("UICorner")
 InputCorner.CornerRadius = UDim.new(0, 8)
 InputCorner.Parent = KeyInput
 
+-- Standart Giriş Butonu
 local BtnStandard = Instance.new("TextButton")
 BtnStandard.Parent = LoginCard
 BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
-BtnStandard.Position = UDim2.new(0, 25, 0, 120)
+BtnStandard.Position = UDim2.new(0, 25, 0, 152)
 BtnStandard.Size = UDim2.new(0, 290, 0, 42)
 BtnStandard.Font = Enum.Font.GothamBold
-BtnStandard.Text = texts.TR.stdBtn
+BtnStandard.Text = "Standart Giriş Yap"
 BtnStandard.TextColor3 = Color3.fromRGB(255, 255, 255)
 BtnStandard.TextSize = 13
 
@@ -106,13 +89,14 @@ local StdCorner = Instance.new("UICorner")
 StdCorner.CornerRadius = UDim.new(0, 8)
 StdCorner.Parent = BtnStandard
 
+-- VIP Giriş Butonu
 local BtnVIP = Instance.new("TextButton")
 BtnVIP.Parent = LoginCard
 BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
-BtnVIP.Position = UDim2.new(0, 25, 0, 172)
+BtnVIP.Position = UDim2.new(0, 25, 0, 204)
 BtnVIP.Size = UDim2.new(0, 290, 0, 42)
 BtnVIP.Font = Enum.Font.GothamBold
-BtnVIP.Text = texts.TR.vipBtn
+BtnVIP.Text = "👑 VIP / Premium Giriş"
 BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
 BtnVIP.TextSize = 13
 
@@ -121,76 +105,44 @@ VipCorner.CornerRadius = UDim.new(0, 8)
 VipCorner.Parent = BtnVIP
 
 
--- ==================== 2. BİLGİLENDİRME (ALERT) PENCERESİ ====================
-local function ShowNotification(callback)
-    local NotifOverlay = Instance.new("Frame")
-    NotifOverlay.Parent = ScreenGui
-    NotifOverlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    NotifOverlay.BackgroundTransparency = 0.5
-    NotifOverlay.Size = UDim2.new(1, 0, 1, 0)
-
-    local NotifBox = Instance.new("Frame")
-    NotifBox.Parent = NotifOverlay
-    NotifBox.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
-    NotifBox.Position = UDim2.new(0.5, -140, 0.5, -75)
-    NotifBox.Size = UDim2.new(0, 280, 0, 150)
-
-    local BoxCorner = Instance.new("UICorner")
-    BoxCorner.CornerRadius = UDim.new(0, 10)
-    BoxCorner.Parent = NotifBox
-
-    local BoxStroke = Instance.new("UIStroke")
-    BoxStroke.Color = Color3.fromRGB(99, 102, 241)
-    BoxStroke.Thickness = 2
-    BoxStroke.Parent = NotifBox
-
-    local Title = Instance.new("TextLabel")
-    Title.Parent = NotifBox
-    Title.BackgroundTransparency = 1
-    Title.Position = UDim2.new(0, 0, 0, 12)
-    Title.Size = UDim2.new(1, 0, 0, 25)
-    Title.Font = Enum.Font.GothamBold
-    Title.Text = texts[currentLang].notifTitle
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.TextSize = 14
-
-    local Desc = Instance.new("TextLabel")
-    Desc.Parent = NotifBox
-    Desc.BackgroundTransparency = 1
-    Desc.Position = UDim2.new(0, 15, 0, 45)
-    Desc.Size = UDim2.new(1, -30, 0, 45)
-    Desc.Font = Enum.Font.Gotham
-    Desc.Text = texts[currentLang].notifDesc
-    Desc.TextColor3 = Color3.fromRGB(200, 200, 210)
-    Desc.TextSize = 12
-    Desc.TextWrapped = true
-
-    local OkBtn = Instance.new("TextButton")
-    OkBtn.Parent = NotifBox
-    OkBtn.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
-    OkBtn.Position = UDim2.new(0, 25, 0, 100)
-    OkBtn.Size = UDim2.new(0, 230, 0, 32)
-    OkBtn.Font = Enum.Font.GothamBold
-    OkBtn.Text = texts[currentLang].notifBtn
-    OkBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    OkBtn.TextSize = 12
-
-    local OkCorner = Instance.new("UICorner")
-    OkCorner.CornerRadius = UDim.new(0, 6)
-    OkCorner.Parent = OkBtn
-
-    OkBtn.MouseButton1Click:Connect(function()
-        NotifOverlay:Destroy()
-        if callback then callback() end
-    end)
-end
-
-
--- ==================== 3. ANA KONTROL PANELİ ====================
+-- ==================== 2. ANA KONTROL PANELİ ====================
 local function LoadDashboard(isVIP)
     LoginCard:Destroy()
 
-    ShowNotification(function()
+    -- Giriş Sonrası Şık Bilgilendirme Banner'ı
+    local AlertBanner = Instance.new("Frame")
+    AlertBanner.Parent = ScreenGui
+    AlertBanner.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+    AlertBanner.Position = UDim2.new(0.5, -160, 0, -60)
+    AlertBanner.Size = UDim2.new(0, 320, 0, 50)
+
+    local AlertCorner = Instance.new("UICorner")
+    AlertCorner.CornerRadius = UDim.new(0, 8)
+    AlertCorner.Parent = AlertBanner
+
+    local AlertStroke = Instance.new("UIStroke")
+    AlertStroke.Color = Color3.fromRGB(34, 197, 94)
+    AlertStroke.Thickness = 2
+    AlertStroke.Parent = AlertBanner
+
+    local AlertText = Instance.new("TextLabel")
+    AlertText.Parent = AlertBanner
+    AlertText.BackgroundTransparency = 1
+    AlertText.Size = UDim2.new(1, 0, 1, 0)
+    AlertText.Font = Enum.Font.GothamBold
+    AlertText.Text = "✅ Key Onaylandı! Hub Yükleniyor..."
+    AlertText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    AlertText.TextSize = 13
+
+    -- Banner Animasyonu (Aşağı kaydır, bekle, yukarı çek ve Paneli aç)
+    AlertBanner:TweenPosition(UDim2.new(0.5, -160, 0, 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+
+    task.delay(1.5, function()
+        AlertBanner:TweenPosition(UDim2.new(0.5, -160, 0, -60), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.3, true)
+        task.wait(0.3)
+        AlertBanner:Destroy()
+
+        -- Ana Panel
         local Dashboard = Instance.new("Frame")
         Dashboard.Parent = ScreenGui
         Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
@@ -218,49 +170,31 @@ local function LoadDashboard(isVIP)
         TopCorner.CornerRadius = UDim.new(0, 10)
         TopCorner.Parent = TopBar
 
+        -- Üst Bar Küçük Logo
+        local SmallLogo = Instance.new("TextLabel")
+        SmallLogo.Parent = TopBar
+        SmallLogo.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+        SmallLogo.Position = UDim2.new(0, 10, 0, 10)
+        SmallLogo.Size = UDim2.new(0, 25, 0, 25)
+        SmallLogo.Font = Enum.Font.GothamBold
+        SmallLogo.Text = "⚡"
+        SmallLogo.TextColor3 = Color3.fromRGB(255, 255, 255)
+        SmallLogo.TextSize = 12
+
+        local SLogoCorner = Instance.new("UICorner")
+        SLogoCorner.CornerRadius = UDim.new(0, 6)
+        SLogoCorner.Parent = SmallLogo
+
         local TitleText = Instance.new("TextLabel")
         TitleText.Parent = TopBar
         TitleText.BackgroundTransparency = 1
-        TitleText.Position = UDim2.new(0, 15, 0, 0)
-        TitleText.Size = UDim2.new(0, 230, 1, 0)
+        TitleText.Position = UDim2.new(0, 45, 0, 0)
+        TitleText.Size = UDim2.new(0, 300, 1, 0)
         TitleText.Font = Enum.Font.GothamBold
-        TitleText.Text = isVIP and texts[currentLang].vipTitle or texts[currentLang].stdTitle
+        TitleText.Text = isVIP and "klakz Hub [VIP Sürüm]" or "klakz Hub [Standart Sürüm]"
         TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
         TitleText.TextSize = 13
         TitleText.TextXAlignment = Enum.TextXAlignment.Left
-
-        -- Dil Değiştirme Butonları (TR / EN)
-        local LangTR = Instance.new("TextButton")
-        LangTR.Parent = TopBar
-        LangTR.BackgroundColor3 = currentLang == "TR" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
-        LangTR.Position = UDim2.new(1, -100, 0, 10)
-        LangTR.Size = UDim2.new(0, 26, 0, 25)
-        LangTR.Font = Enum.Font.GothamBold
-        LangTR.Text = "TR"
-        LangTR.TextColor3 = Color3.fromRGB(255, 255, 255)
-        LangTR.TextSize = 10
-
-        local LangEN = Instance.new("TextButton")
-        LangEN.Parent = TopBar
-        LangEN.BackgroundColor3 = currentLang == "EN" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
-        LangEN.Position = UDim2.new(1, -70, 0, 10)
-        LangEN.Size = UDim2.new(0, 26, 0, 25)
-        LangEN.Font = Enum.Font.GothamBold
-        LangEN.Text = "EN"
-        LangEN.TextColor3 = Color3.fromRGB(255, 255, 255)
-        LangEN.TextSize = 10
-
-        LangTR.MouseButton1Click:Connect(function()
-            currentLang = "TR"
-            ScreenGui:Destroy()
-            LoadDashboard(isVIP)
-        end)
-
-        LangEN.MouseButton1Click:Connect(function()
-            currentLang = "EN"
-            ScreenGui:Destroy()
-            LoadDashboard(isVIP)
-        end)
 
         local CloseButton = Instance.new("TextButton")
         CloseButton.Parent = TopBar
@@ -271,6 +205,10 @@ local function LoadDashboard(isVIP)
         CloseButton.Text = "✕"
         CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         CloseButton.TextSize = 12
+
+        local CloseCorner = Instance.new("UICorner")
+        CloseCorner.CornerRadius = UDim.new(0, 6)
+        CloseCorner.Parent = CloseButton
 
         CloseButton.MouseButton1Click:Connect(function()
             ScreenGui:Destroy()
@@ -309,6 +247,10 @@ local function LoadDashboard(isVIP)
             TabBtn.TextColor3 = Color3.fromRGB(210, 210, 220)
             TabBtn.TextSize = 11
 
+            local BtnCorner = Instance.new("UICorner")
+            BtnCorner.CornerRadius = UDim.new(0, 6)
+            BtnCorner.Parent = TabBtn
+
             local Page = Instance.new("Frame")
             Page.Parent = PagesContainer
             Page.Size = UDim2.new(1, 0, 1, 0)
@@ -345,59 +287,61 @@ local function LoadDashboard(isVIP)
             ScriptBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
             ScriptBtn.TextSize = 12
 
+            local ScriptCorner = Instance.new("UICorner")
+            ScriptCorner.CornerRadius = UDim.new(0, 6)
+            ScriptCorner.Parent = ScriptBtn
+
             ScriptBtn.MouseButton1Click:Connect(function()
                 local status, err = pcall(callback)
                 if not status then warn("Çalıştırma hatası: " .. tostring(err)) end
             end)
         end
 
-        -- Sekmeleri Oluşturma
-        local tNames = texts[currentLang].tabs
-
-        local TabGenel = CreateCategory(tNames[1])
+        -- Sekmeler ve Oyunlar
+        local TabGenel = CreateCategory("Genel Araçlar")
         AddScriptButton(TabGenel, "Güvenli Fly (Uçma)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
         AddScriptButton(TabGenel, "Infinite Yield (Admin)", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
         AddScriptButton(TabGenel, "Speed Hack (50 Hız)", function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.WalkSpeed = 50 end end)
         AddScriptButton(TabGenel, "Godmode (Ölümsüzlük)", function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.MaxHealth = math.huge p.Character.Humanoid.Health = math.huge end end)
 
-        local TabTSB = CreateCategory(tNames[2])
+        local TabTSB = CreateCategory("Strongest Battle.")
         AddScriptButton(TabTSB, "BadWare Hub", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))() end)
 
-        local TabAV = CreateCategory(tNames[3])
+        local TabAV = CreateCategory("Anime Vanguards")
         AddScriptButton(TabAV, "Vanguard Auto Farm", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards"))() end)
 
-        local TabGym = CreateCategory(tNames[4])
+        local TabGym = CreateCategory("Gym League")
         AddScriptButton(TabGym, "Gym League Auto Train", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"))() end)
 
-        local TabType = CreateCategory(tNames[5])
+        local TabType = CreateCategory("Type Soul")
         AddScriptButton(TabType, "Type Soul Auto Farm", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua"))() end)
 
-        local TabArm = CreateCategory(tNames[6])
+        local TabArm = CreateCategory("Arm Wrestle Sim")
         AddScriptButton(TabArm, "Arm Wrestle Auto Clicker", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"))() end)
 
-        local TabDoors = CreateCategory(tNames[7])
+        local TabDoors = CreateCategory("Doors")
         AddScriptButton(TabDoors, "Doors ESP & Notifier", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"))() end)
 
-        local TabBB = CreateCategory(tNames[8])
+        local TabBB = CreateCategory("Blade Ball")
         AddScriptButton(TabBB, "Auto Parry", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))() end)
 
-        local TabFisch = CreateCategory(tNames[9])
+        local TabFisch = CreateCategory("Fisch")
         AddScriptButton(TabFisch, "Speed Hub X", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
 
-        local TabBF = CreateCategory(tNames[10])
+        local TabBF = CreateCategory("Blox Fruits")
         AddScriptButton(TabBF, "Redz Hub", function() loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"))() end)
     end)
 end
 
--- ==================== GİRİŞ BUTONLARI ====================
+-- ==================== GİRİŞ KONTROLLERİ ====================
 BtnStandard.MouseButton1Click:Connect(function()
     if KeyInput.Text == NORMAL_KEY then
         LoadDashboard(false)
     else
-        BtnStandard.Text = texts[currentLang].errKey
+        BtnStandard.Text = "❌ Geçersiz Anahtar!"
         BtnStandard.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
         task.wait(1.5)
-        BtnStandard.Text = texts[currentLang].stdBtn
+        BtnStandard.Text = "Standart Giriş Yap"
         BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
     end
 end)
@@ -406,10 +350,10 @@ BtnVIP.MouseButton1Click:Connect(function()
     if KeyInput.Text == PREMIUM_KEY then
         LoadDashboard(true)
     else
-        BtnVIP.Text = texts[currentLang].errVipKey
+        BtnVIP.Text = "❌ Geçersiz VIP Anahtar!"
         BtnVIP.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
         task.wait(1.5)
-        BtnVIP.Text = texts[currentLang].vipBtn
+        BtnVIP.Text = "👑 VIP / Premium Giriş"
         BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
     end
 end)
