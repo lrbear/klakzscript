@@ -1,4 +1,4 @@
--- klakz Hub - 100 Roblox Oyunu İçin Kapsamlı Script Entegrasyonu
+-- klakz Hub - Place ID Otomatik Algılamalı Akıllı Sistem
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -12,6 +12,32 @@ ScreenGui.ResetOnSpawn = false
 local NORMAL_KEY = "klakz123"
 local PREMIUM_KEY = "klakz_vip_2026"
 local currentLang = "TR"
+local currentPlaceId = game.PlaceId
+
+-- Oyun Veritabanı (Place ID Eşleşmeleri ve Scriptleri)
+local gameDatabase = {
+    -- Popüler Dövüş / Anime
+    [2753915549] = {name = "Blox Fruits", url = "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+    [10449761463] = {name = "The Strongest Battlegrounds", url = "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+    [1537690962] = {name = "Type Soul", url = "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua"},
+    [16732694052] = {name = "Anime Vanguards", url = "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards"},
+    
+    -- Simulator & Pet
+    [8737899170] = {name = "Pet Simulator 99!", url = "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+    [17260714902] = {name = "Fisch", url = "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+    [10078438206] = {name = "Gym League", url = "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+    [16478940842] = {name = "Arm Wrestle Simulator", url = "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"},
+
+    -- FPS & Yetenek
+    [11520107397] = {name = "Blade Ball", url = "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"},
+    [142823291] = {name = "Murder Mystery 2", url = "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2"},
+    [8554990801] = {name = "BedWars", url = "https://raw.githubusercontent.com/VapeVoidware/vapevoidware/main/loader.lua"},
+
+    -- Korku & Hayatta Kalma
+    [6516141723] = {name = "Doors", url = "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+    [9872472334] = {name = "Evade", url = "https://raw.githubusercontent.com/RobloxScripts/Evade/main/Source.lua"},
+    [286090429] = {name = "Arsenal", url = "https://raw.githubusercontent.com/fevse/Arsenal/main/Loader"}
+}
 
 local texts = {
     TR = {
@@ -21,22 +47,10 @@ local texts = {
         vipBtn = "👑 VIP / Premium Giriş",
         errKey = "❌ Geçersiz Anahtar!",
         errVipKey = "❌ Geçersiz VIP Anahtar!",
-        alertText = "✅ Key Onaylandı! 100 Oyunluk Hub Yükleniyor...",
-        stdHeader = "klakz Hub [100 Oyun Sürümü]",
-        vipHeader = "klakz Hub [100 Oyun VIP Sürüm]",
-        tabs = {
-            "Genel Araçlar", 
-            "RP & Yaşam", 
-            "Anime & Dövüş", 
-            "FPS & Nişancı", 
-            "Korku & Hayatta Kalma", 
-            "Simülasyon & Pet", 
-            "Spor & Simulator", 
-            "İnşa & Sandbox", 
-            "Parkur & Eğlence", 
-            "Yarış & Araba", 
-            "Trendler"
-        }
+        alertText = "✅ Key Onaylandı! Sistem Yükleniyor...",
+        stdHeader = "klakz Hub [Otomatik Algılama]",
+        activeGame = "Algılanan Oyun ID: ",
+        unknownGame = "⚠️ Bu oyun veritabanında yok (Genel Araçlar Aktif)"
     },
     EN = {
         loginTitle = "KLAKZ HUB LOGIN",
@@ -45,22 +59,10 @@ local texts = {
         vipBtn = "👑 VIP / Premium Login",
         errKey = "❌ Invalid Key!",
         errVipKey = "❌ Invalid VIP Key!",
-        alertText = "✅ Key Verified! 100 Games Hub Loading...",
-        stdHeader = "klakz Hub [100 Games Edition]",
-        vipHeader = "klakz Hub [100 Games VIP Edition]",
-        tabs = {
-            "General Tools", 
-            "RP & Life", 
-            "Anime & Fight", 
-            "FPS & Shooter", 
-            "Horror & Survival", 
-            "Simulator & Pet", 
-            "Sports & Sim", 
-            "Build & Sandbox", 
-            "Obby & Fun", 
-            "Racing & Cars", 
-            "Trends"
-        }
+        alertText = "✅ Key Verified! Loading System...",
+        stdHeader = "klakz Hub [Auto Detect]",
+        activeGame = "Detected Game ID: ",
+        unknownGame = "⚠️ Game not in database (General Tools Active)"
     }
 }
 
@@ -72,10 +74,7 @@ LoginCard.Position = UDim2.new(0.5, -170, 0.5, -135)
 LoginCard.Size = UDim2.new(0, 340, 0, 270)
 LoginCard.Active = true
 LoginCard.Draggable = true
-
-local CardCorner = Instance.new("UICorner")
-CardCorner.CornerRadius = UDim.new(0, 12)
-CardCorner.Parent = LoginCard
+Instance.new("UICorner", LoginCard).CornerRadius = UDim.new(0, 12)
 
 local CardStroke = Instance.new("UIStroke")
 CardStroke.Color = Color3.fromRGB(99, 102, 241)
@@ -161,250 +160,122 @@ BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
 BtnVIP.TextSize = 13
 Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
 
--- ==================== 2. ANA PANEL ====================
+-- ==================== 2. ANA KONTROL PANELİ ====================
 local function LoadDashboard(isVIP)
     LoginCard:Destroy()
 
-    local AlertBanner = Instance.new("Frame")
-    AlertBanner.Parent = ScreenGui
-    AlertBanner.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-    AlertBanner.Position = UDim2.new(0.5, -160, 0, -60)
-    AlertBanner.Size = UDim2.new(0, 320, 0, 50)
-    Instance.new("UICorner", AlertBanner).CornerRadius = UDim.new(0, 8)
-    
-    local AlertStroke = Instance.new("UIStroke")
-    AlertStroke.Color = Color3.fromRGB(34, 197, 94)
-    AlertStroke.Thickness = 2
-    AlertStroke.Parent = AlertBanner
+    local Dashboard = Instance.new("Frame")
+    Dashboard.Parent = ScreenGui
+    Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    Dashboard.Position = UDim2.new(0.5, -200, 0.5, -150)
+    Dashboard.Size = UDim2.new(0, 400, 0, 300)
+    Dashboard.Active = true
+    Dashboard.Draggable = true
+    Instance.new("UICorner", Dashboard).CornerRadius = UDim.new(0, 10)
 
-    local AlertText = Instance.new("TextLabel")
-    AlertText.Parent = AlertBanner
-    AlertText.BackgroundTransparency = 1
-    AlertText.Size = UDim2.new(1, 0, 1, 0)
-    AlertText.Font = Enum.Font.GothamBold
-    AlertText.Text = texts[currentLang].alertText
-    AlertText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    AlertText.TextSize = 12
+    local DashStroke = Instance.new("UIStroke")
+    DashStroke.Color = Color3.fromRGB(99, 102, 241)
+    DashStroke.Thickness = 2
+    DashStroke.Parent = Dashboard
 
-    AlertBanner:TweenPosition(UDim2.new(0.5, -160, 0, 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+    local TopBar = Instance.new("Frame")
+    TopBar.Parent = Dashboard
+    TopBar.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+    TopBar.Size = UDim2.new(1, 0, 0, 45)
+    Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 10)
 
-    task.delay(1.5, function()
-        AlertBanner:TweenPosition(UDim2.new(0.5, -160, 0, -60), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.3, true)
-        task.wait(0.3)
-        AlertBanner:Destroy()
+    local TitleText = Instance.new("TextLabel")
+    TitleText.Parent = TopBar
+    TitleText.BackgroundTransparency = 1
+    TitleText.Position = UDim2.new(0, 15, 0, 0)
+    TitleText.Size = UDim2.new(0, 300, 1, 0)
+    TitleText.Font = Enum.Font.GothamBold
+    TitleText.Text = texts[currentLang].stdHeader
+    TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleText.TextSize = 12
+    TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
-        local Dashboard = Instance.new("Frame")
-        Dashboard.Parent = ScreenGui
-        Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-        Dashboard.Position = UDim2.new(0.5, -240, 0.5, -190)
-        Dashboard.Size = UDim2.new(0, 480, 0, 380)
-        Dashboard.Active = true
-        Dashboard.Draggable = true
-        Instance.new("UICorner", Dashboard).CornerRadius = UDim.new(0, 10)
+    local CloseButton = Instance.new("TextButton")
+    CloseButton.Parent = TopBar
+    CloseButton.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    CloseButton.Position = UDim2.new(1, -38, 0, 10)
+    CloseButton.Size = UDim2.new(0, 26, 0, 25)
+    CloseButton.Font = Enum.Font.GothamBold
+    CloseButton.Text = "✕"
+    CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseButton.TextSize = 12
+    Instance.new("UICorner", CloseButton).CornerRadius = UDim.new(0, 6)
+    CloseButton.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
-        local DashStroke = Instance.new("UIStroke")
-        DashStroke.Color = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(99, 102, 241)
-        DashStroke.Thickness = 2
-        DashStroke.Parent = Dashboard
+    -- Bilgi Ekranı (Place ID Göstergesi)
+    local InfoLabel = Instance.new("TextLabel")
+    InfoLabel.Parent = Dashboard
+    InfoLabel.BackgroundTransparency = 1
+    InfoLabel.Position = UDim2.new(0, 15, 0, 55)
+    InfoLabel.Size = UDim2.new(1, -30, 0, 30)
+    InfoLabel.Font = Enum.Font.GothamMedium
+    InfoLabel.Text = texts[currentLang].activeGame .. tostring(currentPlaceId)
+    InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 170)
+    InfoLabel.TextSize = 12
+    InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-        local TopBar = Instance.new("Frame")
-        TopBar.Parent = Dashboard
-        TopBar.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
-        TopBar.Size = UDim2.new(1, 0, 0, 45)
-        Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 10)
+    -- İçerik Alanı (ScrollingFrame)
+    local Container = Instance.new("ScrollingFrame")
+    Container.Parent = Dashboard
+    Container.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+    Container.Position = UDim2.new(0, 15, 0, 95)
+    Container.Size = UDim2.new(1, -30, 1, -110)
+    Container.CanvasSize = UDim2.new(0, 0, 2.0, 0)
+    Container.ScrollBarThickness = 3
 
-        local TitleText = Instance.new("TextLabel")
-        TitleText.Parent = TopBar
-        TitleText.BackgroundTransparency = 1
-        TitleText.Position = UDim2.new(0, 15, 0, 0)
-        TitleText.Size = UDim2.new(0, 240, 1, 0)
-        TitleText.Font = Enum.Font.GothamBold
-        TitleText.Text = isVIP and texts[currentLang].vipHeader or texts[currentLang].stdHeader
-        TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
-        TitleText.TextSize = 12
-        TitleText.TextXAlignment = Enum.TextXAlignment.Left
+    local Layout = Instance.new("UIListLayout")
+    Layout.Parent = Container
+    Layout.SortOrder = Enum.SortOrder.LayoutOrder
+    Layout.Padding = UDim.new(0, 8)
 
-        local CloseButton = Instance.new("TextButton")
-        CloseButton.Parent = TopBar
-        CloseButton.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-        CloseButton.Position = UDim2.new(1, -38, 0, 10)
-        CloseButton.Size = UDim2.new(0, 26, 0, 25)
-        CloseButton.Font = Enum.Font.GothamBold
-        CloseButton.Text = "✕"
-        CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        CloseButton.TextSize = 12
-        Instance.new("UICorner", CloseButton).CornerRadius = UDim.new(0, 6)
-        CloseButton.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+    local function AddButton(label, callback)
+        local Btn = Instance.new("TextButton")
+        Btn.Parent = Container
+        Btn.BackgroundColor3 = Color3.fromRGB(38, 38, 50)
+        Btn.Size = UDim2.new(1, 0, 0, 38)
+        Btn.Font = Enum.Font.GothamBold
+        Btn.Text = label
+        Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Btn.TextSize = 12
+        Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
 
-        local TabsContainer = Instance.new("ScrollingFrame")
-        TabsContainer.Parent = Dashboard
-        TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-        TabsContainer.Position = UDim2.new(0, 12, 0, 58)
-        TabsContainer.Size = UDim2.new(0, 140, 0, 310)
-        TabsContainer.CanvasSize = UDim2.new(0, 0, 4.5, 0)
-        TabsContainer.ScrollBarThickness = 3
-        
-        local TabsLayout = Instance.new("UIListLayout")
-        TabsLayout.Parent = TabsContainer
-        TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        TabsLayout.Padding = UDim.new(0, 5)
-
-        local PagesContainer = Instance.new("ScrollingFrame")
-        PagesContainer.Parent = Dashboard
-        PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-        PagesContainer.Position = UDim2.new(0, 162, 0, 58)
-        PagesContainer.Size = UDim2.new(0, 306, 0, 310)
-        PagesContainer.CanvasSize = UDim2.new(0, 0, 15.0, 0)
-        PagesContainer.ScrollBarThickness = 3
-
-        local firstTab = true
-        local function CreateCategory(name)
-            local TabBtn = Instance.new("TextButton")
-            TabBtn.Parent = TabsContainer
-            TabBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-            TabBtn.Size = UDim2.new(1, -6, 0, 34)
-            TabBtn.Font = Enum.Font.GothamMedium
-            TabBtn.Text = name
-            TabBtn.TextColor3 = Color3.fromRGB(210, 210, 220)
-            TabBtn.TextSize = 11
-            Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
-
-            local Page = Instance.new("Frame")
-            Page.Parent = PagesContainer
-            Page.Size = UDim2.new(1, 0, 1, 0)
-            Page.BackgroundTransparency = 1
-            Page.Visible = false
-
-            local PageLayout = Instance.new("UIListLayout")
-            PageLayout.Parent = Page
-            PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            PageLayout.Padding = UDim.new(0, 6)
-
-            TabBtn.MouseButton1Click:Connect(function()
-                for _, v in pairs(PagesContainer:GetChildren()) do
-                    if v:IsA("Frame") then v.Visible = false end
-                end
-                Page.Visible = true
-            end)
-
-            if firstTab then
-                Page.Visible = true
-                firstTab = false
-            end
-
-            return Page
-        end
-
-        local function AddScriptButton(parent, label, urlOrFunc)
-            local ScriptBtn = Instance.new("TextButton")
-            ScriptBtn.Parent = parent
-            ScriptBtn.BackgroundColor3 = Color3.fromRGB(38, 38, 50)
-            ScriptBtn.Size = UDim2.new(1, -10, 0, 32)
-            ScriptBtn.Font = Enum.Font.Gotham
-            ScriptBtn.Text = label
-            ScriptBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            ScriptBtn.TextSize = 11
-            Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
-
-            ScriptBtn.MouseButton1Click:Connect(function()
-                pcall(function()
-                    if type(urlOrFunc) == "string" then
-                        loadstring(game:HttpGet(urlOrFunc))()
-                    elseif type(urlOrFunc) == "function" then
-                        urlOrFunc()
-                    end
-                end)
-            end)
-        end
-
-        local tNames = texts[currentLang].tabs
-
-        -- 1. Genel Araçlar & Baseplate
-        local TabGenel = CreateCategory(tNames[1])
-        AddScriptButton(TabGenel, "🚀 Güvenli Fly (Fly Gui V3)", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-        AddScriptButton(TabGenel, "⚡ Infinite Yield (Admin)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-        AddScriptButton(TabGenel, "👁️ Universal ESP", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua")
-        AddScriptButton(TabGenel, "🛠️ Blok (Part) Oluştur", function()
-            local p = game.Players.LocalPlayer
-            if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                local part = Instance.new("Part")
-                part.Size = Vector3.new(4, 1, 4)
-                part.Position = p.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
-                part.BrickColor = BrickColor.random()
-                part.Parent = workspace
-            end
+        Btn.MouseButton1Click:Connect(function()
+            pcall(callback)
         end)
-        AddScriptButton(TabGenel, "✨ Yerçekimini Kaldır (0)", function() workspace.Gravity = 0 end)
-        AddScriptButton(TabGenel, "🌍 Normal Yerçekimi", function() workspace.Gravity = 196.2 end)
+    end
 
-        -- 2. RP & Yaşam Oyunları (Brookhaven, Adopt Me, Bloxburg vb.)
-        local TabRP = CreateCategory(tNames[2])
-        AddScriptButton(TabRP, "🏠 Brookhaven RP Hub", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua")
-        AddScriptButton(TabRP, "🐾 Adopt Me! Farm & Trade", "https://raw.githubusercontent.com/jLn003/AdoptMe/main/Main.lua")
-        AddScriptButton(TabRP, "🍔 Bloxburg GUI", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/Bloxburg.lua")
-        AddScriptButton(TabRP, "🌟 Royale High Farm", "https://raw.githubusercontent.com/MeowExecuting/RoyaleHigh/main/Source.lua")
-
-        -- 3. Anime & Dövüş (Blox Fruits, TSB, Type Soul vb.)
-        local TabAnime = CreateCategory(tNames[3])
-        AddScriptButton(TabAnime, "🍎 Blox Fruits (Redz Hub)", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua")
-        AddScriptButton(TabAnime, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
-        AddScriptButton(TabAnime, "⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua")
-        AddScriptButton(TabAnime, "🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards")
-        AddScriptButton(TabAnime, "⚡ Type Soul Loader", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua")
-        AddScriptButton(TabAnime, "🌀 Shindo Life GUI", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/Shindo")
-
-        -- 4. FPS & Nişancı (Blade Ball, MM2, Rivals vb.)
-        local TabFPS = CreateCategory(tNames[4])
-        AddScriptButton(TabFPS, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly")
-        AddScriptButton(TabFPS, "🔪 Murder Mystery 2 Hub", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2")
-        AddScriptButton(TabFPS, "🎯 Rivals Aimbot / ESP", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-        AddScriptButton(TabFPS, "🧱 BedWars Vulnyx", "https://raw.githubusercontent.com/VapeVoidware/vapevoidware/main/loader.lua")
-        AddScriptButton(TabFPS, "🔫 Arsenal Hub", "https://raw.githubusercontent.com/fevse/Arsenal/main/Loader")
-
-        -- 5. Korku & Hayatta Kalma (Doors, Piggy, 3008 vb.)
-        local TabHorror = CreateCategory(tNames[5])
-        AddScriptButton(TabHorror, "🚪 Doors V2 (Erchobacto)", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
-        AddScriptButton(TabHorror, "🐷 Piggy GUI Hub", "https://raw.githubusercontent.com/jLn003/Piggy/main/Main.lua")
-        AddScriptButton(TabHorror, "🛒 3008 SCP Hub", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/SCP3008.lua")
-        AddScriptButton(TabHorror, "🏃 Evade ESP & Speed", "https://raw.githubusercontent.com/RobloxScripts/Evade/main/Source.lua")
-
-        -- 6. Simülasyon & Pet (PS99, Fisch, Bee Swarm vb.)
-        local TabSim = CreateCategory(tNames[6])
-        AddScriptButton(TabSim, "🐱 Pet Simulator 99! Hub", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua")
-        AddScriptButton(TabSim, "🐟 Fisch Auto Fish Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-        AddScriptButton(TabSim, "🐝 Bee Swarm Simulator", "https://raw.githubusercontent.com/HubScripter/BeeSwarm/main/Main.lua")
-        AddScriptButton(TabSim, "🌿 Grow a Garden GUI", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/GrowAGarden.lua")
-
-        -- 7. Spor & Simulator (Gym League, Muscle Legends vb.)
-        local TabSports = CreateCategory(tNames[7])
-        AddScriptButton(TabSports, "💪 Gym League Auto Train", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague")
-        AddScriptButton(TabSports, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle")
-        AddScriptButton(TabSports, "⚡ Muscle Legends Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-        AddScriptButton(TabSports, "🎲 Sol's RNG Auto Roll", "https://raw.githubusercontent.com/solsrng/solsrng/main/loader.lua")
-
-        -- 8. İnşa & Sandbox (Build a Boat, Natural Disaster vb.)
-        local TabBuild = CreateCategory(tNames[8])
-        AddScriptButton(TabBuild, "⛵ Build a Boat for Treasure", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/BuildABoat.lua")
-        AddScriptButton(TabBuild, "🌪️ Natural Disaster Survival", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/NaturalDisaster.lua")
-        AddScriptButton(TabBuild, "🍕 Work at a Pizza Place", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/PizzaPlace.lua")
-
-        -- 9. Parkur & Eğlence (Tower of Hell, Dress to Impress vb.)
-        local TabFun = CreateCategory(tNames[9])
-        AddScriptButton(TabFun, "🗼 Tower of Hell Godmode", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/TowerOfHell.lua")
-        AddScriptButton(TabFun, "👗 Dress to Impress Items", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DressToImpress.lua")
-        AddScriptButton(TabFun, "🎮 Epic Minigames Win", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/EpicMinigames.lua")
-
-        -- 10. Yarış & Araba (Jailbreak, Driving Empire vb.)
-        local TabCar = CreateCategory(tNames[10])
-        AddScriptButton(TabCar, "🚓 Jailbreak Auto Farm", "https://raw.githubusercontent.com/wawsdas/jailbreak/main/loader.lua")
-        AddScriptButton(TabCar, "🏎️ Driving Empire Speed", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DrivingEmpire.lua")
-        AddScriptButton(TabCar, "🚗 Vehicle Simulator GUI", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/VehicleSimulator.lua")
-
-        -- 11. Trendler (Dandy's World, Steal a Brainrot vb.)
-        local TabTrend = CreateCategory(tNames[11])
-        AddScriptButton(TabTrend, "🎨 Dandy's World Helper", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DandysWorld.lua")
-        AddScriptButton(TabTrend, "🧠 Steal a Brainrot Script", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/Brainrot.lua")
+    -- Her Oyunda Çalışan Genel Araçlar
+    AddButton("🚀 Güvenli Fly (Uçma V3)", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
     end)
+    AddButton("⚡ Infinite Yield (Admin Komutları)", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+    end)
+    AddButton("👁️ Universal ESP (Oyuncuları Gör)", function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua"))()
+    end)
+
+    -- Place ID Eşleşmesine Göre Oyuna Özel Scripti Getir
+    local detectedGame = gameDatabase[currentPlaceId]
+    if detectedGame then
+        AddButton("⭐ [" .. detectedGame.name .. "] Özel Scriptini Çalıştır", function()
+            loadstring(game:HttpGet(detectedGame.url))()
+        end)
+    else
+        local WarnLabel = Instance.new("TextLabel")
+        WarnLabel.Parent = Container
+        WarnLabel.BackgroundTransparency = 1
+        WarnLabel.Size = UDim2.new(1, 0, 0, 35)
+        WarnLabel.Font = Enum.Font.Gotham
+        WarnLabel.Text = texts[currentLang].unknownGame
+        WarnLabel.TextColor3 = Color3.fromRGB(239, 68, 68)
+        WarnLabel.TextSize = 11
+    end
 end
 
 LangTR.MouseButton1Click:Connect(function()
