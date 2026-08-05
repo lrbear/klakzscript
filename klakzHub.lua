@@ -1,4 +1,4 @@
--- klakz Hub - Place ID Otomatik Algılama ve Admin Şifreli Giriş Sistemi
+-- klakz Hub - Place ID Algılama + Şifreli Admin Paneli (Tüm Oyunlara Tam Erişim)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -13,9 +13,9 @@ local NORMAL_KEY = "klakz123"
 local ADMIN_PASSWORD = "admin_klakz_99" -- Admin şifresi
 local currentLang = "TR"
 local currentPlaceId = game.PlaceId
-local loginMode = "KEY" -- "KEY" veya "ADMIN"
+local loginMode = "KEY"
 
--- Oyun Veritabanı (Place ID Eşleşmeleri ve Scriptleri)
+-- Tüm Oyunların Veritabanı
 local gameDatabase = {
     [2753915549] = {name = "Blox Fruits", url = "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
     [10449761463] = {name = "The Strongest Battlegrounds", url = "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
@@ -45,9 +45,9 @@ local texts = {
         errKey = "❌ Geçersiz Anahtar!",
         errAdmin = "❌ Hatalı Admin Şifresi!",
         stdHeader = "klakz Hub [Otomatik Algılama]",
-        adminHeader = "klakz Hub [👑 ADMIN PANELİ]",
-        activeGame = "Algılanan Oyun ID: ",
-        unknownGame = "⚠️ Bu oyun veritabanında yok (Genel Araçlar Aktif)"
+        adminHeader = "klakz Hub [👑 TÜM OYUNLAR ADMIN PANELİ]",
+        activeGame = "Bulunduğunuz Oyun ID: ",
+        unknownGame = "⚠️ Bu oyun listede yok, ancak admin yetkisiyle tüm oyun scriptlerine erişebilirsin!"
     },
     EN = {
         loginTitle = "KLAKZ HUB LOGIN",
@@ -60,9 +60,9 @@ local texts = {
         errKey = "❌ Invalid Key!",
         errAdmin = "❌ Incorrect Admin Password!",
         stdHeader = "klakz Hub [Auto Detect]",
-        adminHeader = "klakz Hub [👑 ADMIN PANEL]",
-        activeGame = "Detected Game ID: ",
-        unknownGame = "⚠️ Game not in database (General Tools Active)"
+        adminHeader = "klakz Hub [👑 ALL GAMES ADMIN PANEL]",
+        activeGame = "Current Game ID: ",
+        unknownGame = "⚠️ Game not in list, but you have full access to all scripts!"
     }
 }
 
@@ -81,7 +81,6 @@ CardStroke.Color = Color3.fromRGB(99, 102, 241)
 CardStroke.Thickness = 2
 CardStroke.Parent = LoginCard
 
--- Dil Seçenekleri (TR / EN)
 local LangTR = Instance.new("TextButton")
 LangTR.Parent = LoginCard
 LangTR.BackgroundColor3 = currentLang == "TR" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
@@ -150,7 +149,6 @@ BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
 BtnLogin.TextSize = 13
 Instance.new("UICorner", BtnLogin).CornerRadius = UDim.new(0, 8)
 
--- Mod Değiştirme Butonu (Key <-> Admin)
 local BtnToggleMode = Instance.new("TextButton")
 BtnToggleMode.Parent = LoginCard
 BtnToggleMode.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
@@ -169,8 +167,8 @@ local function LoadDashboard(isAdmin)
     local Dashboard = Instance.new("Frame")
     Dashboard.Parent = ScreenGui
     Dashboard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-    Dashboard.Position = UDim2.new(0.5, -200, 0.5, -150)
-    Dashboard.Size = UDim2.new(0, 400, 0, 300)
+    Dashboard.Position = UDim2.new(0.5, -220, 0.5, -170)
+    Dashboard.Size = UDim2.new(0, 440, 0, 340)
     Dashboard.Active = true
     Dashboard.Draggable = true
     Instance.new("UICorner", Dashboard).CornerRadius = UDim.new(0, 10)
@@ -190,11 +188,11 @@ local function LoadDashboard(isAdmin)
     TitleText.Parent = TopBar
     TitleText.BackgroundTransparency = 1
     TitleText.Position = UDim2.new(0, 15, 0, 0)
-    TitleText.Size = UDim2.new(0, 300, 1, 0)
+    TitleText.Size = UDim2.new(0, 350, 1, 0)
     TitleText.Font = Enum.Font.GothamBold
     TitleText.Text = isAdmin and texts[currentLang].adminHeader or texts[currentLang].stdHeader
     TitleText.TextColor3 = isAdmin and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(255, 255, 255)
-    TitleText.TextSize = 12
+    TitleText.TextSize = 11
     TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
     local CloseButton = Instance.new("TextButton")
@@ -212,20 +210,20 @@ local function LoadDashboard(isAdmin)
     local InfoLabel = Instance.new("TextLabel")
     InfoLabel.Parent = Dashboard
     InfoLabel.BackgroundTransparency = 1
-    InfoLabel.Position = UDim2.new(0, 15, 0, 55)
-    InfoLabel.Size = UDim2.new(1, -30, 0, 30)
+    InfoLabel.Position = UDim2.new(0, 15, 0, 52)
+    InfoLabel.Size = UDim2.new(1, -30, 0, 25)
     InfoLabel.Font = Enum.Font.GothamMedium
     InfoLabel.Text = texts[currentLang].activeGame .. tostring(currentPlaceId)
     InfoLabel.TextColor3 = Color3.fromRGB(150, 150, 170)
-    InfoLabel.TextSize = 12
+    InfoLabel.TextSize = 11
     InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local Container = Instance.new("ScrollingFrame")
     Container.Parent = Dashboard
     Container.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
-    Container.Position = UDim2.new(0, 15, 0, 95)
-    Container.Size = UDim2.new(1, -30, 1, -110)
-    Container.CanvasSize = UDim2.new(0, 0, 2.0, 0)
+    Container.Position = UDim2.new(0, 15, 0, 85)
+    Container.Size = UDim2.new(1, -30, 1, -100)
+    Container.CanvasSize = UDim2.new(0, 0, isAdmin and 4.0 or 2.0, 0)
     Container.ScrollBarThickness = 3
 
     local Layout = Instance.new("UIListLayout")
@@ -233,14 +231,14 @@ local function LoadDashboard(isAdmin)
     Layout.SortOrder = Enum.SortOrder.LayoutOrder
     Layout.Padding = UDim.new(0, 8)
 
-    local function AddButton(label, callback)
+    local function AddButton(label, callback, isSpecial)
         local Btn = Instance.new("TextButton")
         Btn.Parent = Container
-        Btn.BackgroundColor3 = Color3.fromRGB(38, 38, 50)
+        Btn.BackgroundColor3 = isSpecial and Color3.fromRGB(50, 40, 20) or Color3.fromRGB(38, 38, 50)
         Btn.Size = UDim2.new(1, 0, 0, 38)
         Btn.Font = Enum.Font.GothamBold
         Btn.Text = label
-        Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        Btn.TextColor3 = isSpecial and Color3.fromRGB(250, 204, 21) or Color3.fromRGB(255, 255, 255)
         Btn.TextSize = 12
         Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 8)
 
@@ -249,13 +247,7 @@ local function LoadDashboard(isAdmin)
         end)
     end
 
-    -- Admin isen ekstra özellikler gösterilebilir
-    if isAdmin then
-        AddButton("👑 [ADMIN] Tüm Oyun Scriptlerine Tam Erişim", function()
-            print("Admin ayrıcalığı aktif!")
-        end)
-    end
-
+    -- Genel Araçlar Herkese Açık
     AddButton("🚀 Güvenli Fly (Uçma V3)", function()
         loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
     end)
@@ -266,24 +258,42 @@ local function LoadDashboard(isAdmin)
         loadstring(game:HttpGet("https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua"))()
     end)
 
-    local detectedGame = gameDatabase[currentPlaceId]
-    if detectedGame then
-        AddButton("⭐ [" .. detectedGame.name .. "] Özel Scriptini Çalıştır", function()
-            loadstring(game:HttpGet(detectedGame.url))()
-        end)
+    -- EĞER ADMIN İSE: Tüm Oyunların Scriptlerini Listele
+    if isAdmin then
+        local AdminHeaderLabel = Instance.new("TextLabel")
+        AdminHeaderLabel.Parent = Container
+        AdminHeaderLabel.BackgroundTransparency = 1
+        AdminHeaderLabel.Size = UDim2.new(1, 0, 0, 30)
+        AdminHeaderLabel.Font = Enum.Font.GothamBold
+        AdminHeaderLabel.Text = "👑 --- TÜM OYUNLARIN SCRİPT ARŞİVİ ---"
+        AdminHeaderLabel.TextColor3 = Color3.fromRGB(234, 179, 8)
+        AdminHeaderLabel.TextSize = 12
+
+        for id, gameData in pairs(gameDatabase) do
+            AddButton("⭐ " .. gameData.name .. " Scriptini Çalıştır", function()
+                loadstring(game:HttpGet(gameData.url))()
+            end, true)
+        end
     else
-        local WarnLabel = Instance.new("TextLabel")
-        WarnLabel.Parent = Container
-        WarnLabel.BackgroundTransparency = 1
-        WarnLabel.Size = UDim2.new(1, 0, 0, 35)
-        WarnLabel.Font = Enum.Font.Gotham
-        WarnLabel.Text = texts[currentLang].unknownGame
-        WarnLabel.TextColor3 = Color3.fromRGB(239, 68, 68)
-        WarnLabel.TextSize = 11
+        -- Normal kullanıcı için sadece o anki oyun
+        local detectedGame = gameDatabase[currentPlaceId]
+        if detectedGame then
+            AddButton("⭐ [" .. detectedGame.name .. "] Özel Scriptini Çalıştır", function()
+                loadstring(game:HttpGet(detectedGame.url))()
+            end)
+        else
+            local WarnLabel = Instance.new("TextLabel")
+            WarnLabel.Parent = Container
+            WarnLabel.BackgroundTransparency = 1
+            WarnLabel.Size = UDim2.new(1, 0, 0, 35)
+            WarnLabel.Font = Enum.Font.Gotham
+            WarnLabel.Text = texts[currentLang].unknownGame
+            WarnLabel.TextColor3 = Color3.fromRGB(239, 68, 68)
+            WarnLabel.TextSize = 11
+        end
     end
 end
 
--- Dil Değiştirme Fonksiyonları
 local function UpdateTexts()
     if loginMode == "KEY" then
         LoginTitle.Text = texts[currentLang].loginTitle
@@ -312,7 +322,6 @@ LangEN.MouseButton1Click:Connect(function()
     UpdateTexts()
 end)
 
--- Modlar Arası Geçiş (Key <-> Admin Şifre)
 BtnToggleMode.MouseButton1Click:Connect(function()
     if loginMode == "KEY" then
         loginMode = "ADMIN"
@@ -331,7 +340,6 @@ BtnToggleMode.MouseButton1Click:Connect(function()
     UpdateTexts()
 end)
 
--- Giriş Yap Butonu
 BtnLogin.MouseButton1Click:Connect(function()
     if loginMode == "KEY" then
         if InputField.Text == NORMAL_KEY then
