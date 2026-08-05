@@ -1,4 +1,4 @@
--- klakz Hub - TR / EN Dil Seçenekli, Logolu ve Bildirimli Gelişmiş Sürüm
+-- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -28,19 +28,20 @@ local texts = {
         alertText = "✅ Key Onaylandı! Hub Yükleniyor...",
         stdHeader = "klakz Hub [Standart Sürüm]",
         vipHeader = "klakz Hub [VIP Sürüm]",
-        tabs = {"Genel Araçlar", "Universal Hubs", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
+        tabs = {"Genel Araçlar", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
         scripts = {
             fly = "Güvenli Fly (Uçma V3)",
             inf = "Infinite Yield (Admin)",
             speed = "Speed Hack (50 Hız)",
             god = "Godmode (Ölümsüzlük)",
             noclip = "Noclip (Duvarlardan Geçme)",
+            vipInfo = "🔒 Bu sekme sadece VIP üyeler içindir!",
             esp = "Universal ESP (Oyuncuları Gör)",
-            dex = "Dex Explorer (Oyun Kodları)",
-            spy = "Remote Spy (Event Yakalayıcı)",
             speedhub = "Speed Hub X",
             vape = "Vape V4 (PvP / Combat)",
             owl = "Owl Hub (Aimbot & ESP)",
+            dex = "Dex Explorer (Oyun Kodları)",
+            spy = "Remote Spy (Event Yakalayıcı)",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
             gym = "Gym League Auto Train",
@@ -62,19 +63,20 @@ local texts = {
         alertText = "✅ Key Verified! Hub Loading...",
         stdHeader = "klakz Hub [Standard Version]",
         vipHeader = "klakz Hub [VIP Version]",
-        tabs = {"General Tools", "Universal Hubs", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
+        tabs = {"General Tools", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
         scripts = {
             fly = "Safe Fly (Fly Gui V3)",
             inf = "Infinite Yield (Admin)",
             speed = "Speed Hack (50 Speed)",
             god = "Godmode",
             noclip = "Noclip",
+            vipInfo = "🔒 This tab is for VIP members only!",
             esp = "Universal ESP",
-            dex = "Dex Explorer",
-            spy = "Remote Spy",
             speedhub = "Speed Hub X",
             vape = "Vape V4",
             owl = "Owl Hub",
+            dex = "Dex Explorer",
+            spy = "Remote Spy",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
             gym = "Gym League Auto Train",
@@ -446,7 +448,7 @@ local function LoadDashboard(isVIP)
         local tNames = texts[currentLang].tabs
         local sNames = texts[currentLang].scripts
 
-        -- 1. Genel Araçlar
+        -- 1. Genel Araçlar (Standart ve VIP Ortak - Sadece Temel Araçlar)
         local TabGenel = CreateCategory(tNames[1])
         AddScriptButton(TabGenel, sNames.fly, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
         AddScriptButton(TabGenel, sNames.inf, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
@@ -454,14 +456,18 @@ local function LoadDashboard(isVIP)
         AddScriptButton(TabGenel, sNames.god, function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.MaxHealth = math.huge p.Character.Humanoid.Health = math.huge end end)
         AddScriptButton(TabGenel, sNames.noclip, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Noclip-12345"))() end)
 
-        -- 2. Universal Hubs (Yeni Eklenen Geniş Kapsamlı Scriptler)
+        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL)
         local TabUniversal = CreateCategory(tNames[2])
-        AddScriptButton(TabUniversal, sNames.esp, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/PrivateUser202/ESP/main/UniversalESP.lua"))() end)
-        AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
-        AddScriptButton(TabUniversal, sNames.vape, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
-        AddScriptButton(TabUniversal, sNames.owl, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
-        AddScriptButton(TabUniversal, sNames.dex, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dark-Dex-V3-15638"))() end)
-        AddScriptButton(TabUniversal, sNames.spy, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Remote-Spy-Hub-6102"))() end)
+        if isVIP then
+            AddScriptButton(TabUniversal, sNames.esp, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/PrivateUser202/ESP/main/UniversalESP.lua"))() end)
+            AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
+            AddScriptButton(TabUniversal, sNames.vape, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
+            AddScriptButton(TabUniversal, sNames.owl, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
+            AddScriptButton(TabUniversal, sNames.dex, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dark-Dex-V3-15638"))() end)
+            AddScriptButton(TabUniversal, sNames.spy, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Remote-Spy-Hub-6102"))() end)
+        else
+            AddScriptButton(TabUniversal, sNames.vipInfo, function() print("VIP gerekli!") end)
+        end
 
         -- 3. Oyun Sekmeleri
         local TabTSB = CreateCategory(tNames[3])
