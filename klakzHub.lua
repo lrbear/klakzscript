@@ -1,4 +1,4 @@
--- klakz Hub - Siyah Ekran / Çökme Düzeltilmiş Kararlı Sürüm
+-- klakz Hub - Sabit Boyutlu Hatasız Sürüm
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -82,14 +82,13 @@ CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Sol Sekmeler (Kategoriler) Alanı
+-- Sol Sekmeler Alanı
 local TabsContainer = Instance.new("ScrollingFrame")
 TabsContainer.Parent = Dashboard
 TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
 TabsContainer.Position = UDim2.new(0, 12, 0, 58)
 TabsContainer.Size = UDim2.new(0, 150, 0, 330)
-TabsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
-TabsContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
+TabsContainer.CanvasSize = UDim2.new(0, 0, 0, 400)
 TabsContainer.ScrollBarThickness = 3
 
 local TabsLayout = Instance.new("UIListLayout")
@@ -97,7 +96,7 @@ TabsLayout.Parent = TabsContainer
 TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TabsLayout.Padding = UDim.new(0, 5)
 
--- Sağ Sayfalar Taşıyıcısı (Hatasız Çerçeve)
+-- Sağ Sayfalar Taşıyıcısı
 local PagesContainer = Instance.new("Frame")
 PagesContainer.Parent = Dashboard
 PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
@@ -126,8 +125,7 @@ local function CreateCategory(name)
     Page.Parent = PagesContainer
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
-    Page.CanvasSize = UDim2.new(0, 0, 0, 0)
-    Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Page.CanvasSize = UDim2.new(0, 0, 0, 600)
     Page.ScrollBarThickness = 3
     Page.Visible = false
 
