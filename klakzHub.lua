@@ -1,4 +1,4 @@
--- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Güncellenmiş ESP ve Noclip)
+-- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Dex Loader Güncellendi)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -40,7 +40,7 @@ local texts = {
             speedhub = "Speed Hub X",
             vape = "Vape V4 (PvP / Combat)",
             owl = "Owl Hub (Aimbot & ESP)",
-            dex = "Dex Explorer (Oyun Kodları)",
+            dex = "Dark Dex V4 (Oyun Kodları)",
             spy = "Remote Spy (Event Yakalayıcı)",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
@@ -75,7 +75,7 @@ local texts = {
             speedhub = "Speed Hub X",
             vape = "Vape V4",
             owl = "Owl Hub",
-            dex = "Dex Explorer",
+            dex = "Dark Dex V4",
             spy = "Remote Spy",
             badware = "BadWare Hub",
             vanguard = "Vanguard Auto Farm",
@@ -448,14 +448,14 @@ local function LoadDashboard(isVIP)
         local tNames = texts[currentLang].tabs
         local sNames = texts[currentLang].scripts
 
-        -- 1. Genel Araçlar (Düzeltilmiş Güncel Noclip Kodu Dahil)
+        -- 1. Genel Araçlar
         local TabGenel = CreateCategory(tNames[1])
         AddScriptButton(TabGenel, sNames.fly, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
         AddScriptButton(TabGenel, sNames.inf, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
         AddScriptButton(TabGenel, sNames.speed, function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.WalkSpeed = 50 end end)
         AddScriptButton(TabGenel, sNames.god, function() local p = game.Players.LocalPlayer if p.Character and p.Character:FindFirstChild("Humanoid") then p.Character.Humanoid.MaxHealth = math.huge p.Character.Humanoid.Health = math.huge end end)
         
-        -- Düzeltilmiş Kararlı Noclip
+        -- Noclip
         AddScriptButton(TabGenel, sNames.noclip, function()
             local p = game.Players.LocalPlayer
             local RunService = game:GetService("RunService")
@@ -474,10 +474,10 @@ local function LoadDashboard(isVIP)
             end)
         end)
 
-        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL - Düzeltilmiş Güncel ESP Dahil)
+        -- 2. Universal Hubs (SADECE VIP GİRİŞİ YAPANLARA ÖZEL - Güncellenmiş Dark Dex V4 Loader)
         local TabUniversal = CreateCategory(tNames[2])
         if isVIP then
-            -- Düzeltilmiş Çalışan ESP
+            -- ESP
             AddScriptButton(TabUniversal, sNames.esp, function()
                 local Players = game:GetService("Players")
                 local LocalPlayer = Players.LocalPlayer
@@ -518,7 +518,10 @@ local function LoadDashboard(isVIP)
             AddScriptButton(TabUniversal, sNames.speedhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))() end)
             AddScriptButton(TabUniversal, sNames.vape, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))() end)
             AddScriptButton(TabUniversal, sNames.owl, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/CriShoux/OwlHub/master/OwlHub.txt"))() end)
-            AddScriptButton(TabUniversal, sNames.dex, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Dark-Dex-V3-15638"))() end)
+            
+            -- Güncellenmiş Dark Dex V4 / Explorer Loader
+            AddScriptButton(TabUniversal, sNames.dex, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/BypassedDarkDexV3.lua", true))() end)
+            
             AddScriptButton(TabUniversal, sNames.spy, function() loadstring(game:HttpGet("https://rawscripts.net/raw/Universal-Script-Remote-Spy-Hub-6102"))() end)
         else
             AddScriptButton(TabUniversal, sNames.vipInfo, function() print("VIP gerekli!") end)
