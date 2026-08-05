@@ -1,9 +1,13 @@
--- klakz Hub - Saf & Hatasız Full Script Arşivi (VIP Yerine Devasa Liste)
+-- klakz Hub - Kararlı & Crash Atmayan Sürüm
 
--- Ana Ekran
+-- Oyundan atma ve UI yüklenmeme hatalarını önlemek için koruma
+if game:GetService("CoreGui"):FindFirstChild("klakzHub_Master") then
+    game:GetService("CoreGui"):FindFirstChild("klakzHub_Master"):Destroy()
+end
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "klakzHub_Master"
-ScreenGui.Parent = game.CoreGui
+ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
 -- Ana Çerçeve (Menü)
@@ -59,7 +63,7 @@ CloseBtn.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Sol Sekme Listesi (ScrollingFrame)
+-- Sol Sekme Listesi
 local TabList = Instance.new("ScrollingFrame")
 TabList.Parent = MainFrame
 TabList.Position = UDim2.new(0, 10, 0, 50)
@@ -95,8 +99,8 @@ ContentLayout.Parent = ContentFrame
 ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
 ContentLayout.Padding = UDim.new(0, 8)
 
--- Sekme Değiştirme Fonksiyonu
-local currentContainer = nil
+-- Sekme Oluşturucu
+local isFirstTab = true
 local function CreateTab(name)
     local TabBtn = Instance.new("TextButton")
     TabBtn.Parent = TabList
@@ -129,9 +133,9 @@ local function CreateTab(name)
         Container.Visible = true
     end)
 
-    if not currentContainer then
+    if isFirstTab then
         Container.Visible = true
-        currentContainer = true
+        isFirstTab = false
     end
 
     return Container
@@ -152,7 +156,12 @@ local function AddButton(parent, text, callback)
     Corner.CornerRadius = UDim.new(0, 4)
     Corner.Parent = Btn
     
-    Btn.MouseButton1Click:Connect(callback)
+    Btn.MouseButton1Click:Connect(function()
+        local success, err = pcall(callback)
+        if not success then
+            warn("Script çalıştırma hatası: " .. tostring(err))
+        end
+    end)
 end
 
 -- ==================== SEKME 1: GENEL & HIZ ARAÇLARI ====================
@@ -167,21 +176,17 @@ AddButton(Tab1, "Infinite Yield (Admin)", function()
 end)
 
 AddButton(Tab1, "Speed Hack (Hız: 50)", function()
-    game:GetService("RunService").Stepped:Connect(function()
-        local plr = game:GetService("Players").LocalPlayer
-        if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-            plr.Character.Humanoid.WalkSpeed = 50
-        end
-    end)
+    local plr = game:GetService("Players").LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+        plr.Character.Humanoid.WalkSpeed = 50
+    end
 end)
 
 AddButton(Tab1, "Super Speed (Hız: 120)", function()
-    game:GetService("RunService").Stepped:Connect(function()
-        local plr = game:GetService("Players").LocalPlayer
-        if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-            plr.Character.Humanoid.WalkSpeed = 120
-        end
-    end)
+    local plr = game:GetService("Players").LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+        plr.Character.Humanoid.WalkSpeed = 120
+    end
 end)
 
 AddButton(Tab1, "Normal Hıza Dön (16)", function()
@@ -205,21 +210,6 @@ AddButton(Tab1, "Noclip (Duvarlardan Geçme)", function()
         if plr.Character then
             for _, v in pairs(plr.Character:GetDescendants()) do
                 if v:IsA("BasePart") then v.CanCollide = false end
-            end
-        end
-    end)
-end)
-
-AddButton(Tab1, "Anti Fling (Savrulma Koruması)", function()
-    local Players = game:GetService("Players")
-    local localPlayer = Players.LocalPlayer
-    game:GetService("RunService").Stepped:Connect(function()
-        if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            for _, v in pairs(Players:GetPlayers()) do
-                if v ~= localPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                    v.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                    v.Character.HumanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
-                end
             end
         end
     end)
@@ -281,7 +271,7 @@ AddButton(Tab6, "Exunys Dupe Hub", function()
 end)
 
 -- ==================== SEKME 7: BEDWARS & ARSENAL ====================
-localTab7 = CreateTab("BedWars & Arsenal")
+local Tab7 = CreateTab("BedWars & Arsenal")
 AddButton(Tab7, "Vape V4 (BedWars)", function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
 end)
