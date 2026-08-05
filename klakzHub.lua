@@ -291,12 +291,13 @@ local function LoadDashboard(isVIP)
     AddScriptButton(TabPopular, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
     AddScriptButton(TabPopular, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
 
-    -- ==================== 3. MEGA ARŞİV KISMI (200+ FARKLI OYUN SCRİPTİ) ====================
+    -- ==================== 3. MEGA ARŞİV KISMI (Gumanba Entegrasyonlu 200+ Script) ====================
     
-    -- Bölüm 1 (1 - 50)
+    -- Bölüm 1 (1 - 50) - gumanba/Scripts Entegrasyonu Başlangıcı
     local TabMega1 = CreateCategory(tNames[3], true)
     if TabMega1 then
         local list1 = {
+            {"🌲 Gumanba Grow a Garden", "https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaGarden"},
             {"🍎 Blox Fruits (Redz)", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
             {"🥊 Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
             {"⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua"},
@@ -345,8 +346,7 @@ local function LoadDashboard(isVIP)
             {"🐱 PS99 Auto Hatch", "https://raw.githubusercontent.com/PS99Hatch/Loader/main/Script"},
             {"🐟 Fisch Shark Hunter", "https://raw.githubusercontent.com/FischShark/Loader/main/Script"},
             {"💪 Gym League Auto Lift", "https://raw.githubusercontent.com/GymLift/Loader/main/Script"},
-            {"🦾 Arm Wrestle Auto Farm", "https://raw.githubusercontent.com/ArmFarm/Loader/main/Script"},
-            {"🏠 Brookhaven Police Hub", "https://raw.githubusercontent.com/BrookPolice/Loader/main/Script"}
+            {"🦾 Arm Wrestle Auto Farm", "https://raw.githubusercontent.com/ArmFarm/Loader/main/Script"}
         }
         for _, data in ipairs(list1) do
             AddScriptButton(TabMega1, "👑 " .. data[1], data[2], true)
