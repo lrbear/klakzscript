@@ -1,4 +1,4 @@
--- klakz Hub - Sabit Boyutlu Hatasız Sürüm
+-- klakz Hub - Hata Korumalı & Stabil Sürüm
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -25,7 +25,7 @@ Dashboard.Parent = Dashboard
 local DashStroke = Instance.new("UIStroke")
 DashStroke.Color = Color3.fromRGB(99, 102, 241)
 DashStroke.Thickness = 2
-DashStroke.Parent = Dashboard
+Dashboard.Parent = Dashboard
 
 -- Üst Bilgi Barı
 local TopBar = Instance.new("Frame")
@@ -82,13 +82,14 @@ CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Sol Sekmeler Alanı
+-- Sol Sekmeler (Kategoriler) Alanı
 local TabsContainer = Instance.new("ScrollingFrame")
 TabsContainer.Parent = Dashboard
 TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
 TabsContainer.Position = UDim2.new(0, 12, 0, 58)
 TabsContainer.Size = UDim2.new(0, 150, 0, 330)
-TabsContainer.CanvasSize = UDim2.new(0, 0, 0, 400)
+TabsContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
+TabsContainer.AutomaticCanvasSize = Enum.AutomaticSize.Y
 TabsContainer.ScrollBarThickness = 3
 
 local TabsLayout = Instance.new("UIListLayout")
@@ -96,7 +97,7 @@ TabsLayout.Parent = TabsContainer
 TabsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 TabsLayout.Padding = UDim.new(0, 5)
 
--- Sağ Sayfalar Taşıyıcısı
+-- Sağ Sayfalar (Script Butonları) Alanı
 local PagesContainer = Instance.new("Frame")
 PagesContainer.Parent = Dashboard
 PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
@@ -125,7 +126,8 @@ local function CreateCategory(name)
     Page.Parent = PagesContainer
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
-    Page.CanvasSize = UDim2.new(0, 0, 0, 600)
+    Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Page.ScrollBarThickness = 3
     Page.Visible = false
 
