@@ -1,4 +1,4 @@
--- klakz Hub - Sekmeli Tüm Oyun Arşivi + Standart ve Premium Key Sistemi
+-- klakz Hub - Azaltılmış Standart Liste + Premium Kullanıcılara Tam Erişim
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -25,17 +25,8 @@ local texts = {
         headerVip = "klakz Hub [👑 PREMIUM VİP SÜRÜM]",
         tabs = {
             "Genel Araçlar", 
-            "RP & Yaşam", 
-            "Anime & Dövüş", 
-            "FPS & Nişancı", 
-            "Korku & Hayatta Kalma", 
-            "Simülasyon & Pet", 
-            "Spor & Simulator", 
-            "İnşa & Sandbox", 
-            "Parkur & Eğlence", 
-            "Yarış & Araba", 
-            "Trendler",
-            "👑 Premium Özel"
+            "Popüler Oyunlar", 
+            "👑 Premium Arşiv"
         }
     },
     EN = {
@@ -49,17 +40,8 @@ local texts = {
         headerVip = "klakz Hub [👑 PREMIUM VIP EDITION]",
         tabs = {
             "General Tools", 
-            "RP & Life", 
-            "Anime & Fight", 
-            "FPS & Shooter", 
-            "Horror & Survival", 
-            "Simulator & Pet", 
-            "Sports & Sim", 
-            "Build & Sandbox", 
-            "Obby & Fun", 
-            "Racing & Cars", 
-            "Trends",
-            "👑 Premium Exclusive"
+            "Popular Games", 
+            "👑 Premium Archive"
         }
     }
 }
@@ -210,7 +192,7 @@ local function LoadDashboard(isVIP)
     TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
     TabsContainer.Position = UDim2.new(0, 12, 0, 58)
     TabsContainer.Size = UDim2.new(0, 140, 0, 310)
-    TabsContainer.CanvasSize = UDim2.new(0, 0, 5.0, 0)
+    TabsContainer.CanvasSize = UDim2.new(0, 0, 2.0, 0)
     TabsContainer.ScrollBarThickness = 3
     
     local TabsLayout = Instance.new("UIListLayout")
@@ -223,7 +205,7 @@ local function LoadDashboard(isVIP)
     PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
     PagesContainer.Position = UDim2.new(0, 162, 0, 58)
     PagesContainer.Size = UDim2.new(0, 306, 0, 310)
-    PagesContainer.CanvasSize = UDim2.new(0, 0, 15.0, 0)
+    PagesContainer.CanvasSize = UDim2.new(0, 0, 5.0, 0)
     PagesContainer.ScrollBarThickness = 3
 
     local firstTab = true
@@ -291,106 +273,37 @@ local function LoadDashboard(isVIP)
 
     local tNames = texts[currentLang].tabs
 
-    -- 1. Genel Araçlar
+    -- 1. Azaltılmış Standart Genel Araçlar
     local TabGenel = CreateCategory(tNames[1], false)
     AddScriptButton(TabGenel, "🚀 Güvenli Fly (Fly Gui V3)", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
     AddScriptButton(TabGenel, "⚡ Infinite Yield (Admin)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScriptButton(TabGenel, "👁️ Universal ESP", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua")
-    AddScriptButton(TabGenel, "🛠️ Blok (Part) Oluştur", function()
-        local p = game.Players.LocalPlayer
-        if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-            local part = Instance.new("Part")
-            part.Size = Vector3.new(4, 1, 4)
-            part.Position = p.Character.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
-            part.BrickColor = BrickColor.random()
-            part.Parent = workspace
-        end
-    end)
-    AddScriptButton(TabGenel, "✨ Yerçekimini Kaldır (0)", function() workspace.Gravity = 0 end)
-    AddScriptButton(TabGenel, "🌍 Normal Yerçekimi", function() workspace.Gravity = 196.2 end)
 
-    -- 2. RP & Yaşam
-    local TabRP = CreateCategory(tNames[2], false)
-    AddScriptButton(TabRP, "🏠 Brookhaven RP Hub", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua")
-    AddScriptButton(TabRP, "🐾 Adopt Me! Farm", "https://raw.githubusercontent.com/jLn003/AdoptMe/main/Main.lua")
-    AddScriptButton(TabRP, "🍔 Bloxburg GUI", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/Bloxburg.lua")
-    AddScriptButton(TabRP, "🌟 Royale High Farm", "https://raw.githubusercontent.com/MeowExecuting/RoyaleHigh/main/Source.lua")
+    -- 2. Azaltılmış Standart Popüler Oyunlar
+    local TabPopular = CreateCategory(tNames[2], false)
+    AddScriptButton(TabPopular, "🍎 Blox Fruits", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua")
+    AddScriptButton(TabPopular, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
+    AddScriptButton(TabPopular, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly")
+    AddScriptButton(TabPopular, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
 
-    -- 3. Anime & Dövüş
-    local TabAnime = CreateCategory(tNames[3], false)
-    AddScriptButton(TabAnime, "🍎 Blox Fruits", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua")
-    AddScriptButton(TabAnime, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
-    AddScriptButton(TabAnime, "⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua")
-    AddScriptButton(TabAnime, "🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards")
-    AddScriptButton(TabAnime, "⚡ Type Soul Loader", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua")
-    AddScriptButton(TabAnime, "🌀 Shindo Life GUI", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/Shindo")
-
-    -- 4. FPS & Nişancı
-    local TabFPS = CreateCategory(tNames[4], false)
-    AddScriptButton(TabFPS, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly")
-    AddScriptButton(TabFPS, "🔪 Murder Mystery 2", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2")
-    AddScriptButton(TabFPS, "🎯 Rivals Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-    AddScriptButton(TabFPS, "🧱 BedWars Vulnyx", "https://raw.githubusercontent.com/VapeVoidware/vapevoidware/main/loader.lua")
-    AddScriptButton(TabFPS, "🔫 Arsenal Hub", "https://raw.githubusercontent.com/fevse/Arsenal/main/Loader")
-
-    -- 5. Korku & Hayatta Kalma
-    local TabHorror = CreateCategory(tNames[5], false)
-    AddScriptButton(TabHorror, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
-    AddScriptButton(TabHorror, "🐷 Piggy GUI", "https://raw.githubusercontent.com/jLn003/Piggy/main/Main.lua")
-    AddScriptButton(TabHorror, "🛒 3008 SCP Hub", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/SCP3008.lua")
-    AddScriptButton(TabHorror, "🏃 Evade ESP", "https://raw.githubusercontent.com/RobloxScripts/Evade/main/Source.lua")
-
-    -- 6. Simülasyon & Pet
-    local TabSim = CreateCategory(tNames[6], false)
-    AddScriptButton(TabSim, "🐱 Pet Simulator 99!", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua")
-    AddScriptButton(TabSim, "🐟 Fisch Auto Fish", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-    AddScriptButton(TabSim, "🐝 Bee Swarm Simulator", "https://raw.githubusercontent.com/HubScripter/BeeSwarm/main/Main.lua")
-    AddScriptButton(TabSim, "🌿 Grow a Garden", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/GrowAGarden.lua")
-
-    -- 7. Spor & Simulator
-    local TabSports = CreateCategory(tNames[7], false)
-    AddScriptButton(TabSports, "💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague")
-    AddScriptButton(TabSports, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle")
-    AddScriptButton(TabSports, "⚡ Muscle Legends", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-    AddScriptButton(TabSports, "🎲 Sol's RNG", "https://raw.githubusercontent.com/solsrng/solsrng/main/loader.lua")
-
-    -- 8. İnşa & Sandbox
-    local TabBuild = CreateCategory(tNames[8], false)
-    AddScriptButton(TabBuild, "⛵ Build a Boat for Treasure", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/BuildABoat.lua")
-    AddScriptButton(TabBuild, "🌪️ Natural Disaster Survival", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/NaturalDisaster.lua")
-    AddScriptButton(TabBuild, "🍕 Work at a Pizza Place", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/PizzaPlace.lua")
-
-    -- 9. Parkur & Eğlence
-    local TabFun = CreateCategory(tNames[9], false)
-    AddScriptButton(TabFun, "🗼 Tower of Hell", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/TowerOfHell.lua")
-    AddScriptButton(TabFun, "👗 Dress to Impress", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DressToImpress.lua")
-    AddScriptButton(TabFun, "🎮 Epic Minigames", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/EpicMinigames.lua")
-
-    -- 10. Yarış & Araba
-    local TabCar = CreateCategory(tNames[10], false)
-    AddScriptButton(TabCar, "🚓 Jailbreak Auto Farm", "https://raw.githubusercontent.com/wawsdas/jailbreak/main/loader.lua")
-    AddScriptButton(TabCar, "🏎️ Driving Empire", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DrivingEmpire.lua")
-    AddScriptButton(TabCar, "🚗 Vehicle Simulator", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/VehicleSimulator.lua")
-
-    -- 11. Trendler
-    local TabTrend = CreateCategory(tNames[11], false)
-    AddScriptButton(TabTrend, "🎨 Dandy's World", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/DandysWorld.lua")
-    AddScriptButton(TabTrend, "🧠 Steal a Brainrot", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/Brainrot.lua")
-
-    -- 12. 👑 Premium Özel Sekmesi (Sadece VIP Key ile açılır)
-    local TabVIPExclusive = CreateCategory(tNames[12], true)
-    if TabVIPExclusive then
-        AddScriptButton(TabVIPExclusive, "👑 [VIP] Özel Admin Komut Paneli", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", true)
-        AddScriptButton(TabVIPExclusive, "👑 [VIP] Ultra Hız & Godmode", function()
-            pcall(function()
-                local p = game.Players.LocalPlayer
-                if p.Character and p.Character:FindFirstChild("Humanoid") then
-                    p.Character.Humanoid.WalkSpeed = 100
-                    p.Character.Humanoid.JumpPower = 150
-                end
-            end)
-        end, true)
-        AddScriptButton(TabVIPExclusive, "👑 [VIP] Tüm Oyunlar İçin Aimbot", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua", true)
+    -- 3. 👑 Premium Arşiv (Sadece VIP Key ile açılır ve tüm geniş arşivi içerir)
+    local TabVIPArchive = CreateCategory(tNames[3], true)
+    if TabVIPArchive then
+        AddScriptButton(TabVIPArchive, "👑 [VIP] Tüm Admin Komutları", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", true)
+        AddScriptButton(TabVIPArchive, "🍎 Blox Fruits (VIP)", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua", true)
+        AddScriptButton(TabVIPArchive, "🥊 Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua", true)
+        AddScriptButton(TabVIPArchive, "⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua", true)
+        AddScriptButton(TabVIPArchive, "🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards", true)
+        AddScriptButton(TabVIPArchive, "⚡ Type Soul Loader", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua", true)
+        AddScriptButton(TabVIPArchive, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly", true)
+        AddScriptButton(TabVIPArchive, "🔪 Murder Mystery 2", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2", true)
+        AddScriptButton(TabVIPArchive, "🎯 Rivals Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua", true)
+        AddScriptButton(TabVIPArchive, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua", true)
+        AddScriptButton(TabVIPArchive, "🐱 Pet Simulator 99!", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua", true)
+        AddScriptButton(TabVIPArchive, "🐟 Fisch Auto Fish", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua", true)
+        AddScriptButton(TabVIPArchive, "💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague", true)
+        AddScriptButton(TabVIPArchive, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle", true)
+        AddScriptButton(TabVIPArchive, "🏠 Brookhaven RP Hub", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua", true)
     end
 end
 
