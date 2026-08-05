@@ -1,356 +1,290 @@
--- klakz Hub - Premium & Normal Tier System (Gelişmiş Hız Kontrolü ve Universal Araçlar)
+-- klakz Hub - Saf & Hatasız Full Script Arşivi (VIP Yerine Devasa Liste)
 
--- ==================== KEYLER ====================
-local NORMAL_KEY = "klakz123"
-local PREMIUM_KEY = "klakz_vip_2026"
-
--- Ana Ekran (GUI)
+-- Ana Ekran
 local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "klakzHub_Master"
 ScreenGui.Parent = game.CoreGui
-ScreenGui.Name = "klakz_Hub_Main"
+ScreenGui.ResetOnSpawn = false
 
--- ==================== LOGIN / KEY PENCERESİ ====================
-local KeyFrame = Instance.new("Frame")
-KeyFrame.Name = "KeyFrame"
-KeyFrame.Parent = ScreenGui
-KeyFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 22)
-KeyFrame.Position = UDim2.new(0.5, -160, 0.5, -110)
-KeyFrame.Size = UDim2.new(0, 320, 0, 220)
-KeyFrame.Active = true
-KeyFrame.Draggable = true
+-- Ana Çerçeve (Menü)
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+MainFrame.Position = UDim2.new(0.5, -225, 0.5, -175)
+MainFrame.Size = UDim2.new(0, 450, 0, 350)
+MainFrame.Active = true
+MainFrame.Draggable = true
 
-local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
-UICorner.Parent = KeyFrame
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 8)
+MainCorner.Parent = MainFrame
 
-local UIStroke = Instance.new("UIStroke")
-UIStroke.Color = Color3.fromRGB(88, 101, 242)
-UIStroke.Thickness = 2
-UIStroke.Parent = KeyFrame
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(88, 101, 242)
+MainStroke.Thickness = 2
+MainStroke.Parent = MainFrame
 
-local TitleBar = Instance.new("Frame")
-TitleBar.Parent = KeyFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
-TitleBar.Size = UDim2.new(1, 0, 0, 45)
+-- Başlık Çubuğu
+local TitleBar = Instance.new("TextLabel")
+TitleBar.Parent = MainFrame
+TitleBar.BackgroundColor3 = Color3.fromRGB(28, 28, 35)
+TitleBar.Size = UDim2.new(1, 0, 0, 40)
+TitleBar.Font = Enum.Font.GothamBold
+TitleBar.Text = "  ⚡ klakz Hub - Ultimate Script Arşivi"
+TitleBar.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleBar.TextSize = 15
+TitleBar.TextXAlignment = Enum.TextXAlignment.Left
 
 local TitleCorner = Instance.new("UICorner")
-TitleCorner.CornerRadius = UDim.new(0, 10)
+TitleCorner.CornerRadius = UDim.new(0, 8)
 TitleCorner.Parent = TitleBar
 
-local FixFrame = Instance.new("Frame")
-FixFrame.Parent = TitleBar
-FixFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
-FixFrame.BorderSizePixel = 0
-FixFrame.Position = UDim2.new(0, 0, 0.7, 0)
-FixFrame.Size = UDim2.new(1, 0, 0.3, 0)
+-- Kapatma Butonu
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Parent = TitleBar
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseBtn.Position = UDim2.new(1, -35, 0, 8)
+CloseBtn.Size = UDim2.new(0, 25, 0, 24)
+CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseBtn.TextSize = 12
 
-local KeyTitle = Instance.new("TextLabel")
-KeyTitle.Parent = TitleBar
-KeyTitle.BackgroundTransparency = 1
-KeyTitle.Size = UDim2.new(1, 0, 1, 0)
-KeyTitle.Font = Enum.Font.GothamBold
-KeyTitle.Text = "⚡ klakz Hub - Yetkilendirme"
-KeyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-KeyTitle.TextSize = 16
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(0, 4)
+CloseCorner.Parent = CloseBtn
 
-local TextBox = Instance.new("TextBox")
-TextBox.Parent = KeyFrame
-TextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 38)
-TextBox.Position = UDim2.new(0, 25, 0, 60)
-TextBox.Size = UDim2.new(0, 270, 0, 40)
-TextBox.Font = Enum.Font.Gotham
-TextBox.PlaceholderText = "Key'inizi buraya girin..."
-TextBox.Text = ""
-TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-TextBox.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
-TextBox.TextSize = 14
+CloseBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
 
-local BoxCorner = Instance.new("UICorner")
-BoxCorner.CornerRadius = UDim.new(0, 6)
-BoxCorner.Parent = TextBox
+-- Sol Sekme Listesi (ScrollingFrame)
+local TabList = Instance.new("ScrollingFrame")
+TabList.Parent = MainFrame
+TabList.Position = UDim2.new(0, 10, 0, 50)
+TabList.Size = UDim2.new(0, 130, 0, 290)
+TabList.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+TabList.CanvasSize = UDim2.new(0, 0, 2, 0)
+TabList.ScrollBarThickness = 4
 
-local BoxStroke = Instance.new("UIStroke")
-BoxStroke.Color = Color3.fromRGB(50, 50, 65)
-BoxStroke.Thickness = 1
-BoxStroke.Parent = TextBox
+local TabCorner = Instance.new("UICorner")
+TabCorner.CornerRadius = UDim.new(0, 6)
+TabCorner.Parent = TabList
 
-local NormalBtn = Instance.new("TextButton")
-NormalBtn.Parent = KeyFrame
-NormalBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
-NormalBtn.Position = UDim2.new(0, 25, 0, 110)
-NormalBtn.Size = UDim2.new(0, 270, 0, 40)
-NormalBtn.Font = Enum.Font.GothamBold
-NormalBtn.Text = "Normal Giriş (Standard)"
-NormalBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-NormalBtn.TextSize = 14
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = TabList
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 5)
 
-local NormalCorner = Instance.new("UICorner")
-NormalCorner.CornerRadius = UDim.new(0, 6)
-NormalCorner.Parent = NormalBtn
+-- Sağ İçerik Alanı
+local ContentFrame = Instance.new("ScrollingFrame")
+ContentFrame.Parent = MainFrame
+ContentFrame.Position = UDim2.new(0, 150, 0, 50)
+ContentFrame.Size = UDim2.new(0, 290, 0, 290)
+ContentFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 32)
+ContentFrame.CanvasSize = UDim2.new(0, 0, 3, 0)
+ContentFrame.ScrollBarThickness = 4
 
-local PremiumBtn = Instance.new("TextButton")
-PremiumBtn.Parent = KeyFrame
-PremiumBtn.BackgroundColor3 = Color3.fromRGB(212, 175, 55)
-PremiumBtn.Position = UDim2.new(0, 25, 0, 160)
-PremiumBtn.Size = UDim2.new(0, 270, 0, 40)
-PremiumBtn.Font = Enum.Font.GothamBold
-PremiumBtn.Text = "👑 Premium Giriş (VIP)"
-PremiumBtn.TextColor3 = Color3.fromRGB(20, 20, 20)
-PremiumBtn.TextSize = 14
+local ContentCorner = Instance.new("UICorner")
+ContentCorner.CornerRadius = UDim.new(0, 6)
+ContentCorner.Parent = ContentFrame
 
-local PremCorner = Instance.new("UICorner")
-PremCorner.CornerRadius = UDim.new(0, 6)
-PremCorner.Parent = PremiumBtn
+local ContentLayout = Instance.new("UIListLayout")
+ContentLayout.Parent = ContentFrame
+ContentLayout.SortOrder = Enum.SortOrder.LayoutOrder
+ContentLayout.Padding = UDim.new(0, 8)
 
--- ==================== ANA MENÜ YÜKLEYİCİSİ ====================
-local function ArayuzuBaslat(isPremium)
-    local DiscordLib = loadstring(game:HttpGet("https://gitlab.com/HileciBabaYT/hbest/-/raw/main/hbscripthubui"))()
-
-    local titleText = isPremium and "klakz Hub [👑 PREMIUM VIP]" or "klakz Hub [Normal Sürüm]"
-    local win = DiscordLib:Window(titleText)
+-- Sekme Değiştirme Fonksiyonu
+local currentContainer = nil
+local function CreateTab(name)
+    local TabBtn = Instance.new("TextButton")
+    TabBtn.Parent = TabList
+    TabBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 45)
+    TabBtn.Size = UDim2.new(1, -10, 0, 35)
+    TabBtn.Font = Enum.Font.GothamMedium
+    TabBtn.Text = name
+    TabBtn.TextColor3 = Color3.fromRGB(220, 220, 220)
+    TabBtn.TextSize = 13
     
-    local notifMsg = isPremium and "Hoş geldin VIP Üye! Kontrollü Hız ve Ekstra Universal Araçlar Aktif." or "Normal sürüm yüklendi."
-    DiscordLib:Notification("Bildirim", notifMsg, "Tamam")
+    local BtnCorner = Instance.new("UICorner")
+    BtnCorner.CornerRadius = UDim.new(0, 4)
+    BtnCorner.Parent = TabBtn
+    
+    local Container = Instance.new("Frame")
+    Container.Parent = ContentFrame
+    Container.Size = UDim2.new(1, 0, 1, 0)
+    Container.BackgroundTransparency = 1
+    Container.Visible = false
+    
+    local ContainerLayout = Instance.new("UIListLayout")
+    ContainerLayout.Parent = Container
+    ContainerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    ContainerLayout.Padding = UDim.new(0, 6)
 
-    local serv = win:Server("Aktif Oyun Menüsü", "")
-
-    -- ==================== NORMAL SÜRÜM GENEL ARAÇLAR (SADE) ====================
-    local globalChannel = serv:Channel("Genel Araçlar")
-    globalChannel:Button("Güvenli Fly (Uçma)", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+    TabBtn.MouseButton1Click:Connect(function()
+        for _, v in pairs(ContentFrame:GetChildren()) do
+            if v:IsA("Frame") then v.Visible = false end
+        end
+        Container.Visible = true
     end)
-    globalChannel:Button("Infinite Yield (Admin Komutları)", function()
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-    end)
 
-    -- ==================== 👑 PREMIUM UNIVERSAL & VIP ARAÇLAR ====================
-    if isPremium then
-        local premChannel = serv:Channel("👑 Universal & VIP Araçlar")
-        premChannel:Label("Hız ve Kontrol Sistemleri:")
-        
-        -- Kontrollü Hız Ayarı (Kutucuk ile istediğin hızı yazma)
-        premChannel:Button("Speed Hack (Hız Ayarla: 50)", function()
-            local Players = game:GetService("Players")
-            local plr = Players.LocalPlayer
-            local RunService = game:GetService("RunService")
-            RunService.Stepped:Connect(function()
-                if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-                    plr.Character.Humanoid.WalkSpeed = 50
-                end
-            end)
-            print("Hız 50 yapıldı!")
-        end)
-
-        premChannel:Button("Super Speed Hack (Hız Ayarla: 120)", function()
-            local Players = game:GetService("Players")
-            local plr = Players.LocalPlayer
-            local RunService = game:GetService("RunService")
-            RunService.Stepped:Connect(function()
-                if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-                    plr.Character.Humanoid.WalkSpeed = 120
-                end
-            end)
-            print("Süper Hız 120 yapıldı!")
-        end)
-
-        premChannel:Button("Normal Hıza Dön (WalkSpeed: 16)", function()
-            local Players = game:GetService("Players")
-            local plr = Players.LocalPlayer
-            if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-                plr.Character.Humanoid.WalkSpeed = 16
-            end
-        end)
-
-        premChannel:Label("Ekstra Güçlü Evrensel Araçlar:")
-
-        premChannel:Button("Godmode (Ölümsüzlük)", function()
-            local Players = game:GetService("Players")
-            local plr = Players.LocalPlayer
-            if plr.Character and plr.Character:FindFirstChild("Humanoid") then
-                plr.Character.Humanoid.MaxHealth = math.huge
-                plr.Character.Humanoid.Health = math.huge
-            end
-        end)
-
-        premChannel:Button("Noclip (Duvarlardan Geçme)", function()
-            local RunService = game:GetService("RunService")
-            local Players = game:GetService("Players")
-            local plr = Players.LocalPlayer
-            RunService.Stepped:Connect(function()
-                if plr.Character then
-                    for _, v in pairs(plr.Character:GetDescendants()) do
-                        if v:IsA("BasePart") then
-                            v.CanCollide = false
-                        end
-                    end
-                end
-            end)
-        end)
-
-        premChannel:Button("Anti Fling (Uçmaya Karşı Koruma)", function()
-            local Players = game:GetService("Players")
-            local RunService = game:GetService("RunService")
-            local localPlayer = Players.LocalPlayer
-            RunService.Stepped:Connect(function()
-                if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    for _, v in pairs(Players:GetPlayers()) do
-                        if v ~= localPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
-                            v.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
-                            v.Character.HumanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
-                        end
-                    end
-                end
-            end)
-        end)
-
-        premChannel:Button("ESP / Player Highlighter", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/MalwareHecker/ESP/main/loader.lua", true))()
-        end)
-
-        premChannel:Button("FPS Booster & Lag Silici", function()
-            local terrain = workspace.Terrain
-            terrain.WaterWaveSize = 0
-            terrain.WaterWaveSpeed = 0
-            terrain.WaterTransparency = 0
-            settings().Rendering.QualityLevel = 1
-            print("FPS Boost aktif edildi!")
-        end)
-
-        premChannel:Button("Rejoin Server (Tekrar Bağlan)", function()
-            local TeleportService = game:GetService("TeleportService")
-            local Players = game:GetService("Players")
-            TeleportService:Teleport(game.PlaceId, Players.LocalPlayer)
-        end)
-
-        premChannel:Button("Server Hop (Boş Sunucuya Geç)", function()
-            local TeleportService = game:GetService("TeleportService")
-            local HttpService = game:GetService("HttpService")
-            local Players = game:GetService("Players")
-            local servers = HttpService:JSONDecode(game:HttpGet("https://games.roblox.com/v1/games/"..game.PlaceId.."/servers/Public?sortOrder=Asc&limit=100"))
-            for _, server in ipairs(servers.data) do
-                if server.playing < server.maxPlayers then
-                    TeleportService:TeleportToPlaceInstance(game.PlaceId, server.id, Players.LocalPlayer)
-                    break
-                end
-            end
-        end)
+    if not currentContainer then
+        Container.Visible = true
+        currentContainer = true
     end
 
-    -- ==================== OYUN ÖZEL SCRIPTLERİ ====================
-    if game.PlaceId == 12177325772 then
-        -- Super League Soccer
-        local btns = serv:Channel("Super League Soccer")
-        btns:Button("Super League Soccer Scripti", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/1f0yt/community/main/SuperLeagueSoccer"))()
-        end)
-        if isPremium then
-            btns:Button("👑 SLS Pro Aimbot & Curve", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/1f0yt/community/main/SuperLeagueSoccerPremium"))()
-            end)
-        end
-
-    elseif game.PlaceId == 13772394625 then
-        -- Blade Ball
-        local btns = serv:Channel("Blade Ball Özel")
-        btns:Button("Auto Parry (Blade Ball)", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))()
-        end)
-        if isPremium then
-            btns:Button("👑 Reaper Hub (Blade Ball)", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua"))()
-            end)
-            btns:Button("👑 Blade Ball Godmode / Spam Aura", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJabez/BladeBall/main/V3"))()
-            end)
-        end
-
-    elseif game.PlaceId == 10449761463 then
-        -- The Strongest Battlegrounds
-        local btns = serv:Channel("Strongest Battlegrounds")
-        btns:Button("BadWare Hub", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))()
-        end)
-        if isPremium then
-            btns:Button("👑 TSB Ultimate Aura & Moveset", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeScripter/TSB/main/Main.lua"))()
-            end)
-            btns:Button("👑 TSB Ultimate Combo & Feints", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJabez/TSB/main/Loader.lua"))()
-            end)
-        end
-
-    elseif game.PlaceId == 16732694052 then
-        -- Fisch
-        local btns = serv:Channel("Fisch Özel")
-        btns:Button("Speed Hub X (Fisch)", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
-        end)
-        if isPremium then
-            btns:Button("👑 Fisch Auto Fish & Perfect Catch", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/PlatClient/Fisch/main/AutoFish"))()
-            end)
-        end
-
-    elseif game.PlaceId == 13651239634 then
-        -- Blocks n' Props
-        local btns = serv:Channel("Blocks n' Props Özel")
-        btns:Button("Exordum (Blocks n' Props)", function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Booger-Aids-V2/Exordum/refs/heads/main/Blocks%20n'%20Props"))()
-        end)
-
-    elseif game.PlaceId == 112731528776884 or game.PlaceId == 120700541929930 then
-        -- Knife Duels
-        local btns = serv:Channel("Knife Duels Özel")
-        btns:Button("Knife Duels Script 1", function()
-            loadstring(game:HttpGet("https://pastefy.app/iizD2kA3/raw"))()
-        end)
-        if isPremium then
-            btns:Button("👑 Knife Duels VIP Hitbox / Aim", function()
-                loadstring(game:HttpGet("https://pastefy.app/iizD2kA3/raw"))()
-            end)
-        end
-
-    elseif game.PlaceId == 2753915549 or game.PlaceId == 4442272183 or game.PlaceId == 7449423635 then
-        -- Blox Fruits
-        local btns = serv:Channel("Blox Fruits Özel")
-        if isPremium then
-            btns:Button("👑 Redz Hub (Blox Fruits)", function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"))()
-            end)
-        else
-            btns:Label("Bu oyun sadece Premium üyelere özeldir.")
-        end
-
-    else
-        local uyari = serv:Channel("Durum")
-        uyari:Label("Bu oyun özel listesinde yok.")
-        uyari:Label(isPremium and "👑 Premium Universal Araçları kullanabilirsin." or "Sadece temel Genel Araçlar aktif.")
-    end
+    return Container
 end
 
--- ==================== BUTON ETKİLEŞİMLERİ ====================
-NormalBtn.MouseButton1Click:Connect(function()
-    if TextBox.Text == NORMAL_KEY then
-        KeyFrame:Destroy()
-        ArayuzuBaslat(false)
-    else
-        NormalBtn.Text = "❌ Yanlış Normal Key!"
-        NormalBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-        task.wait(1.5)
-        NormalBtn.Text = "Normal Giriş (Standard)"
-        NormalBtn.BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+-- Buton Ekleme Yardımcısı
+local function AddButton(parent, text, callback)
+    local Btn = Instance.new("TextButton")
+    Btn.Parent = parent
+    Btn.BackgroundColor3 = Color3.fromRGB(45, 45, 60)
+    Btn.Size = UDim2.new(1, -10, 0, 32)
+    Btn.Font = Enum.Font.Gotham
+    Btn.Text = text
+    Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Btn.TextSize = 12
+    
+    local Corner = Instance.new("UICorner")
+    Corner.CornerRadius = UDim.new(0, 4)
+    Corner.Parent = Btn
+    
+    Btn.MouseButton1Click:Connect(callback)
+end
+
+-- ==================== SEKME 1: GENEL & HIZ ARAÇLARI ====================
+local Tab1 = CreateTab("Genel Araçlar")
+
+AddButton(Tab1, "Güvenli Fly (Uçma)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+end)
+
+AddButton(Tab1, "Infinite Yield (Admin)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+end)
+
+AddButton(Tab1, "Speed Hack (Hız: 50)", function()
+    game:GetService("RunService").Stepped:Connect(function()
+        local plr = game:GetService("Players").LocalPlayer
+        if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+            plr.Character.Humanoid.WalkSpeed = 50
+        end
+    end)
+end)
+
+AddButton(Tab1, "Super Speed (Hız: 120)", function()
+    game:GetService("RunService").Stepped:Connect(function()
+        local plr = game:GetService("Players").LocalPlayer
+        if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+            plr.Character.Humanoid.WalkSpeed = 120
+        end
+    end)
+end)
+
+AddButton(Tab1, "Normal Hıza Dön (16)", function()
+    local plr = game:GetService("Players").LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+        plr.Character.Humanoid.WalkSpeed = 16
     end
 end)
 
-PremiumBtn.MouseButton1Click:Connect(function()
-    if TextBox.Text == PREMIUM_KEY then
-        KeyFrame:Destroy()
-        ArayuzuBaslat(true)
-    else
-        PremiumBtn.Text = "❌ Yanlış Premium Key!"
-        PremiumBtn.BackgroundColor3 = Color3.fromRGB(200, 60, 60)
-        task.wait(1.5)
-        PremiumBtn.Text = "👑 Premium Giriş (VIP)"
-        PremiumBtn.BackgroundColor3 = Color3.fromRGB(212, 175, 55)
+AddButton(Tab1, "Godmode (Ölümsüzlük)", function()
+    local plr = game:GetService("Players").LocalPlayer
+    if plr.Character and plr.Character:FindFirstChild("Humanoid") then
+        plr.Character.Humanoid.MaxHealth = math.huge
+        plr.Character.Humanoid.Health = math.huge
     end
+end)
+
+AddButton(Tab1, "Noclip (Duvarlardan Geçme)", function()
+    game:GetService("RunService").Stepped:Connect(function()
+        local plr = game:GetService("Players").LocalPlayer
+        if plr.Character then
+            for _, v in pairs(plr.Character:GetDescendants()) do
+                if v:IsA("BasePart") then v.CanCollide = false end
+            end
+        end
+    end)
+end)
+
+AddButton(Tab1, "Anti Fling (Savrulma Koruması)", function()
+    local Players = game:GetService("Players")
+    local localPlayer = Players.LocalPlayer
+    game:GetService("RunService").Stepped:Connect(function()
+        if localPlayer.Character and localPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            for _, v in pairs(Players:GetPlayers()) do
+                if v ~= localPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                    v.Character.HumanoidRootPart.Velocity = Vector3.new(0, 0, 0)
+                    v.Character.HumanoidRootPart.RotVelocity = Vector3.new(0, 0, 0)
+                end
+            end
+        end
+    end)
+end)
+
+AddButton(Tab1, "ESP / Oyuncu Gösterici", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/MalwareHecker/ESP/main/loader.lua", true))()
+end)
+
+-- ==================== SEKME 2: BLADE BALL ====================
+local Tab2 = CreateTab("Blade Ball")
+AddButton(Tab2, "Auto Parry (Otomatik Savuşturma)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))()
+end)
+AddButton(Tab2, "Reaper Hub", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AyoReaper/Reaper-Hub/main/loader.lua"))()
+end)
+AddButton(Tab2, "Godmode / Spam Aura", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJabez/BladeBall/main/V3"))()
+end)
+
+-- ==================== SEKME 3: THE STRONGEST BATTLEGROUNDS ====================
+local Tab3 = CreateTab("Strongest Battle.")
+AddButton(Tab3, "BadWare Hub", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))()
+end)
+AddButton(Tab3, "Ultimate Aura & Moveset (Efektli)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/VapeScripter/TSB/main/Main.lua"))()
+end)
+AddButton(Tab3, "Ultimate Combo & Feints", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJabez/TSB/main/Loader.lua"))()
+end)
+
+-- ==================== SEKME 4: FISCH ====================
+local Tab4 = CreateTab("Fisch")
+AddButton(Tab4, "Speed Hub X", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/AhmadV99/Speed-Hub-X/main/Speed%20Hub%20X.lua", true))()
+end)
+AddButton(Tab4, "Auto Fish & Perfect Catch", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/PlatClient/Fisch/main/AutoFish"))()
+end)
+
+-- ==================== SEKME 5: BLOX FRUITS ====================
+local Tab5 = CreateTab("Blox Fruits")
+AddButton(Tab5, "Redz Hub", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"))()
+end)
+AddButton(Tab5, "W-Azure Hub", function()
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/2b212f32f327e4e138a37943d39ec53b.lua"))()
+end)
+
+-- ==================== SEKME 6: PET SIMULATOR 99 ====================
+local Tab6 = CreateTab("PS99")
+AddButton(Tab6, "Zenith Auto Farm & Hatch", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/ZenithTheBest/PS99/main/Main.lua"))()
+end)
+AddButton(Tab6, "Exunys Dupe Hub", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Exunys/PS99-Hub/main/Loader.lua"))()
+end)
+
+-- ==================== SEKME 7: BEDWARS & ARSENAL ====================
+localTab7 = CreateTab("BedWars & Arsenal")
+AddButton(Tab7, "Vape V4 (BedWars)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua", true))()
+end)
+AddButton(Tab7, "ThunderClient (Arsenal)", function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Thunderclient/Thunderclient/main/Main.lua"))()
 end)
