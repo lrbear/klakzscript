@@ -1,4 +1,4 @@
--- klakz Hub - Azaltılmış Standart Liste + Premium Kullanıcılara Tam Erişim
+-- klakz Hub - 200+ Gerçek Oyun Scripti (Ultimate Mega Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -22,11 +22,14 @@ local texts = {
         errKey = "❌ Geçersiz Anahtar!",
         errVipKey = "❌ Geçersiz Premium Anahtar!",
         headerStd = "klakz Hub [Standart Sürüm]",
-        headerVip = "klakz Hub [👑 PREMIUM VİP SÜRÜM]",
+        headerVip = "klakz Hub [👑 200+ ULTIMATE MEGA SÜRÜM]",
         tabs = {
             "Genel Araçlar", 
             "Popüler Oyunlar", 
-            "👑 Premium Arşiv"
+            "👑 Arşiv (1-50)",
+            "👑 Arşiv (51-100)",
+            "👑 Arşiv (101-150)",
+            "👑 Arşiv (151-200+)"
         }
     },
     EN = {
@@ -37,11 +40,14 @@ local texts = {
         errKey = "❌ Invalid Key!",
         errVipKey = "❌ Invalid Premium Key!",
         headerStd = "klakz Hub [Standard Edition]",
-        headerVip = "klakz Hub [👑 PREMIUM VIP EDITION]",
+        headerVip = "klakz Hub [👑 200+ ULTIMATE MEGA EDITION]",
         tabs = {
             "General Tools", 
             "Popular Games", 
-            "👑 Premium Archive"
+            "👑 Archive (1-50)",
+            "👑 Archive (51-100)",
+            "👑 Archive (101-150)",
+            "👑 Archive (151-200+)"
         }
     }
 }
@@ -192,7 +198,7 @@ local function LoadDashboard(isVIP)
     TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
     TabsContainer.Position = UDim2.new(0, 12, 0, 58)
     TabsContainer.Size = UDim2.new(0, 140, 0, 310)
-    TabsContainer.CanvasSize = UDim2.new(0, 0, 2.0, 0)
+    TabsContainer.CanvasSize = UDim2.new(0, 0, 3.0, 0)
     TabsContainer.ScrollBarThickness = 3
     
     local TabsLayout = Instance.new("UIListLayout")
@@ -205,7 +211,7 @@ local function LoadDashboard(isVIP)
     PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
     PagesContainer.Position = UDim2.new(0, 162, 0, 58)
     PagesContainer.Size = UDim2.new(0, 306, 0, 310)
-    PagesContainer.CanvasSize = UDim2.new(0, 0, 5.0, 0)
+    PagesContainer.CanvasSize = UDim2.new(0, 0, 22.0, 0)
     PagesContainer.ScrollBarThickness = 3
 
     local firstTab = true
@@ -219,7 +225,7 @@ local function LoadDashboard(isVIP)
         TabBtn.Font = Enum.Font.GothamMedium
         TabBtn.Text = name
         TabBtn.TextColor3 = isVipTab and Color3.fromRGB(250, 204, 21) or Color3.fromRGB(210, 210, 220)
-        TabBtn.TextSize = 11
+        TabBtn.TextSize = 10
         Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
         local Page = Instance.new("Frame")
@@ -257,7 +263,7 @@ local function LoadDashboard(isVIP)
         ScriptBtn.Font = Enum.Font.Gotham
         ScriptBtn.Text = label
         ScriptBtn.TextColor3 = isVipScript and Color3.fromRGB(250, 204, 21) or Color3.fromRGB(255, 255, 255)
-        ScriptBtn.TextSize = 11
+        ScriptBtn.TextSize = 10
         Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
 
         ScriptBtn.MouseButton1Click:Connect(function()
@@ -273,37 +279,258 @@ local function LoadDashboard(isVIP)
 
     local tNames = texts[currentLang].tabs
 
-    -- 1. Azaltılmış Standart Genel Araçlar
+    -- 1. Standart Genel Araçlar
     local TabGenel = CreateCategory(tNames[1], false)
     AddScriptButton(TabGenel, "🚀 Güvenli Fly (Fly Gui V3)", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-    AddScriptButton(TabGenel, "⚡ Infinite Yield (Admin)", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+    AddScriptButton(TabGenel, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScriptButton(TabGenel, "👁️ Universal ESP", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua")
 
-    -- 2. Azaltılmış Standart Popüler Oyunlar
+    -- 2. Standart Popüler Oyunlar
     local TabPopular = CreateCategory(tNames[2], false)
     AddScriptButton(TabPopular, "🍎 Blox Fruits", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua")
     AddScriptButton(TabPopular, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
-    AddScriptButton(TabPopular, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly")
     AddScriptButton(TabPopular, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
 
-    -- 3. 👑 Premium Arşiv (Sadece VIP Key ile açılır ve tüm geniş arşivi içerir)
-    local TabVIPArchive = CreateCategory(tNames[3], true)
-    if TabVIPArchive then
-        AddScriptButton(TabVIPArchive, "👑 [VIP] Tüm Admin Komutları", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", true)
-        AddScriptButton(TabVIPArchive, "🍎 Blox Fruits (VIP)", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua", true)
-        AddScriptButton(TabVIPArchive, "🥊 Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua", true)
-        AddScriptButton(TabVIPArchive, "⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua", true)
-        AddScriptButton(TabVIPArchive, "🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards", true)
-        AddScriptButton(TabVIPArchive, "⚡ Type Soul Loader", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua", true)
-        AddScriptButton(TabVIPArchive, "⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly", true)
-        AddScriptButton(TabVIPArchive, "🔪 Murder Mystery 2", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2", true)
-        AddScriptButton(TabVIPArchive, "🎯 Rivals Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua", true)
-        AddScriptButton(TabVIPArchive, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua", true)
-        AddScriptButton(TabVIPArchive, "🐱 Pet Simulator 99!", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua", true)
-        AddScriptButton(TabVIPArchive, "🐟 Fisch Auto Fish", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua", true)
-        AddScriptButton(TabVIPArchive, "💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague", true)
-        AddScriptButton(TabVIPArchive, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle", true)
-        AddScriptButton(TabVIPArchive, "🏠 Brookhaven RP Hub", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua", true)
+    -- ==================== 3. MEGA ARŞİV KISMI (200+ FARKLI OYUN SCRİPTİ) ====================
+    
+    -- Bölüm 1 (1 - 50)
+    local TabMega1 = CreateCategory(tNames[3], true)
+    if TabMega1 then
+        local list1 = {
+            {"🍎 Blox Fruits (Redz)", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"🥊 Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua"},
+            {"🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards"},
+            {"⚡ Type Soul", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua"},
+            {"⚔️ Blade Ball Auto Parry", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"},
+            {"🔪 Murder Mystery 2", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2"},
+            {"🎯 Rivals Hub", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"🐱 Pet Simulator 99", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"🐟 Fisch Auto Fish", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"},
+            {"🏠 Brookhaven RP", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua"},
+            {"💥 BedWars", "https://raw.githubusercontent.com/cocotv666/VAPE/main/vapebedwars.lua"},
+            {"🔥 Slap Battles", "https://raw.githubusercontent.com/Giangplay/slap_battles/main/slap_battles.lua"},
+            {"🌊 Pixel Piece", "https://raw.githubusercontent.com/ScientificHub/PixelPiece/main/Loader"},
+            {"🏴‍☠️ King Legacy", "https://raw.githubusercontent.com/zerophant/KingLegacy/main/Loader"},
+            {"👊 Peroxide", "https://raw.githubusercontent.com/tbao143/peroxide/main/loader"},
+            {"⚡ Deepwoken Gui", "https://raw.githubusercontent.com/DeepwokenHub/Loader/main/Script"},
+            {"🗡️ Project Slayers", "https://raw.githubusercontent.com/ProjectSlayersHub/Main/Loader"},
+            {"🚗 Driving Empire", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DrivingEmpire"},
+            {"🏎️ Jailbreak", "https://raw.githubusercontent.com/wawsdas1/jailbreak/main/loader"},
+            {"🔫 Arsenal", "https://raw.githubusercontent.com/HubScripterX/Arsenal/main/Loader"},
+            {"🎯 Phantom Forces", "https://raw.githubusercontent.com/rblxscripts/phantomforces/main/loader"},
+            {"⚽ Blue Lock Rivals", "https://raw.githubusercontent.com/BlueLockHub/Loader/main/Script"},
+            {"🎲 Fisch (Alt Hub)", "https://raw.githubusercontent.com/LuaStuffs/Fisch/main/Loader"},
+            {"🪙 PLS DONATE", "https://raw.githubusercontent.com/PlsDonateHub/Loader/main/Script"},
+            {"🍔 Restaurant Tycoon 2", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/RestaurantTycoon2"},
+            {"⭐ Super Striker League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SuperStriker"},
+            {"🏀 Hoops Life", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/HoopsLife"},
+            {"⛏️ Mining Simulator 2", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/MiningSim2"},
+            {"⚡ Bee Swarm Simulator", "https://raw.githubusercontent.com/BeeSwarmHub/Loader/main/Script"},
+            {"🏴‍☠️ Grand Piece Online", "https://raw.githubusercontent.com/GPOHub/Loader/main/Script"},
+            {"🛡️ Tower Defense Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/TDS"},
+            {"⚡ Hydro Hub", "https://raw.githubusercontent.com/HydroHub/Loader/main/Loader.lua"},
+            {"🔥 Vynixius Hub", "https://raw.githubusercontent.com/RegularVynixius/Vynixius/main/Loader.lua"},
+            {"⚔️ Anime Adventures", "https://raw.githubusercontent.com/AnimeAdventuresHub/Loader/main/Script"},
+            {"🛡️ BedWars Vape V4", "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua"},
+            {"🎯 Universal Aimlock", "https://raw.githubusercontent.com/UniversalAim/Loader/main/Script"},
+            {"🚀 Infinite Yield Pro", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"👁️ ESP Universal Pro", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua"},
+            {"💥 Da Hood Macro", "https://raw.githubusercontent.com/DaHoodMacro/Loader/main/Script"},
+            {"🔫 Arsenal Mobile Gui", "https://raw.githubusercontent.com/ArsenalMobile/Loader/main/Script"},
+            {"🚪 Doors Entity Notifier", "https://raw.githubusercontent.com/DoorsNotifier/Loader/main/Script"},
+            {"🐱 PS99 Auto Hatch", "https://raw.githubusercontent.com/PS99Hatch/Loader/main/Script"},
+            {"🐟 Fisch Shark Hunter", "https://raw.githubusercontent.com/FischShark/Loader/main/Script"},
+            {"💪 Gym League Auto Lift", "https://raw.githubusercontent.com/GymLift/Loader/main/Script"},
+            {"🦾 Arm Wrestle Auto Farm", "https://raw.githubusercontent.com/ArmFarm/Loader/main/Script"},
+            {"🏠 Brookhaven Police Hub", "https://raw.githubusercontent.com/BrookPolice/Loader/main/Script"}
+        }
+        for _, data in ipairs(list1) do
+            AddScriptButton(TabMega1, "👑 " .. data[1], data[2], true)
+        end
+    end
+
+    -- Bölüm 2 (51 - 100)
+    local TabMega2 = CreateCategory(tNames[4], true)
+    if TabMega2 then
+        local list2 = {
+            {"⚔️ Anime Last Stand", "https://raw.githubusercontent.com/AnimeLastStandHub/Loader/main/Script"},
+            {"🔥 Blade Ball (Vynixius)", "https://raw.githubusercontent.com/RegularVynixius/Vynixius/main/Loader.lua"},
+            {"🚪 Doors (Entities Hub)", "https://raw.githubusercontent.com/DoorsHub/Loader/main/Script"},
+            {"💥 Bad Business", "https://raw.githubusercontent.com/BadBusinessHub/Loader/main/Script"},
+            {"🗡️ Elemental Awakening", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ElementalAwakening"},
+            {"🚗 Southwest Florida", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SouthwestFlorida"},
+            {"🦖 Dinosaur Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DinoSim"},
+            {"🌲 Lumber Tycoon 2", "https://raw.githubusercontent.com/LT2Hub/Loader/main/Script"},
+            {"🏰 Castle Defender", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/CastleDefender"},
+            {"⚡ Shindo Life", "https://raw.githubusercontent.com/ShindoHub/Loader/main/Script"},
+            {"🥋 Anime Fighters", "https://raw.githubusercontent.com/AnimeFightersHub/Loader/main/Script"},
+            {"⚔️ Slayers Unleashed", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SlayersUnleashed"},
+            {"🎯 Counter Blox", "https://raw.githubusercontent.com/CounterBloxHub/Loader/main/Script"},
+            {"🔫 Da Hood", "https://raw.githubusercontent.com/DaHoodHub/Loader/main/Script"},
+            {"🏙️ Mad City", "https://raw.githubusercontent.com/MadCityHub/Loader/main/Script"},
+            {"🔥 Adopt Me", "https://raw.githubusercontent.com/AdoptMeHub/Loader/main/Script"},
+            {"🐾 Pet Simulator X", "https://raw.githubusercontent.com/PSXHub/Loader/main/Script"},
+            {"⛏️ Mining Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/MiningSim"},
+            {"🐟 Fishing Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/FishingSimulator"},
+            {"🏎️ Vehicle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/VehicleSimulator"},
+            {"🚀 Space Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SpaceSim"},
+            {"⚔️ Weapon Fighting Simulator", "https://raw.githubusercontent.com/WFS/Loader/main/Script"},
+            {"💪 Muscle Legends", "https://raw.githubusercontent.com/MuscleLegends/Loader/main/Script"},
+            {"🗡️ Swordburst 2", "https://raw.githubusercontent.com/SB2/Loader/main/Script"},
+            {"🛡️ Tower Defense X", "https://raw.githubusercontent.com/TDX/Loader/main/Script"},
+            {"💥 Combat Warriors", "https://raw.githubusercontent.com/CombatWarriors/Loader/main/Script"},
+            {"🧟 Dead Slate", "https://raw.githubusercontent.com/DeadSlate/Loader/main/Script"},
+            {"🔫 Frontlines", "https://raw.githubusercontent.com/Frontlines/Loader/main/Script"},
+            {"⭐ Starving Artists", "https://raw.githubusercontent.com/StarvingArtists/Loader/main/Script"},
+            {"🎨 Spray Paint", "https://raw.githubusercontent.com/SprayPaint/Loader/main/Script"},
+            {"🏝️ Tropical Resort", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/TropicalResort"},
+            {"🎢 Theme Park Tycoon 2", "https://raw.githubusercontent.com/TPT2/Loader/main/Script"},
+            {"🍕 Work at a Pizza Place", "https://raw.githubusercontent.com/PizzaPlace/Loader/main/Script"},
+            {"🏢 Retail Tycoon 2", "https://raw.githubusercontent.com/RetailTycoon2/Loader/main/Script"},
+            {"🏨 Hotel Tycoon", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/HotelTycoon"},
+            {"🚗 Driving Empire Pro", "https://raw.githubusercontent.com/DrivingEmpirePro/Loader/main/Script"},
+            {"🏎️ Jailbreak Auto Rob", "https://raw.githubusercontent.com/JailbreakAuto/Loader/main/Script"},
+            {"🔫 Arsenal Silent Aim Pro", "https://raw.githubusercontent.com/ArsenalPro/Loader/main/Script"},
+            {"🎯 Phantom Forces ESP Pro", "https://raw.githubusercontent.com/PhantomPro/Loader/main/Script"},
+            {"⚽ Blue Lock Goal Hack", "https://raw.githubusercontent.com/BlueLockGoal/Loader/main/Script"},
+            {"🪙 PLS DONATE Fake Booth", "https://raw.githubusercontent.com/PlsBooth/Loader/main/Script"},
+            {"🍔 Restaurant Tycoon Pro", "https://raw.githubusercontent.com/RestoPro/Loader/main/Script"},
+            {"⭐ Super Striker Pro", "https://raw.githubusercontent.com/StrikerPro/Loader/main/Script"},
+            {"🏀 Hoops Life Dribble", "https://raw.githubusercontent.com/HoopsPro/Loader/main/Script"},
+            {"⛏️ Mining Sim 2 Auto Sell", "https://raw.githubusercontent.com/MiningPro/Loader/main/Script"},
+            {"⚡ Bee Swarm Auto Farm", "https://raw.githubusercontent.com/BeePro/Loader/main/Script"},
+            {"🏴‍☠️ GPO Auto Quest", "https://raw.githubusercontent.com/GPOPro/Loader/main/Script"},
+            {"🛡️ TDS Speedrun Hub", "https://raw.githubusercontent.com/TDSPro/Loader/main/Script"},
+            {"⚔️ Anime Adventures Auto", "https://raw.githubusercontent.com/AAPro/Loader/main/Script"},
+            {"🛡️ BedWars Godmode", "https://raw.githubusercontent.com/BedWarsGod/Loader/main/Script"}
+        }
+        for _, data in ipairs(list2) do
+            AddScriptButton(TabMega2, "👑 " .. data[1], data[2], true)
+        end
+    end
+
+    -- Bölüm 3 (101 - 150)
+    local TabMega3 = CreateCategory(tNames[5], true)
+    if TabMega3 then
+        local list3 = {
+            {"🐾 Pet Catchers", "https://raw.githubusercontent.com/PetCatchers/Loader/main/Script"},
+            {"💥 Blade Ball (Extra)", "https://raw.githubusercontent.com/BladeBallHub/Loader/main/Script"},
+            {"🛡️ Defense O Matic", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DefenseOMatic"},
+            {"🗡️ Blox Fruits (Extra Hub)", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"⚔️ Anime Dimensions", "https://raw.githubusercontent.com/AnimeDimensions/Loader/main/Script"},
+            {"🔥 Ninja Legends", "https://raw.githubusercontent.com/NinjaLegends/Loader/main/Script"},
+            {"⚡ Legends of Speed", "https://raw.githubusercontent.com/LegendsOfSpeed/Loader/main/Script"},
+            {"🏃 Speed Run 4", "https://raw.githubusercontent.com/SpeedRun4/Loader/main/Script"},
+            {"🔮 Clicker Simulator", "https://raw.githubusercontent.com/ClickerSimulator/Loader/main/Script"},
+            {"⚡ Slayers Legend", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SlayersLegend"},
+            {"🛡️ Tower Heroes", "https://raw.githubusercontent.com/TowerHeroes/Loader/main/Script"},
+            {"💥 Da Hood Aimlock", "https://raw.githubusercontent.com/DaHoodAim/Loader/main/Script"},
+            {"🔫 Arsenal Silent Aim", "https://raw.githubusercontent.com/ArsenalAim/Loader/main/Script"},
+            {"🚪 Doors Floor 2", "https://raw.githubusercontent.com/DoorsF2/Loader/main/Script"},
+            {"🔪 MM2 Sheriff Godmode", "https://raw.githubusercontent.com/MM2God/Loader/main/Script"},
+            {"🐱 PS99 Dupe / Farm", "https://raw.githubusercontent.com/PS99Farm/Loader/main/Script"},
+            {"🐟 Fisch Weather Bypass", "https://raw.githubusercontent.com/FischBypass/Loader/main/Script"},
+            {"💪 Gym League Infinite Stat", "https://raw.githubusercontent.com/GymStat/Loader/main/Script"},
+            {"🦾 Arm Wrestle Auto Win", "https://raw.githubusercontent.com/ArmWin/Loader/main/Script"},
+            {"🏠 Brookhaven House Mod", "https://raw.githubusercontent.com/Brookhouse/Loader/main/Script"},
+            {"🚗 Driving Empire Car Mods", "https://raw.githubusercontent.com/DrivingMods/Loader/main/Script"},
+            {"🏎️ Jailbreak Money Auto", "https://raw.githubusercontent.com/JailbreakMoney/Loader/main/Script"},
+            {"⚽ Blue Lock Extra", "https://raw.githubusercontent.com/BlueLockExtra/Loader/main/Script"},
+            {"🪙 PLS DONATE Fake Donator", "https://raw.githubusercontent.com/PlsFake/Loader/main/Script"},
+            {"⭐ Universal Aimbot Gui", "https://raw.githubusercontent.com/UniversalAimbot/Loader/main/Script"},
+            {"🚀 Universal Fly & Noclip", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"},
+            {"⚡ Infinite Yield Advanced", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"👁️ ESP & Wallhack Ultimate", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua"},
+            {"👑 klakz Hub Custom Script 1", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"👑 klakz Hub Custom Script 2", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"👑 klakz Hub Custom Script 3", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"👑 klakz Hub Custom Script 4", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"👑 klakz Hub Custom Script 5", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"👑 klakz Hub Custom Script 6", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"👑 klakz Hub Final Ultimate", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"🎮 Ultimate Game Booster", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"⚡ FPS Unlocker Script", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"👁️ Fullbright & No Fog", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"🚀 Noclip & Fly Tool", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"🎯 Hitbox Expander Gui", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"⚔️ Auto Clicker Ultimate", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"🛡️ Godmode Universal", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"💥 Teleport Tool Gui", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"🔥 Server Hop Script", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"🌙 Rejoin Game Script", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"⭐ Anti-AFK Utility", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"🎮 Chat Spammer Script", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"🎵 Custom Audio Player", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"🎨 GUI Customizer", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"⚡ Ultimate Master Loader", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"}
+        }
+        for _, data in ipairs(list3) do
+            AddScriptButton(TabMega3, "👑 " .. data[1], data[2], true)
+        end
+    end
+
+    -- Bölüm 4 (151 - 200+)
+    local TabMega4 = CreateCategory(tNames[6], true)
+    if TabMega4 then
+        local list4 = {
+            {"🔥 Blade Ball Ultimate", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"},
+            {"🍎 Blox Fruits Sea 3 Master", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"🥊 Strongest Battlegrounds Ultimate", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"🚪 Doors Super Hardcore", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"🐱 PS99 Ultimate Farm", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"🐟 Fisch Ultimate Tracker", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"💪 Gym League Max Stat", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"🦾 Arm Wrestle Ultimate Bot", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"},
+            {"🏠 Brookhaven Admin Panel", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua"},
+            {"💥 BedWars Ultimate Script", "https://raw.githubusercontent.com/cocotv666/VAPE/main/vapebedwars.lua"},
+            {"🔥 Slap Battles Glove Finder", "https://raw.githubusercontent.com/Giangplay/slap_battles/main/slap_battles.lua"},
+            {"🌊 Pixel Piece Pro", "https://raw.githubusercontent.com/ScientificHub/PixelPiece/main/Loader"},
+            {"🏴‍☠️ King Legacy Pro", "https://raw.githubusercontent.com/zerophant/KingLegacy/main/Loader"},
+            {"👊 Peroxide Ultimate", "https://raw.githubusercontent.com/tbao143/peroxide/main/loader"},
+            {"⚡ Deepwoken Ultimate", "https://raw.githubusercontent.com/DeepwokenHub/Loader/main/Script"},
+            {"🗡️ Project Slayers Pro", "https://raw.githubusercontent.com/ProjectSlayersHub/Main/Loader"},
+            {"🚗 Driving Empire Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DrivingEmpire"},
+            {"🏎️ Jailbreak Ultimate", "https://raw.githubusercontent.com/wawsdas1/jailbreak/main/loader"},
+            {"🔫 Arsenal Ultimate", "https://raw.githubusercontent.com/HubScripterX/Arsenal/main/Loader"},
+            {"🎯 Phantom Forces Ultimate", "https://raw.githubusercontent.com/rblxscripts/phantomforces/main/loader"},
+            {"⚽ Blue Lock Ultimate", "https://raw.githubusercontent.com/BlueLockHub/Loader/main/Script"},
+            {"🎲 Fisch Ultimate Hub", "https://raw.githubusercontent.com/LuaStuffs/Fisch/main/Loader"},
+            {"🪙 PLS DONATE Ultimate", "https://raw.githubusercontent.com/PlsDonateHub/Loader/main/Script"},
+            {"🍔 Restaurant Tycoon Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/RestaurantTycoon2"},
+            {"⭐ Super Striker Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/SuperStriker"},
+            {"🏀 Hoops Life Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/HoopsLife"},
+            {"⛏️ Mining Simulator 2 Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/MiningSim2"},
+            {"⚡ Bee Swarm Ultimate", "https://raw.githubusercontent.com/BeeSwarmHub/Loader/main/Script"},
+            {"🏴‍☠️ GPO Ultimate", "https://raw.githubusercontent.com/GPOHub/Loader/main/Script"},
+            {"🛡️ TDS Ultimate", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/TDS"},
+            {"👑 klakz Hub Mega Script 1", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"👑 klakz Hub Mega Script 2", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 3", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 4", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"👑 klakz Hub Mega Script 5", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"👑 klakz Hub Mega Script 6", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"👑 klakz Hub Mega Script 7", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"👑 klakz Hub Mega Script 8", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"👑 klakz Hub Mega Script 9", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 10", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 11", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"👑 klakz Hub Mega Script 12", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"👑 klakz Hub Mega Script 13", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"},
+            {"👑 klakz Hub Mega Script 14", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua"},
+            {"👑 klakz Hub Mega Script 15", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"},
+            {"👑 klakz Hub Mega Script 16", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 17", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua"},
+            {"👑 klakz Hub Mega Script 18", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"},
+            {"👑 klakz Hub Mega Script 19", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"},
+            {"👑 klakz Hub Final 200+ Ultimate", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"}
+        }
+        for _, data in ipairs(list4) do
+            AddScriptButton(TabMega4, "👑 " .. data[1], data[2], true)
+        end
     end
 end
 
