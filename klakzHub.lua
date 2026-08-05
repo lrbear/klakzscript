@@ -1,4 +1,4 @@
--- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (+ Baseplate Test Araçları)
+-- klakz Hub - TR / EN Dil Seçenekli, Key ve VIP Kısıtlamalı Sürüm (Baseplate Araçları Genel Sekmede)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -28,7 +28,7 @@ local texts = {
         alertText = "✅ Key Onaylandı! Hub Yükleniyor...",
         stdHeader = "klakz Hub [Standart Sürüm]",
         vipHeader = "klakz Hub [VIP Sürüm]",
-        tabs = {"Genel Araçlar", "🛠️ Baseplate Test", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
+        tabs = {"Genel & Baseplate", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
         scripts = {
             fly = "Güvenli Fly (Uçma V3)",
             inf = "Infinite Yield (Admin)",
@@ -52,13 +52,13 @@ local texts = {
             fischhub = "Fisch Auto Fish & Hub",
             redz = "Redz Hub",
             -- Baseplate Araçları
-            spawnPart = "Blok (Part) Oluştur",
-            spawnNeon = "Işıklı Neon Blok At",
-            rainbowFloor = "Gökkuşağı Zemin Efekti",
-            toolGiver = "Admin / Builder Tool Ver",
-            gravityZero = "Yerçekimini Kaldır (0 Gravity)",
-            gravityNormal = "Normal Yerçekimine Dön",
-            clearParts = "Oluşturulan Parçaları Temizle"
+            spawnPart = "🛠️ Blok (Part) Oluştur",
+            spawnNeon = "🛠️ Işıklı Neon Blok At",
+            rainbowFloor = "🛠️ Gökkuşağı Zemin Efekti",
+            toolGiver = "🛠️ Admin / Builder Tool Ver",
+            gravityZero = "🛠️ Yerçekimini Kaldır (0)",
+            gravityNormal = "🛠️ Normal Yerçekimine Dön",
+            clearParts = "🛠️ Oluşturulan Parçaları Temizle"
         }
     },
     EN = {
@@ -71,7 +71,7 @@ local texts = {
         alertText = "✅ Key Verified! Hub Loading...",
         stdHeader = "klakz Hub [Standard Version]",
         vipHeader = "klakz Hub [VIP Version]",
-        tabs = {"General Tools", "🛠️ Baseplate Test", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
+        tabs = {"General & Baseplate", "👑 Universal Hubs (VIP)", "Strongest Battle.", "Anime Vanguards", "Gym League", "Type Soul", "Arm Wrestle Sim", "Doors", "Blade Ball", "Fisch", "Blox Fruits"},
         scripts = {
             fly = "Safe Fly (Fly Gui V3)",
             inf = "Infinite Yield (Admin)",
@@ -95,13 +95,13 @@ local texts = {
             fischhub = "Fisch Auto Fish & Hub",
             redz = "Redz Hub",
             -- Baseplate Tools
-            spawnPart = "Spawn Standard Part",
-            spawnNeon = "Spawn Neon Glowing Part",
-            rainbowFloor = "Rainbow Floor Effect",
-            toolGiver = "Give Builder Tools",
-            gravityZero = "Disable Gravity (0)",
-            gravityNormal = "Reset Gravity",
-            clearParts = "Clear Spawned Parts"
+            spawnPart = "🛠️ Spawn Standard Part",
+            spawnNeon = "🛠️ Spawn Neon Glowing Part",
+            rainbowFloor = "🛠️ Rainbow Floor Effect",
+            toolGiver = "🛠️ Give Builder Tools",
+            gravityZero = "🛠️ Disable Gravity (0)",
+            gravityNormal = "🛠️ Reset Gravity",
+            clearParts = "🛠️ Clear Spawned Parts"
         }
     }
 }
@@ -383,7 +383,7 @@ local function LoadDashboard(isVIP)
         TabsContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
         TabsContainer.Position = UDim2.new(0, 12, 0, 58)
         TabsContainer.Size = UDim2.new(0, 140, 0, 310)
-        TabsContainer.CanvasSize = UDim2.new(0, 0, 4.0, 0)
+        TabsContainer.CanvasSize = UDim2.new(0, 0, 3.5, 0)
         TabsContainer.ScrollBarThickness = 3
 
         local TabsLayout = Instance.new("UIListLayout")
@@ -396,7 +396,7 @@ local function LoadDashboard(isVIP)
         PagesContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
         PagesContainer.Position = UDim2.new(0, 162, 0, 58)
         PagesContainer.Size = UDim2.new(0, 306, 0, 310)
-        PagesContainer.CanvasSize = UDim2.new(0, 0, 4.5, 0)
+        PagesContainer.CanvasSize = UDim2.new(0, 0, 6.0, 0) -- Sayfa içeriği uzun olduğu için genişletildi
         PagesContainer.ScrollBarThickness = 3
 
         local firstTab = true
@@ -464,7 +464,7 @@ local function LoadDashboard(isVIP)
         local tNames = texts[currentLang].tabs
         local sNames = texts[currentLang].scripts
 
-        -- 1. Genel Araçlar
+        -- 1. Genel & Baseplate Araçları (DOĞRUDAN İLK SEKMEDE)
         local TabGenel = CreateCategory(tNames[1])
         AddScriptButton(TabGenel, sNames.fly, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
         AddScriptButton(TabGenel, sNames.inf, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
@@ -490,10 +490,7 @@ local function LoadDashboard(isVIP)
             end)
         end)
 
-        -- 2. YENİ: Baseplate Test Araçları (Workspace Üzerinde Kodla Blok Oluşturma, Yerçekimi ve Araçlar)
-        local TabBaseplate = CreateCategory(tNames[2])
-        
-        -- Oluşturulan parçaları topluca silmek için klasör
+        -- Baseplate Klasörü
         if not workspace:FindFirstChild("KlakzBaseplateParts") then
             local folder = Instance.new("Folder")
             folder.Name = "KlakzBaseplateParts"
@@ -501,7 +498,7 @@ local function LoadDashboard(isVIP)
         end
 
         -- Blok Ekle
-        AddScriptButton(TabBaseplate, sNames.spawnPart, function()
+        AddScriptButton(TabGenel, sNames.spawnPart, function()
             local p = game.Players.LocalPlayer
             if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
                 local part = Instance.new("Part")
@@ -514,7 +511,7 @@ local function LoadDashboard(isVIP)
         end)
 
         -- Işıklı Neon Blok Ekle
-        AddScriptButton(TabBaseplate, sNames.spawnNeon, function()
+        AddScriptButton(TabGenel, sNames.spawnNeon, function()
             local p = game.Players.LocalPlayer
             if p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
                 local part = Instance.new("Part")
@@ -529,7 +526,7 @@ local function LoadDashboard(isVIP)
         end)
 
         -- Gökkuşağı Zemin Efekti
-        AddScriptButton(TabBaseplate, sNames.rainbowFloor, function()
+        AddScriptButton(TabGenel, sNames.rainbowFloor, function()
             task.spawn(function()
                 while true do
                     for _, v in pairs(workspace:GetDescendants()) do
@@ -542,8 +539,8 @@ local function LoadDashboard(isVIP)
             end)
         end)
 
-        -- Builder / Admin Tool Ver (Hammer, Clone, Delete)
-        AddScriptButton(TabBaseplate, sNames.toolGiver, function()
+        -- Builder / Admin Tool Ver
+        AddScriptButton(TabGenel, sNames.toolGiver, function()
             local p = game.Players.LocalPlayer
             if p and p:FindFirstChild("Backpack") then
                 for _, toolName in ipairs({"Hammer", "Clone", "Delete"}) do
@@ -555,24 +552,24 @@ local function LoadDashboard(isVIP)
         end)
 
         -- Yerçekimini Sıfırla (0)
-        AddScriptButton(TabBaseplate, sNames.gravityZero, function()
+        AddScriptButton(TabGenel, sNames.gravityZero, function()
             workspace.Gravity = 0
         end)
 
         -- Normal Yerçekimine Dön (196.2)
-        AddScriptButton(TabBaseplate, sNames.gravityNormal, function()
+        AddScriptButton(TabGenel, sNames.gravityNormal, function()
             workspace.Gravity = 196.2
         end)
 
         -- Oluşturulan Parçaları Temizle
-        AddScriptButton(TabBaseplate, sNames.clearParts, function()
+        AddScriptButton(TabGenel, sNames.clearParts, function()
             if workspace:FindFirstChild("KlakzBaseplateParts") then
                 workspace.KlakzBaseplateParts:ClearAllChildren()
             end
         end)
 
-        -- 3. Universal Hubs (VIP)
-        local TabUniversal = CreateCategory(tNames[3])
+        -- 2. Universal Hubs (VIP)
+        local TabUniversal = CreateCategory(tNames[2])
         if isVIP then
             AddScriptButton(TabUniversal, sNames.esp, function()
                 local Players = game:GetService("Players")
@@ -620,32 +617,32 @@ local function LoadDashboard(isVIP)
             AddScriptButton(TabUniversal, sNames.vipInfo, function() print("VIP gerekli!") end)
         end
 
-        -- 4. Oyun Sekmeleri
-        local TabTSB = CreateCategory(tNames[4])
+        -- 3. Oyun Sekmeleri
+        local TabTSB = CreateCategory(tNames[3])
         AddScriptButton(TabTSB, sNames.badware, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/sandwichk/RobloxScripts/main/Scripts/BadWare/Hub/Load.lua", true))() end)
 
-        local TabAV = CreateCategory(tNames[5])
+        local TabAV = CreateCategory(tNames[4])
         AddScriptButton(TabAV, sNames.vanguard, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards"))() end)
 
-        local TabGym = CreateCategory(tNames[6])
+        local TabGym = CreateCategory(tNames[5])
         AddScriptButton(TabGym, sNames.gym, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague"))() end)
 
-        local TabType = CreateCategory(tNames[7])
+        local TabType = CreateCategory(tNames[6])
         AddScriptButton(TabType, sNames.typesoul, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua"))() end)
 
-        local TabArm = CreateCategory(tNames[8])
+        local TabArm = CreateCategory(tNames[7])
         AddScriptButton(TabArm, sNames.arm, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle"))() end)
 
-        local TabDoors = CreateCategory(tNames[9])
+        local TabDoors = CreateCategory(tNames[8])
         AddScriptButton(TabDoors, sNames.doors, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua"))() end)
 
-        local TabBB = CreateCategory(tNames[10])
+        local TabBB = CreateCategory(tNames[9])
         AddScriptButton(TabBB, sNames.parry, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly"))() end)
 
-        local TabFisch = CreateCategory(tNames[11])
+        local TabFisch = CreateCategory(tNames[10])
         AddScriptButton(TabFisch, sNames.fischhub, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua"))() end)
 
-        local TabBF = CreateCategory(tNames[12])
+        local TabBF = CreateCategory(tNames[11])
         AddScriptButton(TabBF, sNames.redz, function() loadstring(game:HttpGet("https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua"))() end)
     end)
 end
