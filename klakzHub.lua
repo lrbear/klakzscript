@@ -1,12 +1,16 @@
--- klakz Hub - Seki UI (Tam ve Güncel Sürüm)
+-- klakz Hub - Seki UI (Optimize Edilmiş ve Geliştirilmiş Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
 end
 
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "klakzHub_MainUI"
-ScreenGui.Parent = game:GetService("CoreGui")
+ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
 local STANDARD_KEY = "klakz123"
@@ -192,7 +196,8 @@ local function LoadDashboard(isVIP)
     Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
     Sidebar.Position = UDim2.new(0, 0, 0, 36)
     Sidebar.Size = UDim2.new(0, 140, 1, -36)
-    Sidebar.CanvasSize = UDim2.new(0, 0, 2, 0)
+    Sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Sidebar.ScrollBarThickness = 2
 
     local SideLayout = Instance.new("UIListLayout")
@@ -209,16 +214,14 @@ local function LoadDashboard(isVIP)
 
     local firstTab = true
 
-    local function CreateTab(name, isVipTab)
-        if isVipTab and not isVIP then return nil end
-
+    local function CreateTab(name)
         local TabButton = Instance.new("TextButton")
         TabButton.Parent = Sidebar
         TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
         TabButton.Size = UDim2.new(1, 0, 0, 34)
         TabButton.Font = Enum.Font.GothamMedium
         TabButton.Text = name
-        TabButton.TextColor3 = isVipTab and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(180, 180, 200)
+        TabButton.TextColor3 = Color3.fromRGB(180, 180, 200)
         TabButton.TextSize = 10
         TabButton.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -230,7 +233,8 @@ local function LoadDashboard(isVIP)
         Page.Parent = ContentContainer
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.BackgroundTransparency = 1
-        Page.CanvasSize = UDim2.new(0, 0, 4, 0)
+        Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+        Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
         Page.ScrollBarThickness = 3
         Page.Visible = false
 
@@ -299,20 +303,18 @@ local function LoadDashboard(isVIP)
     end
 
     -- SEKME 1: Araç Gereçler
-    local TabTools = CreateTab("Araç Gereçler", false)
+    local TabTools = CreateTab("Araç Gereçler")
     AddScript(TabTools, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source", 0)
     AddScript(TabTools, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt", 0)
     
-    -- Fly V4 (Doğrudan Kod)
+    -- Fly V4
     AddDirectCode(TabTools, "✈️ Fly Hack v4.0", function()
-        local Player = game:GetService("Players").LocalPlayer
-        local Character = Player.Character or Player.CharacterAdded:Wait()
+        local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
         local Humanoid = Character:WaitForChild("Humanoid")
         local RootPart = Character:WaitForChild("HumanoidRootPart")
         
         local UserInputService = game:GetService("UserInputService")
         local RunService = game:GetService("RunService")
-        local CoreGui = game:GetService("CoreGui")
 
         local FlyScreenGui = Instance.new("ScreenGui")
         if gethui then
@@ -434,24 +436,12 @@ local function LoadDashboard(isVIP)
                 local camera = workspace.CurrentCamera
                 local moveDir = Vector3.new(0, 0, 0)
 
-                if UserInputService:IsKeyDown(Enum.KeyCode.W) then
-                    moveDir = moveDir + camera.CFrame.LookVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.S) then
-                    moveDir = moveDir - camera.CFrame.LookVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.A) then
-                    moveDir = moveDir - camera.CFrame.RightVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.D) then
-                    moveDir = moveDir + camera.CFrame.RightVector
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-                    moveDir = moveDir + Vector3.new(0, 1, 0)
-                end
-                if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
-                    moveDir = moveDir - Vector3.new(0, 1, 0)
-                end
+                if UserInputService:IsKeyDown(Enum.KeyCode.W) then moveDir = moveDir + camera.CFrame.LookVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.S) then moveDir = moveDir - camera.CFrame.LookVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.A) then moveDir = moveDir - camera.CFrame.RightVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.D) then moveDir = moveDir + camera.CFrame.RightVector end
+                if UserInputService:IsKeyDown(Enum.KeyCode.Space) then moveDir = moveDir + Vector3.new(0, 1, 0) end
+                if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then moveDir = moveDir - Vector3.new(0, 1, 0) end
 
                 if moveDir.Magnitude > 0 then
                     moveDir = moveDir.Unit * FlySpeed
@@ -492,21 +482,16 @@ local function LoadDashboard(isVIP)
         Humanoid.Died:Connect(function() StopFlying() end)
     end)
 
-    -- Ultimate Square Cheat GUI Hub (Doğrudan Kod)
+    -- Square Cheat GUI Hub
     AddDirectCode(TabTools, "🔲 Square Cheat GUI Hub", function()
-        local Players = game:GetService("Players")
         local TweenService = game:GetService("TweenService")
         local RunService = game:GetService("RunService")
         local UserInputService = game:GetService("UserInputService")
         local Lighting = game:GetService("Lighting")
-        local LocalPlayer = Players.LocalPlayer
         local Mouse = LocalPlayer:GetMouse()
         local Camera = workspace.CurrentCamera
 
-        local toggles = {
-            noclip = false, god = false, invisible = false, fullbright = false,
-            infjump = false, nofall = false, esp = false
-        }
+        local toggles = {noclip = false, god = false, invisible = false, fullbright = false, infjump = false, nofall = false, esp = false}
         local connections = {}
         local flyEnabled = false
         local flySpeed = 50
@@ -515,9 +500,7 @@ local function LoadDashboard(isVIP)
         local humanoid, rootPart
 
         local function cleanup()
-            for _, conn in pairs(connections) do
-                if conn then conn:Disconnect() end
-            end
+            for _, conn in pairs(connections) do if conn then conn:Disconnect() end end
             connections = {}
             toggles = {noclip = false, god = false, invisible = false, fullbright = false, infjump = false, nofall = false, esp = false}
             flyEnabled = false
@@ -545,12 +528,9 @@ local function LoadDashboard(isVIP)
             rootPart = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
         end
 
-        local function setWalkSpeed(speed)
-            if humanoid then humanoid.WalkSpeed = speed end
-        end
-        local function setJumpPower(jp)
-            if humanoid then humanoid.JumpPower = jp end
-        end
+        local function setWalkSpeed(speed) if humanoid then humanoid.WalkSpeed = speed end end
+        local function setJumpPower(jp) if humanoid then humanoid.JumpPower = jp end end
+        
         local function toggleNoclip()
             toggles.noclip = not toggles.noclip
             if toggles.noclip then
@@ -565,6 +545,7 @@ local function LoadDashboard(isVIP)
                 if connections.noclip then connections.noclip:Disconnect() end
             end
         end
+
         local function toggleGod()
             toggles.god = not toggles.god
             if humanoid and toggles.god then
@@ -575,6 +556,7 @@ local function LoadDashboard(isVIP)
                 end)
             end
         end
+
         local function toggleInvisible()
             toggles.invisible = not toggles.invisible
             if LocalPlayer.Character then
@@ -585,20 +567,14 @@ local function LoadDashboard(isVIP)
                 end
             end
         end
+
         local function toggleFullbright()
             toggles.fullbright = not toggles.fullbright
-            if toggles.fullbright then
-                Lighting.Brightness = 2
-                Lighting.ClockTime = 14
-                Lighting.FogEnd = 100000
-                Lighting.GlobalShadows = false
-            else
-                Lighting.Brightness = 1
-                Lighting.ClockTime = 14
-                Lighting.FogEnd = 100000
-                Lighting.GlobalShadows = true
-            end
+            Lighting.Brightness = toggles.fullbright and 2 or 1
+            Lighting.GlobalShadows = not toggles.fullbright
+            Lighting.FogEnd = 100000
         end
+
         local function toggleInfJump()
             toggles.infjump = not toggles.infjump
             if toggles.infjump and humanoid then
@@ -607,6 +583,7 @@ local function LoadDashboard(isVIP)
                 end)
             end
         end
+
         local function toggleNoFall()
             toggles.nofall = not toggles.nofall
             if toggles.nofall then
@@ -617,6 +594,7 @@ local function LoadDashboard(isVIP)
                 end)
             end
         end
+
         local function toggleESP()
             toggles.esp = not toggles.esp
             if toggles.esp then
@@ -636,35 +614,27 @@ local function LoadDashboard(isVIP)
                 espHighlights = {}
             end
         end
+
         local function flingSelf(strength)
             if rootPart then
-                rootPart.AssemblyLinearVelocity = Vector3.new(
-                    math.random(-strength, strength),
-                    strength * 2,
-                    math.random(-strength, strength)
-                )
+                rootPart.AssemblyLinearVelocity = Vector3.new(math.random(-strength, strength), strength * 2, math.random(-strength, strength))
             end
         end
+
         local function tpMouse()
-            if rootPart and Mouse.Hit then
-                rootPart.CFrame = Mouse.Hit + Vector3.new(0, 5, 0)
-            end
+            if rootPart and Mouse.Hit then rootPart.CFrame = Mouse.Hit + Vector3.new(0, 5, 0) end
         end
+
         local function tpSpawn()
-            if LocalPlayer.Character then
-                LocalPlayer.Character:PivotTo(workspace:FindFirstChild("SpawnLocation") or CFrame.new(0,50,0))
-            end
+            if LocalPlayer.Character then LocalPlayer.Character:PivotTo(workspace:FindFirstChild("SpawnLocation") or CFrame.new(0,50,0)) end
         end
+
         local function tpRandomPlayer()
             local others = {}
-            for _, plr in Players:GetPlayers() do
-                if plr ~= LocalPlayer and plr.Character then table.insert(others, plr) end
-            end
+            for _, plr in Players:GetPlayers() do if plr ~= LocalPlayer and plr.Character then table.insert(others, plr) end end
             if #others > 0 then
                 local target = others[math.random(1, #others)]
-                if target.Character.PrimaryPart then
-                    rootPart.CFrame = target.Character.PrimaryPart.CFrame * CFrame.new(0,0,-5)
-                end
+                if target.Character.PrimaryPart then rootPart.CFrame = target.Character.PrimaryPart.CFrame * CFrame.new(0,0,-5) end
             end
         end
 
@@ -682,6 +652,7 @@ local function LoadDashboard(isVIP)
             if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then moveVector = moveVector - Vector3.new(0,1,0) end
             flyBV.Velocity = (moveVector.Unit * flySpeed) * 16
         end
+
         local function enableFly(speed)
             flyEnabled = true
             flySpeed = speed or 50
@@ -696,6 +667,7 @@ local function LoadDashboard(isVIP)
             flyBV.Parent = rootPart
             connections.fly = RunService.RenderStepped:Connect(updateFly)
         end
+
         local function disableFly()
             flyEnabled = false
             humanoid.PlatformStand = false
@@ -804,9 +776,7 @@ local function LoadDashboard(isVIP)
 
         for i=1,10 do
             createSquareButton("TP R" .. i, function()
-                if rootPart then
-                    rootPart.CFrame = rootPart.CFrame + Vector3.new(math.random(-50,50),0,math.random(-50,50))
-                end
+                if rootPart then rootPart.CFrame = rootPart.CFrame + Vector3.new(math.random(-50,50),0,math.random(-50,50)) end
             end)
         end
 
@@ -849,7 +819,7 @@ local function LoadDashboard(isVIP)
     AddScript(TabTools, "🛠️ Ekstra Araç Hub", "https://api.luarmor.net/files/v4/loaders/a29177a0adbed682fcef60d92cc0f805.lua", 0)
 
     -- SEKME 2: Oyun Scriptleri
-    local TabGames = CreateTab("Oyun Scriptleri", false)
+    local TabGames = CreateTab("Oyun Scriptleri")
     AddScript(TabGames, "🪵 Lumber Tycoon 2", "https://raw.githubusercontent.com/DevKron/Kron_Hub/refs/heads/main/version_1.0", 1)
     AddScript(TabGames, "💵 Counterfeit Tycoon", "https://raw.githubusercontent.com/generoushyena22/main/cft/script", 0)
     AddScript(TabGames, "⚡ Legends Of Speed", "https://pastebin.com/raw/zYLE0nF7", 0)
