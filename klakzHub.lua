@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI Sürümü (Login Ekranı Aktif)
+-- klakz Hub - Seki UI (Gelişmiş & Düzenlenmiş Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -22,8 +22,7 @@ local texts = {
         errKey = "❌ Geçersiz Anahtar!",
         errVipKey = "❌ Geçersiz Premium Anahtar!",
         headerStd = "klakz Hub [Standart Sürüm]",
-        headerVip = "klakz Hub [👑 SEKI UI SÜRÜMÜ]",
-        searchPlaceholder = "🔍 Script Ara..."
+        headerVip = "klakz Hub [👑 PREMIUM SEKI UI]"
     },
     EN = {
         loginTitle = "KLAKZ HUB LOGIN",
@@ -33,8 +32,7 @@ local texts = {
         errKey = "❌ Invalid Key!",
         errVipKey = "❌ Invalid Premium Key!",
         headerStd = "klakz Hub [Standard Edition]",
-        headerVip = "klakz Hub [👑 SEKI UI EDITION]",
-        searchPlaceholder = "🔍 Search Script..."
+        headerVip = "klakz Hub [👑 PREMIUM SEKI UI]"
     }
 }
 
@@ -139,69 +137,77 @@ local function LoadDashboard(isVIP)
     local Window = Instance.new("Frame")
     Window.Name = "SekiUI_Window"
     Window.Parent = ScreenGui
-    Window.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
-    Window.Position = UDim2.new(0.5, -250, 0.5, -175)
-    Window.Size = UDim2.new(0, 500, 0, 350)
+    Window.BackgroundColor3 = Color3.fromRGB(20, 20, 26)
+    Window.Position = UDim2.new(0.5, -260, 0.5, -190)
+    Window.Size = UDim2.new(0, 520, 0, 380)
     Window.Active = true
     Window.Draggable = true
-    Instance.new("UICorner", Window).CornerRadius = UDim.new(0, 8)
+    Instance.new("UICorner", Window).CornerRadius = UDim.new(0, 10)
 
     local WinStroke = Instance.new("UIStroke")
-    WinStroke.Color = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(45, 45, 55)
-    WinStroke.Thickness = 1
+    WinStroke.Color = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(99, 102, 241)
+    WinStroke.Thickness = 1.5
     WinStroke.Parent = Window
 
-    -- Üst Seki UI Başlık Çubuğu
+    -- Üst Başlık Çubuğu
     local TopBar = Instance.new("Frame")
     TopBar.Parent = Window
-    TopBar.BackgroundColor3 = Color3.fromRGB(18, 18, 23)
-    TopBar.Size = UDim2.new(1, 0, 0, 32)
-    Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 8)
+    TopBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    TopBar.Size = UDim2.new(1, 0, 0, 36)
+    Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 10)
+
+    -- Alt köşeleri düzeltmek için küçük kaplama
+    local FixBar = Instance.new("Frame")
+    FixBar.Parent = TopBar
+    FixBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    FixBar.Position = UDim2.new(0, 0, 1, -5)
+    FixBar.Size = UDim2.new(1, 0, 0, 5)
+    FixBar.BorderSizePixel = 0
 
     local TitleLabel = Instance.new("TextLabel")
     TitleLabel.Parent = TopBar
     TitleLabel.BackgroundTransparency = 1
-    TitleLabel.Position = UDim2.new(0, 12, 0, 0)
+    TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     TitleLabel.Size = UDim2.new(0, 350, 1, 0)
     TitleLabel.Font = Enum.Font.GothamBold
     TitleLabel.Text = isVIP and texts[currentLang].headerVip or texts[currentLang].headerStd
-    TitleLabel.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(220, 220, 230)
+    TitleLabel.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(240, 240, 250)
     TitleLabel.TextSize = 11
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Parent = TopBar
-    CloseBtn.BackgroundTransparency = 1
-    CloseBtn.Position = UDim2.new(1, -30, 0, 0)
-    CloseBtn.Size = UDim2.new(0, 30, 1, 0)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    CloseBtn.Position = UDim2.new(1, -32, 0, 6)
+    CloseBtn.Size = UDim2.new(0, 24, 0, 24)
     CloseBtn.Font = Enum.Font.GothamBold
     CloseBtn.Text = "✕"
-    CloseBtn.TextColor3 = Color3.fromRGB(150, 150, 170)
-    CloseBtn.TextSize = 11
+    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.TextSize = 10
+    Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
     CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
     -- Sol Sekme Listesi (Sidebar)
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Parent = Window
-    Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 22)
-    Sidebar.Position = UDim2.new(0, 0, 0, 32)
-    Sidebar.Size = UDim2.new(0, 130, 1, -32)
+    Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+    Sidebar.Position = UDim2.new(0, 0, 0, 36)
+    Sidebar.Size = UDim2.new(0, 140, 1, -36)
     Sidebar.CanvasSize = UDim2.new(0, 0, 2, 0)
     Sidebar.ScrollBarThickness = 2
 
     local SideLayout = Instance.new("UIListLayout")
     SideLayout.Parent = Sidebar
     SideLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    SideLayout.Padding = UDim.new(0, 2)
+    SideLayout.Padding = UDim.new(0, 4)
 
     -- Sağ İçerik Alanı
     local ContentContainer = Instance.new("Frame")
     ContentContainer.Parent = Window
     ContentContainer.BackgroundTransparency = 1
-    ContentContainer.Position = UDim2.new(0, 138, 0, 42)
-    ContentContainer.Size = UDim2.new(0, 352, 1, -50)
+    ContentContainer.Position = UDim2.new(0, 148, 0, 46)
+    ContentContainer.Size = UDim2.new(0, 362, 1, -56)
 
-    local allScriptButtons = {}
     local firstTab = true
 
     local function CreateTab(name, isVipTab)
@@ -209,30 +215,30 @@ local function LoadDashboard(isVIP)
 
         local TabButton = Instance.new("TextButton")
         TabButton.Parent = Sidebar
-        TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 28)
-        TabButton.Size = UDim2.new(1, 0, 0, 30)
+        TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+        TabButton.Size = UDim2.new(1, 0, 0, 34)
         TabButton.Font = Enum.Font.GothamMedium
         TabButton.Text = name
-        TabButton.TextColor3 = isVipTab and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(170, 170, 190)
+        TabButton.TextColor3 = isVipTab and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(180, 180, 200)
         TabButton.TextSize = 10
         TabButton.TextXAlignment = Enum.TextXAlignment.Left
 
         local Padding = Instance.new("UIPadding")
-        Padding.PaddingLeft = UDim.new(0, 12)
+        Padding.PaddingLeft = UDim.new(0, 14)
         Padding.Parent = TabButton
 
         local Page = Instance.new("ScrollingFrame")
         Page.Parent = ContentContainer
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.BackgroundTransparency = 1
-        Page.CanvasSize = UDim2.new(0, 0, 3, 0)
+        Page.CanvasSize = UDim2.new(0, 0, 4, 0)
         Page.ScrollBarThickness = 3
         Page.Visible = false
 
         local PageLayout = Instance.new("UIListLayout")
         PageLayout.Parent = Page
         PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
-        PageLayout.Padding = UDim.new(0, 5)
+        PageLayout.Padding = UDim.new(0, 6)
 
         TabButton.MouseButton1Click:Connect(function()
             for _, v in pairs(ContentContainer:GetChildren()) do
@@ -253,25 +259,23 @@ local function LoadDashboard(isVIP)
         if not parent then return end
         local ScriptBtn = Instance.new("TextButton")
         ScriptBtn.Parent = parent
-        ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 36)
-        ScriptBtn.Size = UDim2.new(1, -6, 0, 30)
+        ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        ScriptBtn.Size = UDim2.new(1, -8, 0, 34)
         ScriptBtn.Font = Enum.Font.Gotham
         ScriptBtn.Text = "   " .. label
-        ScriptBtn.TextColor3 = Color3.fromRGB(230, 230, 240)
+        ScriptBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
         ScriptBtn.TextSize = 10
         ScriptBtn.TextXAlignment = Enum.TextXAlignment.Left
-        Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 5)
+        Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
 
         ScriptBtn.MouseButton1Click:Connect(function()
             pcall(function()
                 loadstring(game:HttpGet(url))()
             end)
         end)
-
-        table.insert(allScriptButtons, ScriptBtn)
     end
 
-    -- Seki UI Sekmeleri ve Çalışan Linkler
+    -- Seki UI Sekmeleri ve Tam Liste Linkler
     local Tab1 = CreateTab("Genel Araçlar", false)
     AddScript(Tab1, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScript(Tab1, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
@@ -295,6 +299,16 @@ local function LoadDashboard(isVIP)
         AddScript(Tab3, "💥 BedWars Vape V4", "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua")
         AddScript(Tab3, "🔥 Slap Battles", "https://raw.githubusercontent.com/Giangplay/slap_battles/main/slap_battles.lua")
         AddScript(Tab3, "🚗 Driving Empire", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DrivingEmpire")
+        AddScript(Tab3, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle")
+        AddScript(Tab3, "💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague")
+        AddScript(Tab3, "🏠 Brookhaven RP", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua")
+        AddScript(Tab3, "🌊 Pixel Piece", "https://raw.githubusercontent.com/ScientificHub/PixelPiece/main/Loader")
+        AddScript(Tab3, "🏴‍☠️ King Legacy", "https://raw.githubusercontent.com/zerophant/KingLegacy/main/Loader")
+        AddScript(Tab3, "👊 Peroxide", "https://raw.githubusercontent.com/tbao143/peroxide/main/loader")
+        AddScript(Tab3, "🏎️ Jailbreak", "https://raw.githubusercontent.com/wawsdas1/jailbreak/main/loader")
+        AddScript(Tab3, "🔫 Arsenal", "https://raw.githubusercontent.com/HubScripterX/Arsenal/main/Loader")
+        AddScript(Tab3, "🎯 Phantom Forces", "https://raw.githubusercontent.com/rblxscripts/phantomforces/main/loader")
+        AddScript(Tab3, "🪙 PLS DONATE", "https://raw.githubusercontent.com/PlsDonateHub/Loader/main/Script")
     end
 end
 
