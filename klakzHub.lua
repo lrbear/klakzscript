@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Sadece Genel Araçlar Sürümü)
+-- klakz Hub - Seki UI (Sadece Genel Araçlar - Temiz Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -207,8 +207,6 @@ local function LoadDashboard(isVIP)
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
     ContentContainer.Size = UDim2.new(0, 362, 1, -56)
 
-    local firstTab = true
-
     local function CreateTab(name, isVipTab)
         if isVipTab and not isVIP then return nil end
 
@@ -232,24 +230,12 @@ local function LoadDashboard(isVIP)
         Page.BackgroundTransparency = 1
         Page.CanvasSize = UDim2.new(0, 0, 2, 0)
         Page.ScrollBarThickness = 3
-        Page.Visible = false
+        Page.Visible = true
 
         local PageLayout = Instance.new("UIListLayout")
         PageLayout.Parent = Page
         PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
         PageLayout.Padding = UDim.new(0, 6)
-
-        TabButton.MouseButton1Click:Connect(function()
-            for _, v in pairs(ContentContainer:GetChildren()) do
-                if v:IsA("ScrollingFrame") then v.Visible = false end
-            end
-            Page.Visible = true
-        end)
-
-        if firstTab then
-            Page.Visible = true
-            firstTab = false
-        end
 
         return Page
     end
@@ -274,7 +260,7 @@ local function LoadDashboard(isVIP)
         end)
     end
 
-    -- Sadece Genel Araçlar Sekmesi
+    -- Sadece Genel Araçlar Sekmesi ve Araçları
     local Tab1 = CreateTab("Genel Araçlar", false)
     AddScript(Tab1, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScript(Tab1, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
