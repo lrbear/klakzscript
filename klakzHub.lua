@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Sadece Genel Araçlar - Temiz Sürüm)
+-- klakz Hub - Seki UI (Manuel Ekleme Sürümü)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -260,11 +260,8 @@ local function LoadDashboard(isVIP)
         end)
     end
 
-    -- Sadece Genel Araçlar Sekmesi ve Araçları
+    -- Sadece Genel Araçlar Sekmesi (Şu an boş, sırayla ekleyeceğiz)
     local Tab1 = CreateTab("Genel Araçlar", false)
-    AddScript(Tab1, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-    AddScript(Tab1, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
-    AddScript(Tab1, "👁️ ESP Viewer", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua")
 end
 
 LangTR.MouseButton1Click:Connect(function()
