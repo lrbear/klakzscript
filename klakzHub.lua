@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Gelişmiş & Düzenlenmiş Sürüm)
+-- klakz Hub - Seki UI (Sadece Genel Araçlar Sürümü)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -156,7 +156,6 @@ local function LoadDashboard(isVIP)
     TopBar.Size = UDim2.new(1, 0, 0, 36)
     Instance.new("UICorner", TopBar).CornerRadius = UDim.new(0, 10)
 
-    -- Alt köşeleri düzeltmek için küçük kaplama
     local FixBar = Instance.new("Frame")
     FixBar.Parent = TopBar
     FixBar.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
@@ -231,7 +230,7 @@ local function LoadDashboard(isVIP)
         Page.Parent = ContentContainer
         Page.Size = UDim2.new(1, 0, 1, 0)
         Page.BackgroundTransparency = 1
-        Page.CanvasSize = UDim2.new(0, 0, 4, 0)
+        Page.CanvasSize = UDim2.new(0, 0, 2, 0)
         Page.ScrollBarThickness = 3
         Page.Visible = false
 
@@ -275,41 +274,11 @@ local function LoadDashboard(isVIP)
         end)
     end
 
-    -- Seki UI Sekmeleri ve Tam Liste Linkler
+    -- Sadece Genel Araçlar Sekmesi
     local Tab1 = CreateTab("Genel Araçlar", false)
     AddScript(Tab1, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScript(Tab1, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
     AddScript(Tab1, "👁️ ESP Viewer", "https://raw.githubusercontent.com/GamingScripter/ESP-Viewer/main/ESP-Viewer.lua")
-
-    local Tab2 = CreateTab("Popüler Oyunlar", false)
-    AddScript(Tab2, "🍎 Blox Fruits", "https://raw.githubusercontent.com/realredz/BloxFruits/main/Source.lua")
-    AddScript(Tab2, "🥊 The Strongest Battlegrounds", "https://raw.githubusercontent.com/skzu/TheStrongestBattlegrounds/main/Source.lua")
-    AddScript(Tab2, "🚪 Doors V2", "https://raw.githubusercontent.com/Erchobacto/Doors/main/V2.lua")
-    AddScript(Tab2, "⚔️ Jujutsu Shenanigans", "https://raw.githubusercontent.com/ScriptBlox/Scripts/main/JujutsuShenanigans.lua")
-
-    local Tab3 = CreateTab("👑 Aktif Hublar", true)
-    if Tab3 then
-        AddScript(Tab3, "🌲 Grow a Garden", "https://raw.githubusercontent.com/gumanba/Scripts/main/GrowaGarden")
-        AddScript(Tab3, "🎯 Speed Hub X", "https://raw.githubusercontent.com/ahmadsgaming/speedhubx/main/loader.lua")
-        AddScript(Tab3, "🐱 Pet Simulator 99", "https://raw.githubusercontent.com/XoAD2/PS99/main/Loader.lua")
-        AddScript(Tab3, "⚔️ Blade Ball", "https://raw.githubusercontent.com/Code4Zaaa/X7Project/main/Game/AutoParryOnly")
-        AddScript(Tab3, "🛡️ Anime Vanguards", "https://raw.githubusercontent.com/scriptpastebin/raw/main/AnimeVanguards")
-        AddScript(Tab3, "⚡ Type Soul", "https://raw.githubusercontent.com/xu-dev/typesoul/main/loader.lua")
-        AddScript(Tab3, "🔪 Murder Mystery 2", "https://raw.githubusercontent.com/sannin9000/Roblox/main/MM2")
-        AddScript(Tab3, "💥 BedWars Vape V4", "https://raw.githubusercontent.com/7GrandDadPGN/VapeV4ForRoblox/main/NewMainScript.lua")
-        AddScript(Tab3, "🔥 Slap Battles", "https://raw.githubusercontent.com/Giangplay/slap_battles/main/slap_battles.lua")
-        AddScript(Tab3, "🚗 Driving Empire", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/DrivingEmpire")
-        AddScript(Tab3, "🦾 Arm Wrestle Simulator", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/ArmWrestle")
-        AddScript(Tab3, "💪 Gym League", "https://raw.githubusercontent.com/ToraIsMe/ToraIsMe/main/GymLeague")
-        AddScript(Tab3, "🏠 Brookhaven RP", "https://raw.githubusercontent.com/IceMaestroc/Roblox-Script-Hubs/main/Brookhaven.lua")
-        AddScript(Tab3, "🌊 Pixel Piece", "https://raw.githubusercontent.com/ScientificHub/PixelPiece/main/Loader")
-        AddScript(Tab3, "🏴‍☠️ King Legacy", "https://raw.githubusercontent.com/zerophant/KingLegacy/main/Loader")
-        AddScript(Tab3, "👊 Peroxide", "https://raw.githubusercontent.com/tbao143/peroxide/main/loader")
-        AddScript(Tab3, "🏎️ Jailbreak", "https://raw.githubusercontent.com/wawsdas1/jailbreak/main/loader")
-        AddScript(Tab3, "🔫 Arsenal", "https://raw.githubusercontent.com/HubScripterX/Arsenal/main/Loader")
-        AddScript(Tab3, "🎯 Phantom Forces", "https://raw.githubusercontent.com/rblxscripts/phantomforces/main/loader")
-        AddScript(Tab3, "🪙 PLS DONATE", "https://raw.githubusercontent.com/PlsDonateHub/Loader/main/Script")
-    end
 end
 
 LangTR.MouseButton1Click:Connect(function()
