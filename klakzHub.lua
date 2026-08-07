@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Logo Çıkış Butonlu Nihai Sürüm)
+-- klakz Hub - Seki UI (Ayarlar Sekmeli ve Tam Özellikli Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -6,6 +6,7 @@ end
 
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -16,6 +17,7 @@ ScreenGui.ResetOnSpawn = false
 local STANDARD_KEY = "klakz123"
 local PREMIUM_KEY = "klakz_vip_2026"
 local currentLang = "TR"
+local toggleKey = Enum.KeyCode.RightControl
 
 local texts = {
     TR = {
@@ -227,7 +229,7 @@ LoadDashboard = function(isVIP)
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
     ContentContainer.Size = UDim2.new(0, 362, 1, -56)
 
-    -- Küçültme Mantığı
+    -- Küçültme ve Tuşla Gizleme Mantığı
     local isMinimized = false
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
@@ -239,6 +241,13 @@ LoadDashboard = function(isVIP)
         else
             Window:TweenSize(UDim2.new(0, 520, 0, 380), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
             MinimizeBtn.Text = "-"
+        end
+    end)
+
+    -- Klavyeden Menüyü Açma/Kapama (Toggle) Tuşu Dinleyicisi
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if input.KeyCode == toggleKey then
+            Window.Visible = not Window.Visible
         end
     end)
 
@@ -348,6 +357,92 @@ LoadDashboard = function(isVIP)
 
     for _, scriptName in ipairs(scriptList) do
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
+    end
+
+    -- SEKME 3: Ayarlar
+    local TabSettings = CreateTab("Ayarlar")
+
+    local SettingsTitle = Instance.new("TextLabel")
+    SettingsTitle.Parent = TabSettings
+    SettingsTitle.BackgroundTransparency = 1
+    SettingsTitle.Size = UDim2.new(1, -8, 0, 24)
+    SettingsTitle.Font = Enum.Font.FredokaOne
+    SettingsTitle.Text = "⚙️ Menü Kontrol & Tema Ayarları"
+    SettingsTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    SettingsTitle.TextSize = 12
+    SettingsTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- Tuş Değiştirme Alanı
+    local KeyBindBtn = Instance.new("TextButton")
+    KeyBindBtn.Parent = TabSettings
+    KeyBindBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    KeyBindBtn.Size = UDim2.new(1, -8, 0, 36)
+    KeyBindBtn.Font = Enum.Font.FredokaOne
+    KeyBindBtn.Text = "  Menü Kapatma/Açma Tuşu: [ RightControl ]"
+    KeyBindBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
+    KeyBindBtn.TextSize = 11
+    KeyBindBtn.TextXAlignment = Enum.TextXAlignment.Left
+    Instance.new("UICorner", KeyBindBtn).CornerRadius = UDim.new(0, 6)
+
+    local listeningForKey = false
+    KeyBindBtn.MouseButton1Click:Connect(function()
+        if listeningForKey then return end
+        listeningForKey = true
+        KeyBindBtn.Text = "  Bir tuşa basın..."
+        
+        local connection
+        connection = UserInputService.InputBegan:Connect(function(input, gp)
+            if input.UserInputType == Enum.UserInputType.Keyboard then
+                toggleKey = input.KeyCode
+                KeyBindBtn.Text = "  Menü Kapatma/Açma Tuşu: [ " .. input.KeyCode.Name .. " ]"
+                listeningForKey = false
+                connection:Disconnect()
+            end
+        end)
+    end)
+
+    local ColorTitle = Instance.new("TextLabel")
+    ColorTitle.Parent = TabSettings
+    ColorTitle.BackgroundTransparency = 1
+    ColorTitle.Size = UDim2.new(1, -8, 0, 24)
+    ColorTitle.Font = Enum.Font.FredokaOne
+    ColorTitle.Text = "🎨 Tema Rengi Seç"
+    ColorTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    ColorTitle.TextSize = 12
+    ColorTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local ColorContainer = Instance.new("Frame")
+    ColorContainer.Parent = TabSettings
+    ColorContainer.BackgroundTransparency = 1
+    ColorContainer.Size = UDim2.new(1, -8, 0, 40)
+
+    local ColorLayout = Instance.new("UIListLayout")
+    ColorLayout.Parent = ColorContainer
+    ColorLayout.FillDirection = Enum.FillDirection.Horizontal
+    ColorLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    ColorLayout.Padding = UDim.new(0, 8)
+
+    local colors = {
+        {Name = "Mor", Color = Color3.fromRGB(99, 102, 241)},
+        {Name = "Yeşil", Color = Color3.fromRGB(34, 197, 94)},
+        {Name = "Kırmızı", Color = Color3.fromRGB(239, 68, 68)},
+        {Name = "Mavi", Color = Color3.fromRGB(59, 130, 246)},
+        {Name = "Pembe", Color = Color3.fromRGB(236, 72, 153)}
+    }
+
+    for _, colData in ipairs(colors) do
+        local ColorBtn = Instance.new("TextButton")
+        ColorBtn.Parent = ColorContainer
+        ColorBtn.BackgroundColor3 = colData.Color
+        ColorBtn.Size = UDim2.new(0, 32, 0, 32)
+        ColorBtn.Font = Enum.Font.FredokaOne
+        ColorBtn.Text = ""
+        Instance.new("UICorner", ColorBtn).CornerRadius = UDim.new(0, 8)
+
+        ColorBtn.MouseButton1Click:Connect(function()
+            WinStroke.Color = colData.Color
+            LoginLogo.BackgroundColor3 = colData.Color
+        end)
     end
 end
 
