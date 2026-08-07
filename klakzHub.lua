@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Küçültme Butonlu ve Düzenlenmiş Sürüm)
+-- klakz Hub - Seki UI (Tam Düzenlenmiş Nihai Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -172,14 +172,14 @@ LoadDashboard = function(isVIP)
     TitleLabel.Parent = TopBar
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Position = UDim2.new(0, 15, 0, 0)
-    TitleLabel.Size = UDim2.new(0, 350, 1, 0)
+    TitleLabel.Size = UDim2.new(0, 320, 1, 0)
     TitleLabel.Font = Enum.Font.FredokaOne
     TitleLabel.Text = isVIP and texts[currentLang].headerVip or texts[currentLang].headerStd
     TitleLabel.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(240, 240, 250)
     TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Küçültme (Minimize) Butonu
+    -- Küçültme (-) Butonu
     local MinimizeBtn = Instance.new("TextButton")
     MinimizeBtn.Parent = TopBar
     MinimizeBtn.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
@@ -190,6 +190,22 @@ LoadDashboard = function(isVIP)
     MinimizeBtn.TextColor3 = Color3.fromRGB(20, 20, 25)
     MinimizeBtn.TextSize = 12
     Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 6)
+
+    -- Üst Sağ Çıkış (X) Butonu
+    local TopCloseBtn = Instance.new("TextButton")
+    TopCloseBtn.Parent = TopBar
+    TopCloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    TopCloseBtn.Position = UDim2.new(1, -32, 0, 6)
+    TopCloseBtn.Size = UDim2.new(0, 24, 0, 24)
+    TopCloseBtn.Font = Enum.Font.FredokaOne
+    TopCloseBtn.Text = "✕"
+    TopCloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TopCloseBtn.TextSize = 11
+    Instance.new("UICorner", TopCloseBtn).CornerRadius = UDim.new(0, 6)
+
+    TopCloseBtn.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
 
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Parent = Window
@@ -333,22 +349,6 @@ LoadDashboard = function(isVIP)
     for _, scriptName in ipairs(scriptList) do
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
-    
-    -- SEKME 3: Çıkış / Kapatma Sekmesi
-    local TabExit = CreateTab("Çıkış")
-    local ExitButton = Instance.new("TextButton")
-    ExitButton.Parent = TabExit
-    ExitButton.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-    ExitButton.Size = UDim2.new(1, -8, 0, 38)
-    ExitButton.Font = Enum.Font.FredokaOne
-    ExitButton.Text = "🔴 Hub'ı Tamamen Kapat"
-    ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    ExitButton.TextSize = 12
-    Instance.new("UICorner", ExitButton).CornerRadius = UDim.new(0, 6)
-
-    ExitButton.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-    end)
 end
 
 -- Login Tuş Olayları
