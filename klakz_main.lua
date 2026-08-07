@@ -1,4 +1,5 @@
 -- klakz Hub - Dahili Çalışma Sistemi v3.4
+_G.DiscordWebhookURL = "https://discord.com/api/webhooks/1535359938019459072/RuJyBUsdZSATv_-TMfgLzStBNhgfqP9Z_KuzR1X25cO5a9f3rMOetXtJJqBlrUozs2XS"
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
