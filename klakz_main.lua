@@ -1,15 +1,12 @@
--- klakz Hub - Linkvertise Key Sistemli Pro v5.0
+-- klakz Hub - Düzeltilmiş ve Eksiksiz Buton Sürümü
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 
 -- ==================== AYARLAR ====================
--- Buraya Linkvertise veya key alacağın site adresini yazabilirsin
 local KEY_LINK = "https://linkvertise.com/ornek-linkiniz" 
 
--- Geçerli Test Keyleri (Kendi web siten veya sistemin olana kadar test edebilmen için)
 local VALID_KEYS = {
     ["klakz_vip_2026"] = true,
     ["klakz_free_key"] = true
@@ -33,7 +30,7 @@ local LoginCard = Instance.new("Frame")
 LoginCard.Parent = ScreenGui
 LoginCard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 LoginCard.Position = UDim2.new(0.5, -170, 0.5, -155)
-LoginCard.Size = UDim2.new(0, 340, 0, 290)
+LoginCard.Size = UDim2.new(0, 340, 0, 310)
 LoginCard.Active = true
 LoginCard.Draggable = true
 Instance.new("UICorner", LoginCard).CornerRadius = UDim.new(0, 12)
@@ -49,7 +46,7 @@ LoginTitle.BackgroundTransparency = 1
 LoginTitle.Position = UDim2.new(0, 20, 0, 15)
 LoginTitle.Size = UDim2.new(0, 300, 0, 30)
 LoginTitle.Font = Enum.Font.FredokaOne
-LoginTitle.Text = "⚡ KLAKZ HUB [KEY SİSTEMİ]"
+LoginTitle.Text = "⚡ KLAKZ HUB [GİRİŞ SİSTEMİ]"
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginTitle.TextSize = 14
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -57,8 +54,8 @@ LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
 local KeyInput = Instance.new("TextBox")
 KeyInput.Parent = LoginCard
 KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-KeyInput.Position = UDim2.new(0, 25, 0, 60)
-KeyInput.Size = UDim2.new(0, 290, 0, 42)
+KeyInput.Position = UDim2.new(0, 25, 0, 55)
+KeyInput.Size = UDim2.new(0, 290, 0, 40)
 KeyInput.Font = Enum.Font.FredokaOne
 KeyInput.PlaceholderText = "Key'i buraya girin..."
 KeyInput.Text = ""
@@ -70,20 +67,19 @@ Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
 local BtnLogin = Instance.new("TextButton")
 BtnLogin.Parent = LoginCard
 BtnLogin.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
-BtnLogin.Position = UDim2.new(0, 25, 0, 115)
-BtnLogin.Size = UDim2.new(0, 290, 0, 40)
+BtnLogin.Position = UDim2.new(0, 25, 0, 105)
+BtnLogin.Size = UDim2.new(0, 290, 0, 38)
 BtnLogin.Font = Enum.Font.FredokaOne
 BtnLogin.Text = "Giriş Yap"
 BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
 BtnLogin.TextSize = 13
 Instance.new("UICorner", BtnLogin).CornerRadius = UDim.new(0, 8)
 
--- Key Al Butonu (Linkvertise için)
 local BtnGetKey = Instance.new("TextButton")
 BtnGetKey.Parent = LoginCard
 BtnGetKey.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
-BtnGetKey.Position = UDim2.new(0, 25, 0, 165)
-BtnGetKey.Size = UDim2.new(0, 290, 0, 40)
+BtnGetKey.Position = UDim2.new(0, 25, 0, 153)
+BtnGetKey.Size = UDim2.new(0, 290, 0, 38)
 BtnGetKey.Font = Enum.Font.FredokaOne
 BtnGetKey.Text = "🔗 Key Al (Linkvertise)"
 BtnGetKey.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -93,7 +89,7 @@ Instance.new("UICorner", BtnGetKey).CornerRadius = UDim.new(0, 8)
 local HintLbl = Instance.new("TextLabel")
 HintLbl.Parent = LoginCard
 HintLbl.BackgroundTransparency = 1
-HintLbl.Position = UDim2.new(0, 25, 0, 210)
+HintLbl.Position = UDim2.new(0, 25, 0, 200)
 HintLbl.Size = UDim2.new(0, 290, 0, 25)
 HintLbl.Font = Enum.Font.FredokaOne
 HintLbl.Text = "💡 'Key Al' butonuna basınca link kopyalanır!"
@@ -103,7 +99,7 @@ HintLbl.TextSize = 10
 local ErrorLbl = Instance.new("TextLabel")
 ErrorLbl.Parent = LoginCard
 ErrorLbl.BackgroundTransparency = 1
-ErrorLbl.Position = UDim2.new(0, 25, 0, 245)
+ErrorLbl.Position = UDim2.new(0, 25, 0, 235)
 ErrorLbl.Size = UDim2.new(0, 290, 0, 25)
 ErrorLbl.Font = Enum.Font.FredokaOne
 ErrorLbl.Text = ""
@@ -298,12 +294,12 @@ local function LoadDashboard()
     end)
 end
 
--- Key Al Butonu İşlevi (Panoya Link Kopyalama)
+-- Key Al Butonu İşlevi
 BtnGetKey.MouseButton1Click:Connect(function()
     pcall(function()
         setclipboard(KEY_LINK)
     end)
-    HintLbl.Text = "✅ Link başarıyla kopyalandı! Tarayıcıya yapıştır."
+    HintLbl.Text = "✅ Link kopyalandı! Tarayıcıya yapıştır."
     HintLbl.TextColor3 = Color3.fromRGB(74, 222, 128)
 end)
 
