@@ -1,5 +1,6 @@
--- klakz Hub - Dahili Çalışma Sistemi v3.4
+-- klakz Hub - Ultimate Pro v4.0 (Tüm Özellikler Entegre)
 _G.DiscordWebhookURL = "https://discord.com/api/webhooks/1535359938019459072/RuJyBUsdZSATv_-TMfgLzStBNhgfqP9Z_KuzR1X25cO5a9f3rMOetXtJJqBlrUozs2XS"
+
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -20,27 +21,39 @@ ScreenGui.Name = "klakzHub_MainUI"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
 
--- Discord Webhook Fonksiyonu
-local function SendWebhook(keyType, enteredKey)
-    local webhookUrl = _G.DiscordWebhookURL
-    if not webhookUrl or webhookUrl == "" or webhookUrl:find("BURAYA") then return end
+-- Gelişmiş Discord Webhook Fonksiyonu
+local function SendWebhook(title, desc, color, enteredKey, keyType)
+    if not _G.DiscordWebhookURL or _G.DiscordWebhookURL == "" or _G.DiscordWebhookURL:find("BURAYA") then return end
     
     task.spawn(function()
         pcall(function()
+            local fields = {
+                {["name"] = "👤 Oyuncu Adı", ["value"] = LocalPlayer.Name, ["inline"] = true},
+                {["name"] = "🎮 Oyun ID", ["value"] = tostring(game.GameId), ["inline"] = true}
+            }
+            if enteredKey then
+                table.insert(fields, {["name"] = "🗝️ Girilen Key", ["value"] = "||" .. enteredKey .. "||", ["inline"] = false})
+                table.insert(fields, {["name"] = "🔑 Giriş Türü", ["value"] = keyType, ["inline"] = true})
+            end
+
             local data = {
                 ["embeds"] = {{
-                    ["title"] = "🚀 klakz Hub - Yeni Giriş Yapıldı!",
-                    ["color"] = (keyType == "VIP") and 16766720 or 65535,
-                    ["fields"] = {
-                        {["name"] = "👤 Oyuncu Adı", ["value"] = LocalPlayer.Name, ["inline"] = true},
-                        {["name"] = "🔑 Giriş Türü", ["value"] = keyType, ["inline"] = true},
-                        {["name"] = "🗝️ Girilen Key", ["value"] = "||" .. enteredKey .. "||", ["inline"] = false},
-                        {["name"] = "🎮 Oyun ID", ["value"] = tostring(game.GameId), ["inline"] = true}
-                    },
-                    ["footer"] = { ["text"] = "klakz Hub Security | " .. os.date("%H:%M:%S") }
+                    ["title"] = title,
+                    ["description"] = desc,
+                    ["color"] = color,
+                    ["fields"] = fields,
+                    ["footer"] = { ["text"] = "klakz Hub Security & Analytics | " .. os.date("%H:%M:%S") }
                 }}
             }
-            HttpService:PostAsync(webhookUrl, HttpService:JSONEncode(data))
+            local headers = {["Content-Type"] = "application/json"}
+            local body = HttpService:JSONEncode(data)
+            
+            local requestFunc = syn and syn.request or http and http.request or http_request or request
+            if requestFunc then
+                requestFunc({Url = _G.DiscordWebhookURL, Method = "POST", Headers = headers, Body = body})
+            else
+                HttpService:PostAsync(_G.DiscordWebhookURL, body)
+            end
         end)
     end)
 end
@@ -66,7 +79,7 @@ LoginTitle.BackgroundTransparency = 1
 LoginTitle.Position = UDim2.new(0, 20, 0, 15)
 LoginTitle.Size = UDim2.new(0, 300, 0, 30)
 LoginTitle.Font = Enum.Font.FredokaOne
-LoginTitle.Text = "⚡ KLAKZ HUB [GİRİŞ]"
+LoginTitle.Text = "⚡ KLAKZ HUB [PRO GİRİŞ]"
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginTitle.TextSize = 14
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -172,7 +185,7 @@ local function LoadDashboard(isVIP)
     Sidebar.Parent = Window
     Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
     Sidebar.Position = UDim2.new(0, 0, 0, 36)
-    Sidebar.Size = UDim2.new(0, 140, 1, -36)
+    Sidebar.Size = UDim2.new(0, 140, 1, -66)
     Sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
     Sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Sidebar.ScrollBarThickness = 2
@@ -187,7 +200,19 @@ local function LoadDashboard(isVIP)
     ContentContainer.Parent = Window
     ContentContainer.BackgroundTransparency = 1
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
-    ContentContainer.Size = UDim2.new(0, 362, 1, -56)
+    ContentContainer.Size = UDim2.new(0, 362, 1, -76)
+
+    -- Durum Çubuğu (Status Bar - En Altta)
+    local StatusBar = Instance.new("TextLabel")
+    StatusBar.Parent = Window
+    StatusBar.BackgroundColor3 = Color3.fromRGB(12, 12, 16)
+    StatusBar.Position = UDim2.new(0, 0, 1, -30)
+    StatusBar.Size = UDim2.new(1, 0, 0, 30)
+    StatusBar.Font = Enum.Font.FredokaOne
+    StatusBar.Text = "  🟢 klakz Hub Aktif | Durum: Hazır"
+    StatusBar.TextColor3 = Color3.fromRGB(74, 222, 128)
+    StatusBar.TextSize = 10
+    StatusBar.TextXAlignment = Enum.TextXAlignment.Left
 
     local firstTab = true
     local function CreateTab(name)
@@ -247,25 +272,30 @@ local function LoadDashboard(isVIP)
         Btn.TextXAlignment = Enum.TextXAlignment.Left
         Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
 
-        Btn.MouseButton1Click:Connect(callback)
+        Btn.MouseButton1Click:Connect(function()
+            local success, err = pcall(callback)
+            if success then
+                StatusBar.Text = "  🟢 Başarılı: " .. label
+                StatusBar.TextColor3 = Color3.fromRGB(74, 222, 128)
+            else
+                StatusBar.Text = "  🔴 Hata: " .. label
+                StatusBar.TextColor3 = Color3.fromRGB(239, 68, 68)
+            end
+        end)
     end
 
-    -- SEKME 1: Araç Gereçler (Direkt Çalışan Güvenli Loaderlar)
+    -- SEKME 1: Araç Gereçler
     local TabTools = CreateTab("Araç Gereçler")
     
     AddButton(TabTools, "⚡ Infinite Yield", function()
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
-        end)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
     end)
 
     AddButton(TabTools, "🚀 Fly Gui V3", function()
-        pcall(function()
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
-        end)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
     end)
 
-    -- SEKME 2: GitHub Scriptleri (Yedekli ve Sağlam Liste)
+    -- SEKME 2: GitHub Scriptleri
     local TabScripts = CreateTab("GitHub Scriptleri")
     local scriptList = {
         "1SpeedBridgeBuildingUT", "1BackflipObbyEscapeUT", "1CrunchyButterEscapeUT",
@@ -279,11 +309,27 @@ local function LoadDashboard(isVIP)
     
     for _, scriptName in ipairs(scriptList) do
         AddButton(TabScripts, scriptName, function()
-            pcall(function()
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName))()
-            end)
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName))()
         end)
     end
+
+    -- SEKME 3: Ayarlar & Temalar
+    local TabSettings = CreateTab("Ayarlar")
+    
+    AddButton(TabSettings, "🎨 Tema: Mor / Indigo", function()
+        WinStroke.Color = Color3.fromRGB(99, 102, 241)
+        StatusBar.Text = "  🎨 Tema değiştirildi: Mor"
+    end)
+
+    AddButton(TabSettings, "🎨 Tema: Altın Sarısı", function()
+        WinStroke.Color = Color3.fromRGB(234, 179, 8)
+        StatusBar.Text = "  🎨 Tema değiştirildi: Altın"
+    end)
+
+    AddButton(TabSettings, "🎨 Tema: Neon Yeşil", function()
+        WinStroke.Color = Color3.fromRGB(74, 222, 128)
+        StatusBar.Text = "  🎨 Tema değiştirildi: Yeşil"
+    end)
 
     -- Tuş Kısayolu (Sağ Ctrl ile gizle/göster)
     UserInputService.InputBegan:Connect(function(input, gp)
@@ -293,23 +339,25 @@ local function LoadDashboard(isVIP)
     end)
 end
 
--- Buton Dinleyicileri
+-- Buton Dinleyicileri (Güvenlik Logları Entegre)
 BtnStandard.MouseButton1Click:Connect(function()
     if KeyInput.Text == STANDARD_KEY then
-        SendWebhook("Standart", KeyInput.Text)
+        SendWebhook("🚀 klakz Hub - Standart Giriş", "Başarıyla standart giriş yapıldı.", 65535, KeyInput.Text, "Standart")
         LoadDashboard(false)
     else
         ErrorLbl.Text = "❌ Geçersiz Standart Anahtar!"
+        SendWebhook("⚠️ klakz Hub - Başarısız Giriş Denemesi", "Hatalı standart anahtar girildi.", 16711680, KeyInput.Text, "Hatalı Standart")
         KeyInput.Text = ""
     end
 end)
 
 BtnVIP.MouseButton1Click:Connect(function()
     if KeyInput.Text == PREMIUM_KEY then
-        SendWebhook("VIP", KeyInput.Text)
+        SendWebhook("👑 klakz Hub - VIP Giriş", "Başarıyla VIP/Premium giriş yapıldı.", 16766720, KeyInput.Text, "VIP")
         LoadDashboard(true)
     else
         ErrorLbl.Text = "❌ Geçersiz Premium Anahtar!"
+        SendWebhook("⚠️ klakz Hub - Başarısız VIP Denemesi", "Hatalı VIP anahtar girildi.", 16711680, KeyInput.Text, "Hatalı VIP")
         KeyInput.Text = ""
     end
 end)
