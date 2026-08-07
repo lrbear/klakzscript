@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Düzeltilmiş ve Geliştirilmiş Sürüm)
+-- klakz Hub - Seki UI (Küçültme Butonlu ve Düzenlenmiş Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -179,17 +179,17 @@ LoadDashboard = function(isVIP)
     TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    local CloseBtn = Instance.new("TextButton")
-    CloseBtn.Parent = TopBar
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
-    CloseBtn.Position = UDim2.new(1, -32, 0, 6)
-    CloseBtn.Size = UDim2.new(0, 24, 0, 24)
-    CloseBtn.Font = Enum.Font.FredokaOne
-    CloseBtn.Text = "✕"
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseBtn.TextSize = 11
-    Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
-    CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
+    -- Küçültme (Minimize) Butonu
+    local MinimizeBtn = Instance.new("TextButton")
+    MinimizeBtn.Parent = TopBar
+    MinimizeBtn.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
+    MinimizeBtn.Position = UDim2.new(1, -60, 0, 6)
+    MinimizeBtn.Size = UDim2.new(0, 24, 0, 24)
+    MinimizeBtn.Font = Enum.Font.FredokaOne
+    MinimizeBtn.Text = "-"
+    MinimizeBtn.TextColor3 = Color3.fromRGB(20, 20, 25)
+    MinimizeBtn.TextSize = 12
+    Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 6)
 
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Parent = Window
@@ -210,6 +210,21 @@ LoadDashboard = function(isVIP)
     ContentContainer.BackgroundTransparency = 1
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
     ContentContainer.Size = UDim2.new(0, 362, 1, -56)
+
+    -- Küçültme Mantığı
+    local isMinimized = false
+    MinimizeBtn.MouseButton1Click:Connect(function()
+        isMinimized = not isMinimized
+        Sidebar.Visible = not isMinimized
+        ContentContainer.Visible = not isMinimized
+        if isMinimized then
+            Window:TweenSize(UDim2.new(0, 520, 0, 36), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+            MinimizeBtn.Text = "+"
+        else
+            Window:TweenSize(UDim2.new(0, 520, 0, 380), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.2, true)
+            MinimizeBtn.Text = "-"
+        end
+    end)
 
     local firstTab = true
 
