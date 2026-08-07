@@ -1,4 +1,4 @@
--- klakz Hub - Login ve Discord Webhook Entegreli Tam Sürüm v3.2
+-- klakz Hub - Tüm Scriptler ve Tam Sürüm v3.3
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -107,7 +107,6 @@ Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
 
 local ErrorLbl = Instance.new("TextLabel")
 ErrorLbl.Parent = LoginCard
-ErrorLbl.BackgroundTransparency = ImgTransparency or 1
 ErrorLbl.BackgroundTransparency = 1
 ErrorLbl.Position = UDim2.new(0, 25, 0, 215)
 ErrorLbl.Size = UDim2.new(0, 290, 0, 25)
@@ -234,31 +233,45 @@ local function LoadDashboard(isVIP)
         return Page
     end
 
-    local function AddButton(parent, label, callback)
+    local function AddScript(parent, label, url)
         if not parent then return end
-        local Btn = Instance.new("TextButton")
-        Btn.Parent = parent
-        Btn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
-        Btn.Size = UDim2.new(1, -8, 0, 34)
-        Btn.Font = Enum.Font.FredokaOne
-        Btn.Text = "    " + label
-        Btn.Text = "    " .. label
-        Btn.TextColor3 = Color3.fromRGB(235, 235, 245)
-        Btn.TextSize = 11
-        Btn.TextXAlignment = Enum.TextXAlignment.Left
-        Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
+        local ScriptBtn = Instance.new("TextButton")
+        ScriptBtn.Parent = parent
+        ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        ScriptBtn.Size = UDim2.new(1, -8, 0, 34)
+        ScriptBtn.Font = Enum.Font.FredokaOne
+        ScriptBtn.Text = "    " .. label
+        ScriptBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
+        ScriptBtn.TextSize = 11
+        ScriptBtn.TextXAlignment = Enum.TextXAlignment.Left
+        Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
 
-        Btn.MouseButton1Click:Connect(callback)
+        ScriptBtn.MouseButton1Click:Connect(function()
+            pcall(function()
+                loadstring(game:HttpGet(url))()
+            end)
+        end)
     end
 
-    -- Sekme 1: Araçlar
-    local TabTools = CreateTab("Ana Araçlar")
-    AddButton(TabTools, "⚡ Infinite Yield Aç", function()
-        pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))() end)
-    end)
-    AddButton(TabTools, "🚀 Fly Gui Aç", function()
-        pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))() end)
-    end)
+    -- SEKME 1: Araç Gereçler
+    local TabTools = CreateTab("Araç Gereçler")
+    AddScript(TabTools, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+    AddScript(TabTools, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+
+    -- SEKME 2: GitHub Scriptleri (TÜM LİSTE)
+    local TabScripts = CreateTab("GitHub Scriptleri")
+    local scriptList = {
+        "1SpeedBridgeBuildingUT", "1BackflipObbyEscapeUT", "1CrunchyButterEscapeUT",
+        "1DMGPerReviveUT", "1DoubleJumpBikeEscapeUT", "1FatToFitUT",
+        "1GunEvolutionUT", "1HealthPerClickUT", "1HeightSlideUT",
+        "1JumpPogoClimbUT", "1LootEvoUT", "1MagicEvolutionUT",
+        "1MinePerClickUT", "1MuscletoPushBoulderUT", "1MuscletoSlapFightingUT",
+        "1PickaxeSwingEscapeUT", "1PlankUT", "1PoorToRichUT",
+        "1PunchPerClickUT", "1RunforNEEDOHUT", "1SkillPointLegendsUT"
+    }
+    for _, scriptName in ipairs(scriptList) do
+        AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
+    end
 
     -- Tuş Kısayolu (Sağ Ctrl ile gizle/göster)
     UserInputService.InputBegan:Connect(function(input, gp)
