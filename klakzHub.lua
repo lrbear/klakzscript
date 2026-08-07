@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Müzik Çalar Eklentili Nihai Sürüm)
+-- klakz Hub - Seki UI (Gelişmiş Dahili Müzik Çalar Sürümü)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -407,7 +407,7 @@ LoadDashboard = function(isVIP)
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
 
-    -- SEKME 3: Müzik Çalar (Music Player)
+    -- SEKME 3: Gelişmiş Müzik Çalar
     local TabMusic = CreateTab("Müzik Çalar")
 
     local MusicTitle = Instance.new("TextLabel")
@@ -415,12 +415,12 @@ LoadDashboard = function(isVIP)
     MusicTitle.BackgroundTransparency = 1
     MusicTitle.Size = UDim2.new(1, -8, 0, 24)
     MusicTitle.Font = Enum.Font.FredokaOne
-    MusicTitle.Text = "🎵 Robux / Oyun Müzikleri (Audio ID)"
+    MusicTitle.Text = "🎵 Dahili Müzik Çalar Kontrolü"
     MusicTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
     MusicTitle.TextSize = 12
     MusicTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Arka Plan Müzik Nesnesi Oluşturma
+    -- Müzik Nesnesi
     local bgSound = Instance.new("Sound")
     bgSound.Name = "KlakzHub_Music"
     bgSound.Parent = SoundService
@@ -430,18 +430,60 @@ LoadDashboard = function(isVIP)
     local playingLabel = Instance.new("TextLabel")
     playingLabel.Parent = TabMusic
     playingLabel.BackgroundTransparency = 1
-    playingLabel.Size = UDim2.new(1, -8, 0, 20)
+    playingLabel.Size = UDim2.new(1, -8, 0, 22)
     playingLabel.Font = Enum.Font.FredokaOne
-    playingLabel.Text = "Çalan: Yok"
+    playingLabel.Text = "Durum: Çalan müzik yok"
     playingLabel.TextColor3 = Color3.fromRGB(150, 150, 180)
     playingLabel.TextSize = 10
     playingLabel.TextXAlignment = Enum.TextXAlignment.Left
 
+    -- Özel Audio ID Girişi
+    local CustomIdBox = Instance.new("TextBox")
+    CustomIdBox.Parent = TabMusic
+    CustomIdBox.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    CustomIdBox.Size = UDim2.new(1, -8, 0, 36)
+    CustomIdBox.Font = Enum.Font.FredokaOne
+    CustomIdBox.PlaceholderText = "Örn: 1841261548 (Audio ID girin)"
+    CustomIdBox.Text = ""
+    CustomIdBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    CustomIdBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
+    CustomIdBox.TextSize = 11
+    Instance.new("UICorner", CustomIdBox).CornerRadius = UDim.new(0, 6)
+
+    local PlayCustomBtn = Instance.new("TextButton")
+    PlayCustomBtn.Parent = TabMusic
+    PlayCustomBtn.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+    PlayCustomBtn.Size = UDim2.new(1, -8, 0, 34)
+    PlayCustomBtn.Font = Enum.Font.FredokaOne
+    PlayCustomBtn.Text = "▶ Özel ID'yi Çal"
+    PlayCustomBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    PlayCustomBtn.TextSize = 11
+    Instance.new("UICorner", PlayCustomBtn).CornerRadius = UDim.new(0, 6)
+
+    PlayCustomBtn.MouseButton1Click:Connect(function()
+        local idText = CustomIdBox.Text:gsub("%D", "") -- Sadece sayıları al
+        if idText ~= "" then
+            bgSound.SoundId = "rbxassetid://" .. idText
+            bgSound:Play()
+            playingLabel.Text = "Çalan ID: " .. idText
+        end
+    end)
+
+    local PresetTitle = Instance.new("TextLabel")
+    PresetTitle.Parent = TabMusic
+    PresetTitle.BackgroundTransparency = 1
+    PresetTitle.Size = UDim2.new(1, -8, 0, 24)
+    PresetTitle.Font = Enum.Font.FredokaOne
+    PresetTitle.Text = "📂 Hazır Müzik Listesi"
+    PresetTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    PresetTitle.TextSize = 12
+    PresetTitle.TextXAlignment = Enum.TextXAlignment.Left
+
     local musicList = {
-        {Name = "🎶 Phonk / Epic (1841261548)", ID = "rbxassetid://1841261548"},
-        {Name = "🎶 Chill Lofi (9046835171)", ID = "rbxassetid://9046835171"},
-        {Name = "🎶 Synthwave (5410086218)", ID = "rbxassetid://5410086218"},
-        {Name = "🎶 Action Remix (1838573171)", ID = "rbxassetid://1838573171"}
+        {Name = "🎶 Phonk / Epic Action", ID = "1841261548"},
+        {Name = "🎶 Chill Lofi Beats", ID = "9046835171"},
+        {Name = "🎶 Synthwave Retro", ID = "5410086218"},
+        {Name = "🎶 Action Remix Track", ID = "1838573171"}
     }
 
     for _, song in ipairs(musicList) do
@@ -457,13 +499,12 @@ LoadDashboard = function(isVIP)
         Instance.new("UICorner", SongBtn).CornerRadius = UDim.new(0, 6)
 
         SongBtn.MouseButton1Click:Connect(function()
-            bgSound.SoundId = song.ID
+            bgSound.SoundId = "rbxassetid://" .. song.ID
             bgSound:Play()
             playingLabel.Text = "Çalan: " .. song.Name
         end)
     end
 
-    -- Müzik Kontrol Butonları (Durdur / Devam Ettir)
     local StopMusicBtn = Instance.new("TextButton")
     StopMusicBtn.Parent = TabMusic
     StopMusicBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
@@ -476,7 +517,7 @@ LoadDashboard = function(isVIP)
 
     StopMusicBtn.MouseButton1Click:Connect(function()
         bgSound:Stop()
-        playingLabel.Text = "Çalan: Yok"
+        playingLabel.Text = "Durum: Müziği durduruldu"
     end)
 
     -- SEKME 4: Ayarlar
