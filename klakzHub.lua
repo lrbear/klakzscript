@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Optimize Edilmiş ve Geliştirilmiş Sürüm)
+-- klakz Hub - Seki UI (Düzeltilmiş ve Geliştirilmiş Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -40,7 +40,6 @@ local texts = {
     }
 }
 
--- İleriye dönük Dashboard fonksiyon tanımı
 local LoadDashboard
 
 -- ==================== 1. LOGIN EKRANI ====================
@@ -63,10 +62,10 @@ LangTR.Parent = LoginCard
 LangTR.BackgroundColor3 = currentLang == "TR" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
 LangTR.Position = UDim2.new(1, -65, 0, 15)
 LangTR.Size = UDim2.new(0, 22, 0, 22)
-LangTR.Font = Enum.Font.GothamBold
+LangTR.Font = Enum.Font.FredokaOne
 LangTR.Text = "TR"
 LangTR.TextColor3 = Color3.fromRGB(255, 255, 255)
-LangTR.TextSize = 9
+LangTR.TextSize = 10
 Instance.new("UICorner", LangTR).CornerRadius = UDim.new(0, 4)
 
 local LangEN = Instance.new("TextButton")
@@ -74,10 +73,10 @@ LangEN.Parent = LoginCard
 LangEN.BackgroundColor3 = currentLang == "EN" and Color3.fromRGB(99, 102, 241) or Color3.fromRGB(35, 35, 45)
 LangEN.Position = UDim2.new(1, -38, 0, 15)
 LangEN.Size = UDim2.new(0, 22, 0, 22)
-LangEN.Font = Enum.Font.GothamBold
+LangEN.Font = Enum.Font.FredokaOne
 LangEN.Text = "EN"
 LangEN.TextColor3 = Color3.fromRGB(255, 255, 255)
-LangEN.TextSize = 9
+LangEN.TextSize = 10
 Instance.new("UICorner", LangEN).CornerRadius = UDim.new(0, 4)
 
 local LoginLogo = Instance.new("TextLabel")
@@ -85,7 +84,7 @@ LoginLogo.Parent = LoginCard
 LoginLogo.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
 LoginLogo.Position = UDim2.new(0, 15, 0, 15)
 LoginLogo.Size = UDim2.new(0, 40, 0, 40)
-LoginLogo.Font = Enum.Font.GothamBold
+LoginLogo.Font = Enum.Font.FredokaOne
 LoginLogo.Text = "⚡"
 LoginLogo.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginLogo.TextSize = 18
@@ -96,10 +95,10 @@ LoginTitle.Parent = LoginCard
 LoginTitle.BackgroundTransparency = 1
 LoginTitle.Position = UDim2.new(0, 65, 0, 15)
 LoginTitle.Size = UDim2.new(0, 180, 0, 40)
-LoginTitle.Font = Enum.Font.GothamBold
+LoginTitle.Font = Enum.Font.FredokaOne
 LoginTitle.Text = texts[currentLang].loginTitle
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-LoginTitle.TextSize = 13
+LoginTitle.TextSize = 14
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
 
 local KeyInput = Instance.new("TextBox")
@@ -107,7 +106,7 @@ KeyInput.Parent = LoginCard
 KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 KeyInput.Position = UDim2.new(0, 25, 0, 75)
 KeyInput.Size = UDim2.new(0, 290, 0, 42)
-KeyInput.Font = Enum.Font.Gotham
+KeyInput.Font = Enum.Font.FredokaOne
 KeyInput.PlaceholderText = texts[currentLang].placeholder
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -120,10 +119,10 @@ BtnStandard.Parent = LoginCard
 BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
 BtnStandard.Position = UDim2.new(0, 25, 0, 130)
 BtnStandard.Size = UDim2.new(0, 290, 0, 42)
-BtnStandard.Font = Enum.Font.GothamBold
+BtnStandard.Font = Enum.Font.FredokaOne
 BtnStandard.Text = texts[currentLang].stdBtn
 BtnStandard.TextColor3 = Color3.fromRGB(255, 255, 255)
-BtnStandard.TextSize = 13
+BtnStandard.TextSize = 14
 Instance.new("UICorner", BtnStandard).CornerRadius = UDim.new(0, 8)
 
 local BtnVIP = Instance.new("TextButton")
@@ -131,10 +130,10 @@ BtnVIP.Parent = LoginCard
 BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
 BtnVIP.Position = UDim2.new(0, 25, 0, 185)
 BtnVIP.Size = UDim2.new(0, 290, 0, 42)
-BtnVIP.Font = Enum.Font.GothamBold
+BtnVIP.Font = Enum.Font.FredokaOne
 BtnVIP.Text = texts[currentLang].vipBtn
 BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
-BtnVIP.TextSize = 13
+BtnVIP.TextSize = 14
 Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
 
 -- ==================== 2. SEKI UI PANELİ ====================
@@ -174,10 +173,10 @@ LoadDashboard = function(isVIP)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     TitleLabel.Size = UDim2.new(0, 350, 1, 0)
-    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.Font = Enum.Font.FredokaOne
     TitleLabel.Text = isVIP and texts[currentLang].headerVip or texts[currentLang].headerStd
     TitleLabel.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(240, 240, 250)
-    TitleLabel.TextSize = 11
+    TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
     local CloseBtn = Instance.new("TextButton")
@@ -185,10 +184,10 @@ LoadDashboard = function(isVIP)
     CloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
     CloseBtn.Position = UDim2.new(1, -32, 0, 6)
     CloseBtn.Size = UDim2.new(0, 24, 0, 24)
-    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.Font = Enum.Font.FredokaOne
     CloseBtn.Text = "✕"
     CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseBtn.TextSize = 10
+    CloseBtn.TextSize = 11
     Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 6)
     CloseBtn.MouseButton1Click:Connect(function() ScreenGui:Destroy() end)
 
@@ -219,10 +218,10 @@ LoadDashboard = function(isVIP)
         TabButton.Parent = Sidebar
         TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
         TabButton.Size = UDim2.new(1, 0, 0, 34)
-        TabButton.Font = Enum.Font.GothamMedium
+        TabButton.Font = Enum.Font.FredokaOne
         TabButton.Text = name
         TabButton.TextColor3 = Color3.fromRGB(180, 180, 200)
-        TabButton.TextSize = 10
+        TabButton.TextSize = 11
         TabButton.TextXAlignment = Enum.TextXAlignment.Left
 
         local Padding = Instance.new("UIPadding")
@@ -264,10 +263,10 @@ LoadDashboard = function(isVIP)
         ScriptBtn.Parent = parent
         ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
         ScriptBtn.Size = UDim2.new(1, -8, 0, 34)
-        ScriptBtn.Font = Enum.Font.Gotham
+        ScriptBtn.Font = Enum.Font.FredokaOne
         ScriptBtn.Text = "    " .. label
         ScriptBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
-        ScriptBtn.TextSize = 10
+        ScriptBtn.TextSize = 11
         ScriptBtn.TextXAlignment = Enum.TextXAlignment.Left
         Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
 
@@ -319,6 +318,22 @@ LoadDashboard = function(isVIP)
     for _, scriptName in ipairs(scriptList) do
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
+    
+    -- SEKME 3: Çıkış / Kapatma Sekmesi
+    local TabExit = CreateTab("Çıkış")
+    local ExitButton = Instance.new("TextButton")
+    ExitButton.Parent = TabExit
+    ExitButton.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    ExitButton.Size = UDim2.new(1, -8, 0, 38)
+    ExitButton.Font = Enum.Font.FredokaOne
+    ExitButton.Text = "🔴 Hub'ı Tamamen Kapat"
+    ExitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ExitButton.TextSize = 12
+    Instance.new("UICorner", ExitButton).CornerRadius = UDim.new(0, 6)
+
+    ExitButton.MouseButton1Click:Connect(function()
+        ScreenGui:Destroy()
+    end)
 end
 
 -- Login Tuş Olayları
