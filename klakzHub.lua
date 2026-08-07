@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Anında / Gecikmesiz Müzik Sürümü v2)
+-- klakz Hub - Seki UI (Anında / Gecikmesiz Müzik Sürümü v2.1)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -406,15 +406,15 @@ LoadDashboard = function(isVIP)
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
 
-    -- SEKME 3: Ultra Hızlı Müzik Çalar (Ön Bellek / Cache Hazırlama Sistemi)
-    local TabMusic = CreateTab("Müzik Çalar")
+    -- SEKME 3: Müzik Çalar [BETA]
+    local TabMusic = CreateTab("Müzik Çalar [BETA]")
 
     local MusicTitle = Instance.new("TextLabel")
     MusicTitle.Parent = TabMusic
     MusicTitle.BackgroundTransparency = 1
     MusicTitle.Size = UDim2.new(1, -8, 0, 24)
     MusicTitle.Font = Enum.Font.FredokaOne
-    MusicTitle.Text = "🎵 Kesintisiz Müzik Çalar"
+    MusicTitle.Text = "🎵 Kesintisiz Müzik Çalar [BETA]"
     MusicTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
     MusicTitle.TextSize = 12
     MusicTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -429,8 +429,6 @@ LoadDashboard = function(isVIP)
     playingLabel.TextSize = 10
     playingLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Tüm şarkıları arka planda oluşturup hazırda (mute/0 volume) tutacağız
-    -- Böylece tıklandığı an oyun tekrar indirmekle uğraşmayacak, direkt çalacak.
     local activePlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     local soundObjects = {}
 
@@ -453,18 +451,16 @@ LoadDashboard = function(isVIP)
 
     local currentPlayingSound = nil
 
-    -- Arka planda hepsini teker teker önceden tetikle (Buffer'a al)
     task.spawn(function()
         for _, song in ipairs(musicList) do
             local snd = createPreloadedSound(song.ID, song.Name)
             soundObjects[song.ID] = snd
             
-            -- Saniyelerce bekletmeden sunucudan çekmesi için kısa bir trick
             snd.Volume = 0
             snd:Play()
             task.wait(0.2)
             snd:Stop()
-            snd.Volume = 5 -- Sesini geri aç
+            snd.Volume = 5
         end
         playingLabel.Text = "Durum: Tüm müzikler hazır!"
     end)
