@@ -1,28 +1,22 @@
--- klakz Hub - Random Key Generator v1.0
+-- klakz Hub - Linkvertise Key Sistemli Pro v5.0
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 
--- Rastgele Key Üretme Fonksiyonu (Harf ve Rakam Karışık)
-local function GenerateRandomKey()
-    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    local key = ""
-    math.randomseed(tick())
-    for i = 1, 8 do
-        local randIndex = math.random(1, #chars)
-        key = key .. chars:sub(randIndex, randIndex)
-    end
-    return key
-end
+-- ==================== AYARLAR ====================
+-- Buraya Linkvertise veya key alacağın site adresini yazabilirsin
+local KEY_LINK = "https://linkvertise.com/ornek-linkiniz" 
 
--- O anki geçerli rastgele key'i oluşturuyoruz
-local ACTIVE_RANDOM_KEY = GenerateRandomKey()
+-- Geçerli Test Keyleri (Kendi web siten veya sistemin olana kadar test edebilmen için)
+local VALID_KEYS = {
+    ["klakz_vip_2026"] = true,
+    ["klakz_free_key"] = true
+}
+-- ===================================================
 
--- Test ve takip için konsola yazdırıyoruz (F9'dan görebilirsin)
-print("🔑 [klakz Hub] Güncel Rastgele Giriş Keyi: " .. ACTIVE_RANDOM_KEY)
-
--- Eski arayüzü temizle
+-- Eski arayüzü tamamen temizle
 pcall(function()
     if CoreGui:FindFirstChild("klakzHub_MainUI") then
         CoreGui:FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -38,8 +32,8 @@ ScreenGui.ResetOnSpawn = false
 local LoginCard = Instance.new("Frame")
 LoginCard.Parent = ScreenGui
 LoginCard.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-LoginCard.Position = UDim2.new(0.5, -170, 0.5, -140)
-LoginCard.Size = UDim2.new(0, 340, 0, 260)
+LoginCard.Position = UDim2.new(0.5, -170, 0.5, -155)
+LoginCard.Size = UDim2.new(0, 340, 0, 290)
 LoginCard.Active = true
 LoginCard.Draggable = true
 Instance.new("UICorner", LoginCard).CornerRadius = UDim.new(0, 12)
@@ -55,7 +49,7 @@ LoginTitle.BackgroundTransparency = 1
 LoginTitle.Position = UDim2.new(0, 20, 0, 15)
 LoginTitle.Size = UDim2.new(0, 300, 0, 30)
 LoginTitle.Font = Enum.Font.FredokaOne
-LoginTitle.Text = "⚡ KLAKZ HUB [RANDOM KEY]"
+LoginTitle.Text = "⚡ KLAKZ HUB [KEY SİSTEMİ]"
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginTitle.TextSize = 14
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -66,7 +60,7 @@ KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 KeyInput.Position = UDim2.new(0, 25, 0, 60)
 KeyInput.Size = UDim2.new(0, 290, 0, 42)
 KeyInput.Font = Enum.Font.FredokaOne
-KeyInput.PlaceholderText = "F9 konsolundaki keyi girin..."
+KeyInput.PlaceholderText = "Key'i buraya girin..."
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
@@ -84,21 +78,32 @@ BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
 BtnLogin.TextSize = 13
 Instance.new("UICorner", BtnLogin).CornerRadius = UDim.new(0, 8)
 
--- İsteğe bağlı: Keyi ekranda direkt gösteren küçük bir ipucu etiketi
+-- Key Al Butonu (Linkvertise için)
+local BtnGetKey = Instance.new("TextButton")
+BtnGetKey.Parent = LoginCard
+BtnGetKey.BackgroundColor3 = Color3.fromRGB(34, 197, 94)
+BtnGetKey.Position = UDim2.new(0, 25, 0, 165)
+BtnGetKey.Size = UDim2.new(0, 290, 0, 40)
+BtnGetKey.Font = Enum.Font.FredokaOne
+BtnGetKey.Text = "🔗 Key Al (Linkvertise)"
+BtnGetKey.TextColor3 = Color3.fromRGB(255, 255, 255)
+BtnGetKey.TextSize = 13
+Instance.new("UICorner", BtnGetKey).CornerRadius = UDim.new(0, 8)
+
 local HintLbl = Instance.new("TextLabel")
 HintLbl.Parent = LoginCard
 HintLbl.BackgroundTransparency = 1
-HintLbl.Position = UDim2.new(0, 25, 0, 165)
+HintLbl.Position = UDim2.new(0, 25, 0, 210)
 HintLbl.Size = UDim2.new(0, 290, 0, 25)
 HintLbl.Font = Enum.Font.FredokaOne
-HintLbl.Text = "💡 İpucu: Key'i öğrenmek için F9'a bas!"
+HintLbl.Text = "💡 'Key Al' butonuna basınca link kopyalanır!"
 HintLbl.TextColor3 = Color3.fromRGB(234, 179, 8)
-HintLbl.TextSize = 11
+HintLbl.TextSize = 10
 
 local ErrorLbl = Instance.new("TextLabel")
 ErrorLbl.Parent = LoginCard
 ErrorLbl.BackgroundTransparency = 1
-ErrorLbl.Position = UDim2.new(0, 25, 0, 205)
+ErrorLbl.Position = UDim2.new(0, 25, 0, 245)
 ErrorLbl.Size = UDim2.new(0, 290, 0, 25)
 ErrorLbl.Font = Enum.Font.FredokaOne
 ErrorLbl.Text = ""
@@ -136,7 +141,7 @@ local function LoadDashboard()
     TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     TitleLabel.Size = UDim2.new(0, 320, 1, 0)
     TitleLabel.Font = Enum.Font.FredokaOne
-    TitleLabel.Text = "klakz Hub [Random Key Aktif]"
+    TitleLabel.Text = "klakz Hub [Başarılı Giriş]"
     TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 250)
     TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
@@ -293,12 +298,21 @@ local function LoadDashboard()
     end)
 end
 
+-- Key Al Butonu İşlevi (Panoya Link Kopyalama)
+BtnGetKey.MouseButton1Click:Connect(function()
+    pcall(function()
+        setclipboard(KEY_LINK)
+    end)
+    HintLbl.Text = "✅ Link başarıyla kopyalandı! Tarayıcıya yapıştır."
+    HintLbl.TextColor3 = Color3.fromRGB(74, 222, 128)
+end)
+
 -- Giriş Butonu Kontrolü
 BtnLogin.MouseButton1Click:Connect(function()
-    if KeyInput.Text == ACTIVE_RANDOM_KEY then
+    if VALID_KEYS[KeyInput.Text] then
         LoadDashboard()
     else
-        ErrorLbl.Text = "❌ Geçersiz Key! F9 konsoluna bak."
+        ErrorLbl.Text = "❌ Geçersiz Key!"
         KeyInput.Text = ""
     end
 end)
