@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Anında / Gecikmesiz Müzik Sürümü v2.1)
+-- klakz Hub - Seki UI (Tam Donanımlı Sürüm v2.2)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -8,6 +8,7 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -44,6 +45,40 @@ local texts = {
 }
 
 local LoadDashboard
+
+-- ==================== BİLDİRİM SİSTEMİ (TOAST) ====================
+local function ShowNotification(message, color)
+    task.spawn(function()
+        local Notif = Instance.new("Frame")
+        Notif.Parent = ScreenGui
+        Notif.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+        Notif.Position = UDim2.new(1, 10, 0.85, 0)
+        Notif.Size = UDim2.new(0, 240, 0, 45)
+        Instance.new("UICorner", Notif).CornerRadius = UDim.new(0, 8)
+
+        local Stroke = Instance.new("UIStroke")
+        Stroke.Color = color or Color3.fromRGB(99, 102, 241)
+        Stroke.Thickness = 1.5
+        Stroke.Parent = Notif
+
+        local Label = Instance.new("TextLabel")
+        Label.Parent = Notif
+        Label.BackgroundTransparency = 1
+        Label.Position = UDim2.new(0, 12, 0, 0)
+        Label.Size = UDim2.new(1, -24, 1, 0)
+        Label.Font = Enum.Font.FredokaOne
+        Label.Text = message
+        Label.TextColor3 = Color3.fromRGB(240, 240, 250)
+        Label.TextSize = 11
+        Label.TextXAlignment = Enum.TextXAlignment.Left
+
+        Notif:TweenPosition(UDim2.new(1, -255, 0.85, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.3, true)
+        task.wait(3)
+        Notif:TweenPosition(UDim2.new(1, 10, 0.85, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.3, true)
+        task.wait(0.3)
+        Notif:Destroy()
+    end)
+end
 
 -- ==================== 1. LOGIN EKRANI ====================
 local LoginCard = Instance.new("Frame")
@@ -291,10 +326,18 @@ LoadDashboard = function(isVIP)
         end
     end)
 
+    -- Şık Tween Açılış/Kapanış Efekti
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if input.KeyCode == toggleKey then
-            Window.Visible = not Window.Visible
-            MiniIndicator.Visible = not Window.Visible
+            if Window.Visible then
+                Window.Visible = false
+                MiniIndicator.Visible = true
+            else
+                Window.Visible = true
+                MiniIndicator.Visible = false
+                Window.Size = UDim2.new(0, 0, 0, 0)
+                Window:TweenSize(UDim2.new(0, 520, 0, 380), Enum.EasingDirection.Out, Enum.EasingStyle.Back, 0.3, true)
+            end
         end
     end)
 
@@ -361,44 +404,92 @@ LoadDashboard = function(isVIP)
             pcall(function()
                 loadstring(game:HttpGet(url))()
             end)
+            ShowNotification("Çalıştırıldı: " .. label, Color3.fromRGB(34, 197, 94))
         end)
     end
 
-    -- SEKME 1: Araç Gereçler
+    -- SEKME 1: Araç Gereçler (Hız & Zıplama eklendi)
     local TabTools = CreateTab("Araç Gereçler")
     AddScript(TabTools, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
     AddScript(TabTools, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
 
+    local SpeedTitle = Instance.new("TextLabel")
+    SpeedTitle.Parent = TabTools
+    SpeedTitle.BackgroundTransparency = 1
+    SpeedTitle.Size = UDim2.new(1, -8, 0, 24)
+    SpeedTitle.Font = Enum.Font.FredokaOne
+    SpeedTitle.Text = "🏃‍♂️ Karakter Hızı (WalkSpeed)"
+    SpeedTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    SpeedTitle.TextSize = 12
+    SpeedTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local SpeedBox = Instance.new("TextBox")
+    SpeedBox.Parent = TabTools
+    SpeedBox.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    SpeedBox.Size = UDim2.new(1, -8, 0, 36)
+    SpeedBox.Font = Enum.Font.FredokaOne
+    SpeedBox.PlaceholderText = "Normal: 16 (Değiştirmek için yazın ve Enter'a basın)"
+    SpeedBox.Text = ""
+    SpeedBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    SpeedBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
+    SpeedBox.TextSize = 11
+    Instance.new("UICorner", SpeedBox).CornerRadius = UDim.new(0, 6)
+
+    SpeedBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local val = tonumber(SpeedBox.Text)
+            if val and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                LocalPlayer.Character.Humanoid.WalkSpeed = val
+                ShowNotification("Hız ayarlandı: " .. val, Color3.fromRGB(99, 102, 241))
+            end
+        end
+    end)
+
+    local JumpTitle = Instance.new("TextLabel")
+    JumpTitle.Parent = TabTools
+    JumpTitle.BackgroundTransparency = 1
+    JumpTitle.Size = UDim2.new(1, -8, 0, 24)
+    JumpTitle.Font = Enum.Font.FredokaOne
+    JumpTitle.Text = "🦘 Zıplama Gücü (JumpPower)"
+    JumpTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    JumpTitle.TextSize = 12
+    JumpTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local JumpBox = Instance.new("TextBox")
+    JumpBox.Parent = TabTools
+    JumpBox.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    JumpBox.Size = UDim2.new(1, -8, 0, 36)
+    JumpBox.Font = Enum.Font.FredokaOne
+    JumpBox.PlaceholderText = "Normal: 50 (Değiştirmek için yazın ve Enter'a basın)"
+    JumpBox.Text = ""
+    JumpBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    JumpBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
+    JumpBox.TextSize = 11
+    Instance.new("UICorner", JumpBox).CornerRadius = UDim.new(0, 6)
+
+    JumpBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local val = tonumber(JumpBox.Text)
+            if val and LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid") then
+                LocalPlayer.Character.Humanoid.UseJumpPower = true
+                LocalPlayer.Character.Humanoid.JumpPower = val
+                ShowNotification("Zıplama ayarlandı: " .. val, Color3.fromRGB(99, 102, 241))
+            end
+        end
+    end)
+
     -- SEKME 2: GitHub Scripts (UT Serisi)
     local TabScripts = CreateTab("GitHub Scriptleri")
     local scriptList = {
-        "1SpeedBridgeBuildingUT",
-        "1BackflipObbyEscapeUT",
-        "1CrunchyButterEscapeUT",
-        "1DMGPerReviveUT",
-        "1DoubleJumpBikeEscapeUT",
-        "1FatToFitUT",
-        "1GunEvolutionUT",
-        "1HealthPerClickUT",
-        "1HeightSlideUT",
-        "1JumpPogoClimbUT",
-        "1LootEvoUT",
-        "1MagicEvolutionUT",
-        "1MinePerClickUT",
-        "1MuscletoPushBoulderUT",
-        "1MuscletoSlapFightingUT",
-        "1PickaxeSwingEscapeUT",
-        "1PlankUT",
-        "1PoorToRichUT",
-        "1PunchPerClickUT",
-        "1RunforNEEDOHUT",
-        "1SkillPointLegendsUT",
-        "1SpeedBeaLuckyBlockUT",
-        "1SpeedBikeEscapeUT",
-        "1SpeedBoatTsunamiUT",
-        "1SpeedCarEscapeUT",
-        "1SpeedCollectMinionUT",
-        "1SpeedDinosaurEscapeUT",
+        "1SpeedBridgeBuildingUT", "1BackflipObbyEscapeUT", "1CrunchyButterEscapeUT",
+        "1DMGPerReviveUT", "1DoubleJumpBikeEscapeUT", "1FatToFitUT",
+        "1GunEvolutionUT", "1HealthPerClickUT", "1HeightSlideUT",
+        "1JumpPogoClimbUT", "1LootEvoUT", "1MagicEvolutionUT",
+        "1MinePerClickUT", "1MuscletoPushBoulderUT", "1MuscletoSlapFightingUT",
+        "1PickaxeSwingEscapeUT", "1PlankUT", "1PoorToRichUT",
+        "1PunchPerClickUT", "1RunforNEEDOHUT", "1SkillPointLegendsUT",
+        "1SpeedBeaLuckyBlockUT", "1SpeedBikeEscapeUT", "1SpeedBoatTsunamiUT",
+        "1SpeedCarEscapeUT", "1SpeedCollectMinionUT", "1SpeedDinosaurEscapeUT",
         "1SpeedEscapeforBrainrotsUT"
     }
 
@@ -406,7 +497,7 @@ LoadDashboard = function(isVIP)
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
 
-    -- SEKME 3: Müzik Çalar [BETA]
+    -- SEKME 3: Müzik Çalar [BETA] (Ses Seviyesi Kontrolü Eklendi)
     local TabMusic = CreateTab("Müzik Çalar [BETA]")
 
     local MusicTitle = Instance.new("TextLabel")
@@ -431,12 +522,13 @@ LoadDashboard = function(isVIP)
 
     local activePlayerGui = LocalPlayer:WaitForChild("PlayerGui")
     local soundObjects = {}
+    local globalVolume = 5
 
     local function createPreloadedSound(id, name)
         local sound = Instance.new("Sound")
         sound.Name = "KlakzSong_" .. name
         sound.SoundId = "rbxassetid://" .. id
-        sound.Volume = 5
+        sound.Volume = globalVolume
         sound.Looped = true
         sound.Parent = activePlayerGui
         return sound
@@ -460,9 +552,44 @@ LoadDashboard = function(isVIP)
             snd:Play()
             task.wait(0.2)
             snd:Stop()
-            snd.Volume = 5
+            snd.Volume = globalVolume
         end
         playingLabel.Text = "Durum: Tüm müzikler hazır!"
+    end)
+
+    local VolTitle = Instance.new("TextLabel")
+    VolTitle.Parent = TabMusic
+    VolTitle.BackgroundTransparency = 1
+    VolTitle.Size = UDim2.new(1, -8, 0, 22)
+    VolTitle.Font = Enum.Font.FredokaOne
+    VolTitle.Text = "🔊 Ses Seviyesi (0 - 10)"
+    VolTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    VolTitle.TextSize = 11
+    VolTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local VolBox = Instance.new("TextBox")
+    VolBox.Parent = TabMusic
+    VolBox.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+    VolBox.Size = UDim2.new(1, -8, 0, 32)
+    VolBox.Font = Enum.Font.FredokaOne
+    VolBox.PlaceholderText = "Varsayılan: 5 (Yazıp Enter'a basın)"
+    VolBox.Text = "5"
+    VolBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    VolBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
+    VolBox.TextSize = 11
+    Instance.new("UICorner", VolBox).CornerRadius = UDim.new(0, 6)
+
+    VolBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local val = tonumber(VolBox.Text)
+            if val and val >= 0 and val <= 10 then
+                globalVolume = val
+                for _, snd in pairs(soundObjects) do
+                    snd.Volume = globalVolume
+                end
+                ShowNotification("Ses seviyesi güncellendi: " .. val, Color3.fromRGB(99, 102, 241))
+            end
+        end
     end)
 
     local CustomIdBox = Instance.new("TextBox")
@@ -501,6 +628,7 @@ LoadDashboard = function(isVIP)
             currentPlayingSound = soundObjects[idText]
             currentPlayingSound:Play()
             playingLabel.Text = "Çalan ID: " .. idText
+            ShowNotification("Müzik çalınıyor!", Color3.fromRGB(34, 197, 94))
         end
     end)
 
@@ -535,6 +663,7 @@ LoadDashboard = function(isVIP)
                 currentPlayingSound = soundObjects[song.ID]
                 currentPlayingSound:Play()
                 playingLabel.Text = "Çalan: " .. song.Name
+                ShowNotification("Oynatılıyor: " .. song.Name, Color3.fromRGB(34, 197, 94))
             end
         end)
     end
@@ -554,6 +683,7 @@ LoadDashboard = function(isVIP)
             currentPlayingSound:Stop()
         end
         playingLabel.Text = "Durum: Müzik durduruldu"
+        ShowNotification("Müzik durduruldu.", Color3.fromRGB(239, 68, 68))
     end)
 
     -- SEKME 4: Ayarlar
@@ -593,6 +723,7 @@ LoadDashboard = function(isVIP)
                 KeyBindBtn.Text = "  Menü Kapatma/Açma Tuşu: [ " .. input.KeyCode.Name .. " ]"
                 listeningForKey = false
                 connection:Disconnect()
+                ShowNotification("Tuş değiştirildi: " .. input.KeyCode.Name, Color3.fromRGB(99, 102, 241))
             end
         end)
     end)
@@ -639,6 +770,7 @@ LoadDashboard = function(isVIP)
             WinStroke.Color = colData.Color
             MiniStroke.Color = colData.Color
             LoginLogo.BackgroundColor3 = colData.Color
+            ShowNotification("Tema değiştirildi!", colData.Color)
         end)
     end
 end
