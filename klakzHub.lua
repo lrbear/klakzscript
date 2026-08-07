@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Küçültülmüş FPS/Ping Göstergeli Sürüm)
+-- klakz Hub - Seki UI (Müzik Çalar Eklentili Nihai Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -8,6 +8,7 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
+local SoundService = game:GetService("SoundService")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -182,7 +183,6 @@ LoadDashboard = function(isVIP)
     TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Küçültme (-) Butonu
     local MinimizeBtn = Instance.new("TextButton")
     MinimizeBtn.Parent = TopBar
     MinimizeBtn.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
@@ -194,7 +194,6 @@ LoadDashboard = function(isVIP)
     MinimizeBtn.TextSize = 12
     Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 6)
 
-    -- Üst Sağ Çıkış (X Logolu) Butonu
     local TopCloseBtn = Instance.new("TextButton")
     TopCloseBtn.Parent = TopBar
     TopCloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
@@ -210,7 +209,7 @@ LoadDashboard = function(isVIP)
         ScreenGui:Destroy()
     end)
 
-    -- ==================== 3. KÜÇÜK FPS/PING WIDGET'I (Tuşla Kapandığında Görünür) ====================
+    -- Küçük FPS/Ping Widget'ı
     local MiniIndicator = Instance.new("Frame")
     MiniIndicator.Name = "MiniIndicator"
     MiniIndicator.Parent = ScreenGui
@@ -236,7 +235,6 @@ LoadDashboard = function(isVIP)
     MiniText.TextColor3 = Color3.fromRGB(240, 240, 250)
     MiniText.TextSize = 10
 
-    -- FPS ve Ping Güncelleyici Döngü
     local lastTick = tick()
     local frameCount = 0
     local currentFps = 60
@@ -280,7 +278,6 @@ LoadDashboard = function(isVIP)
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
     ContentContainer.Size = UDim2.new(0, 362, 1, -56)
 
-    -- Küçültme Mantığı (Arayüz İçi Buton)
     local isMinimized = false
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
@@ -295,11 +292,10 @@ LoadDashboard = function(isVIP)
         end
     end)
 
-    -- Klavyeden Menüyü Açma/Kapama (Toggle) Tuşu ve FPS Widget Gösterimi
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if input.KeyCode == toggleKey then
             Window.Visible = not Window.Visible
-            MiniIndicator.Visible = not Window.Visible -- Menü kapandığında küçük FPS widget'ı açılır
+            MiniIndicator.Visible = not Window.Visible
         end
     end)
 
@@ -411,7 +407,79 @@ LoadDashboard = function(isVIP)
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
 
-    -- SEKME 3: Ayarlar
+    -- SEKME 3: Müzik Çalar (Music Player)
+    local TabMusic = CreateTab("Müzik Çalar")
+
+    local MusicTitle = Instance.new("TextLabel")
+    MusicTitle.Parent = TabMusic
+    MusicTitle.BackgroundTransparency = 1
+    MusicTitle.Size = UDim2.new(1, -8, 0, 24)
+    MusicTitle.Font = Enum.Font.FredokaOne
+    MusicTitle.Text = "🎵 Robux / Oyun Müzikleri (Audio ID)"
+    MusicTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    MusicTitle.TextSize = 12
+    MusicTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- Arka Plan Müzik Nesnesi Oluşturma
+    local bgSound = Instance.new("Sound")
+    bgSound.Name = "KlakzHub_Music"
+    bgSound.Parent = SoundService
+    bgSound.Volume = 1
+    bgSound.Looped = true
+
+    local playingLabel = Instance.new("TextLabel")
+    playingLabel.Parent = TabMusic
+    playingLabel.BackgroundTransparency = 1
+    playingLabel.Size = UDim2.new(1, -8, 0, 20)
+    playingLabel.Font = Enum.Font.FredokaOne
+    playingLabel.Text = "Çalan: Yok"
+    playingLabel.TextColor3 = Color3.fromRGB(150, 150, 180)
+    playingLabel.TextSize = 10
+    playingLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    local musicList = {
+        {Name = "🎶 Phonk / Epic (1841261548)", ID = "rbxassetid://1841261548"},
+        {Name = "🎶 Chill Lofi (9046835171)", ID = "rbxassetid://9046835171"},
+        {Name = "🎶 Synthwave (5410086218)", ID = "rbxassetid://5410086218"},
+        {Name = "🎶 Action Remix (1838573171)", ID = "rbxassetid://1838573171"}
+    }
+
+    for _, song in ipairs(musicList) do
+        local SongBtn = Instance.new("TextButton")
+        SongBtn.Parent = TabMusic
+        SongBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        SongBtn.Size = UDim2.new(1, -8, 0, 32)
+        SongBtn.Font = Enum.Font.FredokaOne
+        SongBtn.Text = "  ▶ " .. song.Name
+        SongBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
+        SongBtn.TextSize = 11
+        SongBtn.TextXAlignment = Enum.TextXAlignment.Left
+        Instance.new("UICorner", SongBtn).CornerRadius = UDim.new(0, 6)
+
+        SongBtn.MouseButton1Click:Connect(function()
+            bgSound.SoundId = song.ID
+            bgSound:Play()
+            playingLabel.Text = "Çalan: " .. song.Name
+        end)
+    end
+
+    -- Müzik Kontrol Butonları (Durdur / Devam Ettir)
+    local StopMusicBtn = Instance.new("TextButton")
+    StopMusicBtn.Parent = TabMusic
+    StopMusicBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    StopMusicBtn.Size = UDim2.new(1, -8, 0, 32)
+    StopMusicBtn.Font = Enum.Font.FredokaOne
+    StopMusicBtn.Text = "⏹ Müziği Durdur"
+    StopMusicBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    StopMusicBtn.TextSize = 11
+    Instance.new("UICorner", StopMusicBtn).CornerRadius = UDim.new(0, 6)
+
+    StopMusicBtn.MouseButton1Click:Connect(function()
+        bgSound:Stop()
+        playingLabel.Text = "Çalan: Yok"
+    end)
+
+    -- SEKME 4: Ayarlar
     local TabSettings = CreateTab("Ayarlar")
 
     local SettingsTitle = Instance.new("TextLabel")
