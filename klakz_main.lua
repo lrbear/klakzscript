@@ -1,17 +1,28 @@
--- klakz Hub - Ultimate Pro v4.2 (Full Error Handling & Protection)
-_G.DiscordWebhookURL = "https://discord.com/api/webhooks/1535359938019459072/RuJyBUsdZSATv_-TMfgLzStBNhgfqP9Z_KuzR1X25cO5a9f3rMOetXtJJqBlrUozs2XS"
-
+-- klakz Hub - Random Key Generator v1.0
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
-local HttpService = game:GetService("HttpService")
 local LocalPlayer = Players.LocalPlayer
 
--- Anahtarlar
-local STANDARD_KEY = "klakz123"
-local PREMIUM_KEY = "klakz_vip_2026"
+-- Rastgele Key Üretme Fonksiyonu (Harf ve Rakam Karışık)
+local function GenerateRandomKey()
+    local chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    local key = ""
+    math.randomseed(tick())
+    for i = 1, 8 do
+        local randIndex = math.random(1, #chars)
+        key = key .. chars:sub(randIndex, randIndex)
+    end
+    return key
+end
 
--- Eski arayüzü tamamen temizle (Hata önleyici)
+-- O anki geçerli rastgele key'i oluşturuyoruz
+local ACTIVE_RANDOM_KEY = GenerateRandomKey()
+
+-- Test ve takip için konsola yazdırıyoruz (F9'dan görebilirsin)
+print("🔑 [klakz Hub] Güncel Rastgele Giriş Keyi: " .. ACTIVE_RANDOM_KEY)
+
+-- Eski arayüzü temizle
 pcall(function()
     if CoreGui:FindFirstChild("klakzHub_MainUI") then
         CoreGui:FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -22,61 +33,6 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "klakzHub_MainUI"
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
-
--- Tüm Hataları ve Bloklamaları Engelleyen Webhook Fonksiyonu
-local function SendWebhook(title, desc, color, enteredKey, keyType)
-    if not _G.DiscordWebhookURL or _G.DiscordWebhookURL == "" or _G.DiscordWebhookURL:find("BURAYA") then return end
-    
-    task.spawn(function()
-        pcall(function()
-            local fields = {
-                {["name"] = "👤 Oyuncu Adı", ["value"] = tostring(LocalPlayer.Name), ["inline"] = true},
-                {["name"] = "🎮 Oyun ID", ["value"] = tostring(game.GameId), ["inline"] = true}
-            }
-            if enteredKey then
-                table.insert(fields, {["name"] = "🗝️ Girilen Key", ["value"] = "||" .. tostring(enteredKey) .. "||", ["inline"] = false})
-                table.insert(fields, {["name"] = "🔑 Giriş Türü", ["value"] = tostring(keyType), ["inline"] = true})
-            end
-
-            local data = {
-                ["embeds"] = {{
-                    ["title"] = title,
-                    ["description"] = desc,
-                    ["color"] = color,
-                    ["fields"] = fields,
-                    ["footer"] = { ["text"] = "klakz Hub Security & Analytics | " .. os.date("%H:%M:%S") }
-                }}
-            }
-            
-            local successEncode, body = pcall(function()
-                return HttpService:JSONEncode(data)
-            end)
-            
-            if not successEncode or not body then return end
-            
-            local headers = {["Content-Type"] = "application/json"}
-            local targetUrl = _G.DiscordWebhookURL
-            
-            -- Executor istek fonksiyonlarını güvenli bir şekilde tespit et
-            local requestFunc = (syn and syn.request) or (fluxus and fluxus.request) or (http and http.request) or http_request or request
-            
-            if requestFunc then
-                pcall(function()
-                    requestFunc({
-                        Url = targetUrl,
-                        Method = "POST",
-                        Headers = headers,
-                        Body = body
-                    })
-                end)
-            else
-                pcall(function()
-                    HttpService:PostAsync(targetUrl, body)
-                end)
-            end
-        end)
-    end)
-end
 
 -- ==================== LOGIN EKRANI ====================
 local LoginCard = Instance.new("Frame")
@@ -99,7 +55,7 @@ LoginTitle.BackgroundTransparency = 1
 LoginTitle.Position = UDim2.new(0, 20, 0, 15)
 LoginTitle.Size = UDim2.new(0, 300, 0, 30)
 LoginTitle.Font = Enum.Font.FredokaOne
-LoginTitle.Text = "⚡ KLAKZ HUB [PRO GİRİŞ]"
+LoginTitle.Text = "⚡ KLAKZ HUB [RANDOM KEY]"
 LoginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 LoginTitle.TextSize = 14
 LoginTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -110,39 +66,39 @@ KeyInput.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
 KeyInput.Position = UDim2.new(0, 25, 0, 60)
 KeyInput.Size = UDim2.new(0, 290, 0, 42)
 KeyInput.Font = Enum.Font.FredokaOne
-KeyInput.PlaceholderText = "Anahtarınızı (Key) girin..."
+KeyInput.PlaceholderText = "F9 konsolundaki keyi girin..."
 KeyInput.Text = ""
 KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
 KeyInput.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
 KeyInput.TextSize = 13
 Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 8)
 
-local BtnStandard = Instance.new("TextButton")
-BtnStandard.Parent = LoginCard
-BtnStandard.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
-BtnStandard.Position = UDim2.new(0, 25, 0, 115)
-BtnStandard.Size = UDim2.new(0, 290, 0, 40)
-BtnStandard.Font = Enum.Font.FredokaOne
-BtnStandard.Text = "Standart Giriş"
-BtnStandard.TextColor3 = Color3.fromRGB(255, 255, 255)
-BtnStandard.TextSize = 13
-Instance.new("UICorner", BtnStandard).CornerRadius = UDim.new(0, 8)
+local BtnLogin = Instance.new("TextButton")
+BtnLogin.Parent = LoginCard
+BtnLogin.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
+BtnLogin.Position = UDim2.new(0, 25, 0, 115)
+BtnLogin.Size = UDim2.new(0, 290, 0, 40)
+BtnLogin.Font = Enum.Font.FredokaOne
+BtnLogin.Text = "Giriş Yap"
+BtnLogin.TextColor3 = Color3.fromRGB(255, 255, 255)
+BtnLogin.TextSize = 13
+Instance.new("UICorner", BtnLogin).CornerRadius = UDim.new(0, 8)
 
-local BtnVIP = Instance.new("TextButton")
-BtnVIP.Parent = LoginCard
-BtnVIP.BackgroundColor3 = Color3.fromRGB(234, 179, 8)
-BtnVIP.Position = UDim2.new(0, 25, 0, 165)
-BtnVIP.Size = UDim2.new(0, 290, 0, 40)
-BtnVIP.Font = Enum.Font.FredokaOne
-BtnVIP.Text = "👑 Premium Giriş"
-BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
-BtnVIP.TextSize = 13
-Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
+-- İsteğe bağlı: Keyi ekranda direkt gösteren küçük bir ipucu etiketi
+local HintLbl = Instance.new("TextLabel")
+HintLbl.Parent = LoginCard
+HintLbl.BackgroundTransparency = 1
+HintLbl.Position = UDim2.new(0, 25, 0, 165)
+HintLbl.Size = UDim2.new(0, 290, 0, 25)
+HintLbl.Font = Enum.Font.FredokaOne
+HintLbl.Text = "💡 İpucu: Key'i öğrenmek için F9'a bas!"
+HintLbl.TextColor3 = Color3.fromRGB(234, 179, 8)
+HintLbl.TextSize = 11
 
 local ErrorLbl = Instance.new("TextLabel")
 ErrorLbl.Parent = LoginCard
 ErrorLbl.BackgroundTransparency = 1
-ErrorLbl.Position = UDim2.new(0, 25, 0, 215)
+ErrorLbl.Position = UDim2.new(0, 25, 0, 205)
 ErrorLbl.Size = UDim2.new(0, 290, 0, 25)
 ErrorLbl.Font = Enum.Font.FredokaOne
 ErrorLbl.Text = ""
@@ -150,7 +106,7 @@ ErrorLbl.TextColor3 = Color3.fromRGB(239, 68, 68)
 ErrorLbl.TextSize = 11
 
 -- ==================== ANA PANEL (DASHBOARD) ====================
-local function LoadDashboard(isVIP)
+local function LoadDashboard()
     pcall(function() LoginCard:Destroy() end)
 
     local Window = Instance.new("Frame")
@@ -164,7 +120,7 @@ local function LoadDashboard(isVIP)
     Instance.new("UICorner", Window).CornerRadius = UDim.new(0, 10)
 
     local WinStroke = Instance.new("UIStroke")
-    WinStroke.Color = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(99, 102, 241)
+    WinStroke.Color = Color3.fromRGB(99, 102, 241)
     WinStroke.Thickness = 1.5
     WinStroke.Parent = Window
 
@@ -180,8 +136,8 @@ local function LoadDashboard(isVIP)
     TitleLabel.Position = UDim2.new(0, 15, 0, 0)
     TitleLabel.Size = UDim2.new(0, 320, 1, 0)
     TitleLabel.Font = Enum.Font.FredokaOne
-    TitleLabel.Text = isVIP and "klakz Hub [👑 PREMIUM PRO]" or "klakz Hub [Standart Pro]"
-    TitleLabel.TextColor3 = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(240, 240, 250)
+    TitleLabel.Text = "klakz Hub [Random Key Aktif]"
+    TitleLabel.TextColor3 = Color3.fromRGB(240, 240, 250)
     TitleLabel.TextSize = 12
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
@@ -330,24 +286,6 @@ local function LoadDashboard(isVIP)
         end)
     end
 
-    -- SEKME 3: Ayarlar
-    local TabSettings = CreateTab("Ayarlar")
-    
-    AddButton(TabSettings, "🎨 Tema: Mor / Indigo", function()
-        WinStroke.Color = Color3.fromRGB(99, 102, 241)
-        StatusBar.Text = "  🎨 Tema değiştirildi: Mor"
-    end)
-
-    AddButton(TabSettings, "🎨 Tema: Altın Sarısı", function()
-        WinStroke.Color = Color3.fromRGB(234, 179, 8)
-        StatusBar.Text = "  🎨 Tema değiştirildi: Altın"
-    end)
-
-    AddButton(TabSettings, "🎨 Tema: Neon Yeşil", function()
-        WinStroke.Color = Color3.fromRGB(74, 222, 128)
-        StatusBar.Text = "  🎨 Tema değiştirildi: Yeşil"
-    end)
-
     UserInputService.InputBegan:Connect(function(input, gp)
         if input.KeyCode == Enum.KeyCode.RightControl then
             Window.Visible = not Window.Visible
@@ -355,25 +293,12 @@ local function LoadDashboard(isVIP)
     end)
 end
 
--- Buton Dinleyicileri (Güvenli Kontrol)
-BtnStandard.MouseButton1Click:Connect(function()
-    if KeyInput.Text == STANDARD_KEY then
-        SendWebhook("🚀 klakz Hub - Standart Giriş", "Başarıyla standart giriş yapıldı.", 65535, KeyInput.Text, "Standart")
-        LoadDashboard(false)
+-- Giriş Butonu Kontrolü
+BtnLogin.MouseButton1Click:Connect(function()
+    if KeyInput.Text == ACTIVE_RANDOM_KEY then
+        LoadDashboard()
     else
-        ErrorLbl.Text = "❌ Geçersiz Standart Anahtar!"
-        SendWebhook("⚠️ klakz Hub - Başarısız Giriş", "Hatalı standart anahtar girildi.", 16711680, KeyInput.Text, "Hatalı Standart")
-        KeyInput.Text = ""
-    end
-end)
-
-BtnVIP.MouseButton1Click:Connect(function()
-    if KeyInput.Text == PREMIUM_KEY then
-        SendWebhook("👑 klakz Hub - VIP Giriş", "Başarıyla VIP/Premium giriş yapıldı.", 16766720, KeyInput.Text, "VIP")
-        LoadDashboard(true)
-    else
-        ErrorLbl.Text = "❌ Geçersiz Premium Anahtar!"
-        SendWebhook("⚠️ klakz Hub - Başarısız VIP Denemesi", "Hatalı VIP anahtar girildi.", 16711680, KeyInput.Text, "Hatalı VIP")
+        ErrorLbl.Text = "❌ Geçersiz Key! F9 konsoluna bak."
         KeyInput.Text = ""
     end
 end)
