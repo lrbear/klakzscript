@@ -1,4 +1,4 @@
--- klakz Hub | Seki UI (Tam ve Eksiksiz Sürüm)
+-- klakz Hub - Seki UI (Optimize Edilmiş ve Geliştirilmiş Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -39,6 +39,9 @@ local texts = {
         headerVip = "klakz Hub [👑 PREMIUM SEKI UI]"
     }
 }
+
+-- İleriye dönük Dashboard fonksiyon tanımı
+local LoadDashboard
 
 -- ==================== 1. LOGIN EKRANI ====================
 local LoginCard = Instance.new("Frame")
@@ -134,7 +137,8 @@ BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
 BtnVIP.TextSize = 13
 Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
 
-local function LoadDashboard(isVIP)
+-- ==================== 2. SEKI UI PANELİ ====================
+LoadDashboard = function(isVIP)
     LoginCard:Destroy()
 
     local Window = Instance.new("Frame")
@@ -315,22 +319,23 @@ local function LoadDashboard(isVIP)
     for _, scriptName in ipairs(scriptList) do
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
-
-    BtnStandard.MouseButton1Click:Connect(function()
-        if KeyInput.Text == STANDARD_KEY then
-            LoadDashboard(false)
-        else
-            KeyInput.Text = ""
-            KeyInput.PlaceholderText = texts[currentLang].errKey
-        end
-    end)
-
-    BtnVIP.MouseButton1Click:Connect(function()
-        if KeyInput.Text == PREMIUM_KEY then
-            LoadDashboard(true)
-        else
-            KeyInput.Text = ""
-            KeyInput.PlaceholderText = texts[currentLang].errVipKey
-        end
-    end)
 end
+
+-- Login Tuş Olayları
+BtnStandard.MouseButton1Click:Connect(function()
+    if KeyInput.Text == STANDARD_KEY then
+        LoadDashboard(false)
+    else
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = texts[currentLang].errKey
+    end
+end)
+
+BtnVIP.MouseButton1Click:Connect(function()
+    if KeyInput.Text == PREMIUM_KEY then
+        LoadDashboard(true)
+    else
+        KeyInput.Text = ""
+        KeyInput.PlaceholderText = texts[currentLang].errVipKey
+    end
+end)
