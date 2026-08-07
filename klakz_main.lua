@@ -1,4 +1,4 @@
--- klakz Hub - Modular Core System
+-- klakz Hub - Modular Core System (Tam Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -8,6 +8,7 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TextChatService = game:GetService("TextChatService")
+local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -148,7 +149,7 @@ BtnVIP.TextColor3 = Color3.fromRGB(20, 20, 25)
 BtnVIP.TextSize = 14
 Instance.new("UICorner", BtnVIP).CornerRadius = UDim.new(0, 8)
 
--- Giriş Başarılı Olduğunda Paneli Yükleme
+-- Giriş Yapınca Paneli Yükleme (Tüm Özelliklerle Birlikte)
 local function LoadDashboard(isVIP)
     LoginCard:Destroy()
 
@@ -199,14 +200,153 @@ local function LoadDashboard(isVIP)
         ScreenGui:Destroy()
     end)
 
-    -- Klavye Tuş Dinleyicisi
+    local Sidebar = Instance.new("ScrollingFrame")
+    Sidebar.Parent = Window
+    Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
+    Sidebar.Position = UDim2.new(0, 0, 0, 36)
+    Sidebar.Size = UDim2.new(0, 140, 1, -36)
+    Sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
+    Sidebar.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    Sidebar.ScrollBarThickness = 2
+
+    local SideLayout = Instance.new("UIListLayout")
+    SideLayout.Parent = Sidebar
+    SideLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    SideLayout.Padding = UDim.new(0, 4)
+
+    local ContentContainer = Instance.new("Frame")
+    ContentContainer.Parent = Window
+    ContentContainer.BackgroundTransparency = 1
+    ContentContainer.Position = UDim2.new(0, 148, 0, 46)
+    ContentContainer.Size = UDim2.new(0, 362, 1, -56)
+
     UserInputService.InputBegan:Connect(function(input, gp)
         if input.KeyCode == toggleKey then
             Window.Visible = not Window.Visible
         end
     end)
 
-    ShowNotification("Sistem başarıyla yüklendi! (/klakz yazabilirsin)", Color3.fromRGB(34, 197, 94))
+    local firstTab = true
+    local function CreateTab(name)
+        local TabButton = Instance.new("TextButton")
+        TabButton.Parent = Sidebar
+        TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+        TabButton.Size = UDim2.new(1, 0, 0, 34)
+        TabButton.Font = Enum.Font.FredokaOne
+        TabButton.Text = name
+        TabButton.TextColor3 = Color3.fromRGB(180, 180, 200)
+        TabButton.TextSize = 11
+        TabButton.TextXAlignment = Enum.TextXAlignment.Left
+
+        local Padding = Instance.new("UIPadding")
+        Padding.PaddingLeft = UDim.new(0, 14)
+        Padding.Parent = TabButton
+
+        local Page = Instance.new("ScrollingFrame")
+        Page.Parent = ContentContainer
+        Page.Size = UDim2.new(1, 0, 1, 0)
+        Page.BackgroundTransparency = 1
+        Page.CanvasSize = UDim2.new(0, 0, 0, 0)
+        Page.AutomaticCanvasSize = Enum.AutomaticSize.Y
+        Page.ScrollBarThickness = 3
+        Page.Visible = false
+
+        local PageLayout = Instance.new("UIListLayout")
+        PageLayout.Parent = Page
+        PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
+        PageLayout.Padding = UDim.new(0, 6)
+
+        TabButton.MouseButton1Click:Connect(function()
+            for _, v in pairs(ContentContainer:GetChildren()) do
+                if v:IsA("ScrollingFrame") then v.Visible = false end
+            end
+            Page.Visible = true
+        end)
+
+        if firstTab then
+            Page.Visible = true
+            firstTab = false
+        end
+
+        return Page
+    end
+
+    local function AddScript(parent, label, url)
+        if not parent then return end
+        local ScriptBtn = Instance.new("TextButton")
+        ScriptBtn.Parent = parent
+        ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        ScriptBtn.Size = UDim2.new(1, -8, 0, 34)
+        ScriptBtn.Font = Enum.Font.FredokaOne
+        ScriptBtn.Text = "    " .. label
+        ScriptBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
+        ScriptBtn.TextSize = 11
+        ScriptBtn.TextXAlignment = Enum.TextXAlignment.Left
+        Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
+
+        ScriptBtn.MouseButton1Click:Connect(function()
+            pcall(function()
+                loadstring(game:HttpGet(url))()
+            end)
+            ShowNotification("Çalıştırıldı: " .. label, Color3.fromRGB(34, 197, 94))
+        end)
+    end
+
+    -- SEKME 1: Araç Gereçler
+    local TabTools = CreateTab("Araç Gereçler")
+    AddScript(TabTools, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
+    AddScript(TabTools, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+
+    -- SEKME 2: GitHub Scripts
+    local TabScripts = CreateTab("GitHub Scriptleri")
+    local scriptList = {
+        "1SpeedBridgeBuildingUT", "1BackflipObbyEscapeUT", "1CrunchyButterEscapeUT",
+        "1DMGPerReviveUT", "1DoubleJumpBikeEscapeUT", "1FatToFitUT",
+        "1GunEvolutionUT", "1HealthPerClickUT", "1HeightSlideUT",
+        "1JumpPogoClimbUT", "1LootEvoUT", "1MagicEvolutionUT",
+        "1MinePerClickUT", "1MuscletoPushBoulderUT", "1MuscletoSlapFightingUT",
+        "1PickaxeSwingEscapeUT", "1PlankUT", "1PoorToRichUT",
+        "1PunchPerClickUT", "1RunforNEEDOHUT", "1SkillPointLegendsUT"
+    }
+    for _, scriptName in ipairs(scriptList) do
+        AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
+    end
+
+    -- SEKME 3: Müzik Çalar [BETA]
+    local TabMusic = CreateTab("Müzik Çalar [BETA]")
+    local MusicTitle = Instance.new("TextLabel")
+    MusicTitle.Parent = TabMusic
+    MusicTitle.BackgroundTransparency = 1
+    MusicTitle.Size = UDim2.new(1, -8, 0, 24)
+    MusicTitle.Font = Enum.Font.FredokaOne
+    MusicTitle.Text = "🎵 Kesintisiz Müzik Çalar [BETA]"
+    MusicTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    MusicTitle.TextSize = 12
+    MusicTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    local StopMusicBtn = Instance.new("TextButton")
+    StopMusicBtn.Parent = TabMusic
+    StopMusicBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
+    StopMusicBtn.Size = UDim2.new(1, -8, 0, 32)
+    StopMusicBtn.Font = Enum.Font.FredokaOne
+    StopMusicBtn.Text = "⏹ Müziği Durdur"
+    StopMusicBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    StopMusicBtn.TextSize = 11
+    Instance.new("UICorner", StopMusicBtn).CornerRadius = UDim.new(0, 6)
+
+    -- SEKME 4: Ayarlar
+    local TabSettings = CreateTab("Ayarlar")
+    local SettingsTitle = Instance.new("TextLabel")
+    SettingsTitle.Parent = TabSettings
+    SettingsTitle.BackgroundTransparency = 1
+    SettingsTitle.Size = UDim2.new(1, -8, 0, 24)
+    SettingsTitle.Font = Enum.Font.FredokaOne
+    SettingsTitle.Text = "⚙️ Menü Ayarları"
+    SettingsTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
+    SettingsTitle.TextSize = 12
+    SettingsTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+    ShowNotification("Panel başarıyla yüklendi!", Color3.fromRGB(34, 197, 94))
 end
 
 BtnStandard.MouseButton1Click:Connect(function()
