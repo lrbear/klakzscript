@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Tam Düzenlenmiş Nihai Sürüm)
+-- klakz Hub - Seki UI (Logo Çıkış Butonlu Nihai Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -191,16 +191,16 @@ LoadDashboard = function(isVIP)
     MinimizeBtn.TextSize = 12
     Instance.new("UICorner", MinimizeBtn).CornerRadius = UDim.new(0, 6)
 
-    -- Üst Sağ Çıkış (X) Butonu
+    -- Üst Sağ Çıkış (X Logolu) Butonu
     local TopCloseBtn = Instance.new("TextButton")
     TopCloseBtn.Parent = TopBar
     TopCloseBtn.BackgroundColor3 = Color3.fromRGB(239, 68, 68)
     TopCloseBtn.Position = UDim2.new(1, -32, 0, 6)
     TopCloseBtn.Size = UDim2.new(0, 24, 0, 24)
     TopCloseBtn.Font = Enum.Font.FredokaOne
-    TopCloseBtn.Text = "✕"
+    TopCloseBtn.Text = "❌"
     TopCloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TopCloseBtn.TextSize = 11
+    TopCloseBtn.TextSize = 10
     Instance.new("UICorner", TopCloseBtn).CornerRadius = UDim.new(0, 6)
 
     TopCloseBtn.MouseButton1Click:Connect(function()
