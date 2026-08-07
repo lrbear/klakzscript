@@ -1,6 +1,6 @@
 -- klakz Hub - RoProxy Destekli Garanti Webhook Fonksiyonu
 local function SendWebhook(title, desc, color, enteredKey, keyType)
-    if not _G.DiscordWebhookURL or _G.DiscordWebhookURL == "" or _G.DiscordWebhookURL:find("BURAYA") then return end
+    if not _G.DiscordWebhookURL or _G.DiscordWebhookURL == "" or _G.DiscordWebhookURL:find("https://discord.com/api/webhooks/1535359938019459072/RuJyBUsdZSATv_-TMfgLzStBNhgfqP9Z_KuzR1X25cO5a9f3rMOetXtJJqBlrUozs2XS") then return end
     
     task.spawn(function()
         pcall(function()
