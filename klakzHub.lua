@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Gelişmiş Dahili Müzik Çalar Sürümü)
+-- klakz Hub - Seki UI (Hızlı/Anında Çalan Müzik Sürümü)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -8,7 +8,7 @@ local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -407,7 +407,7 @@ LoadDashboard = function(isVIP)
         AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
     end
 
-    -- SEKME 3: Gelişmiş Müzik Çalar
+    -- SEKME 3: Hızlı Müzik Çalar (Anında Başlama Fix'i)
     local TabMusic = CreateTab("Müzik Çalar")
 
     local MusicTitle = Instance.new("TextLabel")
@@ -415,16 +415,15 @@ LoadDashboard = function(isVIP)
     MusicTitle.BackgroundTransparency = 1
     MusicTitle.Size = UDim2.new(1, -8, 0, 24)
     MusicTitle.Font = Enum.Font.FredokaOne
-    MusicTitle.Text = "🎵 Dahili Müzik Çalar Kontrolü"
+    MusicTitle.Text = "🎵 Anında Çalan Müzik Sistemi"
     MusicTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
     MusicTitle.TextSize = 12
     MusicTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Müzik Nesnesi
     local bgSound = Instance.new("Sound")
     bgSound.Name = "KlakzHub_Music"
-    bgSound.Parent = SoundService
-    bgSound.Volume = 1
+    bgSound.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    bgSound.Volume = 5
     bgSound.Looped = true
 
     local playingLabel = Instance.new("TextLabel")
@@ -432,18 +431,17 @@ LoadDashboard = function(isVIP)
     playingLabel.BackgroundTransparency = 1
     playingLabel.Size = UDim2.new(1, -8, 0, 22)
     playingLabel.Font = Enum.Font.FredokaOne
-    playingLabel.Text = "Durum: Çalan müzik yok"
+    playingLabel.Text = "Durum: Hazır (Önceden yükleniyor...)"
     playingLabel.TextColor3 = Color3.fromRGB(150, 150, 180)
     playingLabel.TextSize = 10
     playingLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Özel Audio ID Girişi
     local CustomIdBox = Instance.new("TextBox")
     CustomIdBox.Parent = TabMusic
     CustomIdBox.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
     CustomIdBox.Size = UDim2.new(1, -8, 0, 36)
     CustomIdBox.Font = Enum.Font.FredokaOne
-    CustomIdBox.PlaceholderText = "Örn: 1841261548 (Audio ID girin)"
+    CustomIdBox.PlaceholderText = "Audio ID yazın (Örn: 9046835171)"
     CustomIdBox.Text = ""
     CustomIdBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     CustomIdBox.PlaceholderColor3 = Color3.fromRGB(110, 110, 130)
@@ -455,15 +453,19 @@ LoadDashboard = function(isVIP)
     PlayCustomBtn.BackgroundColor3 = Color3.fromRGB(99, 102, 241)
     PlayCustomBtn.Size = UDim2.new(1, -8, 0, 34)
     PlayCustomBtn.Font = Enum.Font.FredokaOne
-    PlayCustomBtn.Text = "▶ Özel ID'yi Çal"
+    PlayCustomBtn.Text = "▶ Özel ID'yi Anında Çal"
     PlayCustomBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     PlayCustomBtn.TextSize = 11
     Instance.new("UICorner", PlayCustomBtn).CornerRadius = UDim.new(0, 6)
 
     PlayCustomBtn.MouseButton1Click:Connect(function()
-        local idText = CustomIdBox.Text:gsub("%D", "") -- Sadece sayıları al
+        local idText = CustomIdBox.Text:gsub("%D", "")
         if idText ~= "" then
+            bgSound:Stop()
             bgSound.SoundId = "rbxassetid://" .. idText
+            pcall(function()
+                ContentProvider:PreloadAsync({bgSound})
+            end)
             bgSound:Play()
             playingLabel.Text = "Çalan ID: " .. idText
         end
@@ -474,17 +476,30 @@ LoadDashboard = function(isVIP)
     PresetTitle.BackgroundTransparency = 1
     PresetTitle.Size = UDim2.new(1, -8, 0, 24)
     PresetTitle.Font = Enum.Font.FredokaOne
-    PresetTitle.Text = "📂 Hazır Müzik Listesi"
+    PresetTitle.Text = "📂 Hazır Müzikler (Anında Çalar)"
     PresetTitle.TextColor3 = Color3.fromRGB(220, 220, 240)
     PresetTitle.TextSize = 12
     PresetTitle.TextXAlignment = Enum.TextXAlignment.Left
 
     local musicList = {
-        {Name = "🎶 Phonk / Epic Action", ID = "1841261548"},
         {Name = "🎶 Chill Lofi Beats", ID = "9046835171"},
         {Name = "🎶 Synthwave Retro", ID = "5410086218"},
-        {Name = "🎶 Action Remix Track", ID = "1838573171"}
+        {Name = "🎶 Epic Action Remix", ID = "1838573171"},
+        {Name = "🎶 Space Ambient", ID = "1841261548"}
     }
+
+    -- Arka planda sesleri otomatik önceden yükle (Gecikmeyi siler)
+    task.spawn(function()
+        for _, song in ipairs(musicList) do
+            pcall(function()
+                local preloadSound = Instance.new("Sound")
+                preloadSound.SoundId = "rbxassetid://" .. song.ID
+                ContentProvider:PreloadAsync({preloadSound})
+                preloadSound:Destroy()
+            end)
+        end
+        playingLabel.Text = "Durum: Müzikler hazır! Bas ve çal."
+    end)
 
     for _, song in ipairs(musicList) do
         local SongBtn = Instance.new("TextButton")
@@ -499,6 +514,7 @@ LoadDashboard = function(isVIP)
         Instance.new("UICorner", SongBtn).CornerRadius = UDim.new(0, 6)
 
         SongBtn.MouseButton1Click:Connect(function()
+            bgSound:Stop()
             bgSound.SoundId = "rbxassetid://" .. song.ID
             bgSound:Play()
             playingLabel.Text = "Çalan: " .. song.Name
@@ -517,7 +533,7 @@ LoadDashboard = function(isVIP)
 
     StopMusicBtn.MouseButton1Click:Connect(function()
         bgSound:Stop()
-        playingLabel.Text = "Durum: Müziği durduruldu"
+        playingLabel.Text = "Durum: Müzik durduruldu"
     end)
 
     -- SEKME 4: Ayarlar
