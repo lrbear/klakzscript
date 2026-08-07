@@ -1,4 +1,4 @@
--- klakz Hub - Tüm Scriptler ve Tam Sürüm v3.3
+-- klakz Hub - Dahili Çalışma Sistemi v3.4
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
@@ -233,32 +233,38 @@ local function LoadDashboard(isVIP)
         return Page
     end
 
-    local function AddScript(parent, label, url)
+    local function AddButton(parent, label, callback)
         if not parent then return end
-        local ScriptBtn = Instance.new("TextButton")
-        ScriptBtn.Parent = parent
-        ScriptBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
-        ScriptBtn.Size = UDim2.new(1, -8, 0, 34)
-        ScriptBtn.Font = Enum.Font.FredokaOne
-        ScriptBtn.Text = "    " .. label
-        ScriptBtn.TextColor3 = Color3.fromRGB(235, 235, 245)
-        ScriptBtn.TextSize = 11
-        ScriptBtn.TextXAlignment = Enum.TextXAlignment.Left
-        Instance.new("UICorner", ScriptBtn).CornerRadius = UDim.new(0, 6)
+        local Btn = Instance.new("TextButton")
+        Btn.Parent = parent
+        Btn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
+        Btn.Size = UDim2.new(1, -8, 0, 34)
+        Btn.Font = Enum.Font.FredokaOne
+        Btn.Text = "    " .. label
+        Btn.TextColor3 = Color3.fromRGB(235, 235, 245)
+        Btn.TextSize = 11
+        Btn.TextXAlignment = Enum.TextXAlignment.Left
+        Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
 
-        ScriptBtn.MouseButton1Click:Connect(function()
-            pcall(function()
-                loadstring(game:HttpGet(url))()
-            end)
-        end)
+        Btn.MouseButton1Click:Connect(callback)
     end
 
-    -- SEKME 1: Araç Gereçler
+    -- SEKME 1: Araç Gereçler (Direkt Çalışan Güvenli Loaderlar)
     local TabTools = CreateTab("Araç Gereçler")
-    AddScript(TabTools, "⚡ Infinite Yield", "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source")
-    AddScript(TabTools, "🚀 Fly Gui V3", "https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt")
+    
+    AddButton(TabTools, "⚡ Infinite Yield", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
+        end)
+    end)
 
-    -- SEKME 2: GitHub Scriptleri (TÜM LİSTE)
+    AddButton(TabTools, "🚀 Fly Gui V3", function()
+        pcall(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+        end)
+    end)
+
+    -- SEKME 2: GitHub Scriptleri (Yedekli ve Sağlam Liste)
     local TabScripts = CreateTab("GitHub Scriptleri")
     local scriptList = {
         "1SpeedBridgeBuildingUT", "1BackflipObbyEscapeUT", "1CrunchyButterEscapeUT",
@@ -269,8 +275,13 @@ local function LoadDashboard(isVIP)
         "1PickaxeSwingEscapeUT", "1PlankUT", "1PoorToRichUT",
         "1PunchPerClickUT", "1RunforNEEDOHUT", "1SkillPointLegendsUT"
     }
+    
     for _, scriptName in ipairs(scriptList) do
-        AddScript(TabScripts, scriptName, "https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName)
+        AddButton(TabScripts, scriptName, function()
+            pcall(function()
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/gumanba/Scripts/main/" .. scriptName))()
+            end)
+        end)
     end
 
     -- Tuş Kısayolu (Sağ Ctrl ile gizle/göster)
