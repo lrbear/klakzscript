@@ -1,4 +1,4 @@
--- klakz Hub - Seki UI (Ayarlar Sekmeli ve Tam Özellikli Sürüm)
+-- klakz Hub - Seki UI (Küçültülmüş FPS/Ping Göstergeli Sürüm)
 
 if game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI") then
     game:GetService("CoreGui"):FindFirstChild("klakzHub_MainUI"):Destroy()
@@ -7,6 +7,7 @@ end
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -209,6 +210,56 @@ LoadDashboard = function(isVIP)
         ScreenGui:Destroy()
     end)
 
+    -- ==================== 3. KÜÇÜK FPS/PING WIDGET'I (Tuşla Kapandığında Görünür) ====================
+    local MiniIndicator = Instance.new("Frame")
+    MiniIndicator.Name = "MiniIndicator"
+    MiniIndicator.Parent = ScreenGui
+    MiniIndicator.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    MiniIndicator.Position = UDim2.new(0, 20, 0, 20)
+    MiniIndicator.Size = UDim2.new(0, 160, 0, 36)
+    MiniIndicator.Visible = false
+    MiniIndicator.Active = true
+    MiniIndicator.Draggable = true
+    Instance.new("UICorner", MiniIndicator).CornerRadius = UDim.new(0, 8)
+
+    local MiniStroke = Instance.new("UIStroke")
+    MiniStroke.Color = isVIP and Color3.fromRGB(234, 179, 8) or Color3.fromRGB(99, 102, 241)
+    MiniStroke.Thickness = 1.5
+    MiniStroke.Parent = MiniIndicator
+
+    local MiniText = Instance.new("TextLabel")
+    MiniText.Parent = MiniIndicator
+    MiniText.BackgroundTransparency = 1
+    MiniText.Size = UDim2.new(1, 0, 1, 0)
+    MiniText.Font = Enum.Font.FredokaOne
+    MiniText.Text = "⚡ klakz | FPS: 60 | Ping: 0ms"
+    MiniText.TextColor3 = Color3.fromRGB(240, 240, 250)
+    MiniText.TextSize = 10
+
+    -- FPS ve Ping Güncelleyici Döngü
+    local lastTick = tick()
+    local frameCount = 0
+    local currentFps = 60
+    local currentPing = 0
+
+    RunService.RenderStepped:Connect(function()
+        frameCount = frameCount + 1
+        local now = tick()
+        if now - lastTick >= 1 then
+            currentFps = math.floor(frameCount / (now - lastTick))
+            frameCount = 0
+            lastTick = now
+            
+            pcall(function()
+                currentPing = math.floor(LocalPlayer:GetNetworkPing() * 1000)
+            end)
+
+            if MiniIndicator.Visible then
+                MiniText.Text = "⚡ klakz | FPS: " .. currentFps .. " | Ping: " .. currentPing .. "ms"
+            end
+        end
+    end)
+
     local Sidebar = Instance.new("ScrollingFrame")
     Sidebar.Parent = Window
     Sidebar.BackgroundColor3 = Color3.fromRGB(17, 17, 23)
@@ -229,7 +280,7 @@ LoadDashboard = function(isVIP)
     ContentContainer.Position = UDim2.new(0, 148, 0, 46)
     ContentContainer.Size = UDim2.new(0, 362, 1, -56)
 
-    -- Küçültme ve Tuşla Gizleme Mantığı
+    -- Küçültme Mantığı (Arayüz İçi Buton)
     local isMinimized = false
     MinimizeBtn.MouseButton1Click:Connect(function()
         isMinimized = not isMinimized
@@ -244,10 +295,11 @@ LoadDashboard = function(isVIP)
         end
     end)
 
-    -- Klavyeden Menüyü Açma/Kapama (Toggle) Tuşu Dinleyicisi
+    -- Klavyeden Menüyü Açma/Kapama (Toggle) Tuşu ve FPS Widget Gösterimi
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if input.KeyCode == toggleKey then
             Window.Visible = not Window.Visible
+            MiniIndicator.Visible = not Window.Visible -- Menü kapandığında küçük FPS widget'ı açılır
         end
     end)
 
@@ -372,7 +424,6 @@ LoadDashboard = function(isVIP)
     SettingsTitle.TextSize = 12
     SettingsTitle.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Tuş Değiştirme Alanı
     local KeyBindBtn = Instance.new("TextButton")
     KeyBindBtn.Parent = TabSettings
     KeyBindBtn.BackgroundColor3 = Color3.fromRGB(28, 28, 38)
@@ -441,6 +492,7 @@ LoadDashboard = function(isVIP)
 
         ColorBtn.MouseButton1Click:Connect(function()
             WinStroke.Color = colData.Color
+            MiniStroke.Color = colData.Color
             LoginLogo.BackgroundColor3 = colData.Color
         end)
     end
