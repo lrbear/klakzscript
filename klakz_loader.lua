@@ -1,9 +1,7 @@
 -- klakz Hub - Professional Loader & Main Hub
--- Bu kodu oyun içinde (executor ile) çalıştıracaksın.
-
-_G.KlakzHub_Version = "v3.0"
+_G.KlakzHub_Version = "v3.4"
 _G.GitHubRawBase = "https://raw.githubusercontent.com/lrbear/klakzscript/refs/heads/main/"
-_G.DiscordWebhookURL = "BURAYA_DISCORD_WEBHOOK_LINKINI_YAZ" -- Discord webhook'unu buraya yapıştırabilirsin (istemiyorsan boş bırakabilirsin)
+_G.DiscordWebhookURL = "https://discord.com/api/webhooks/1535359938019459072/RuJyBUsdZSATv_-TMfgLzStBNhgfqP9Z_KuzR1X25cO5a9f3rMOetXtJJqBlrUozs2XS"
 
 -- Discord Webhook Bildirim Fonksiyonu
 local HttpService = game:GetService("HttpService")
